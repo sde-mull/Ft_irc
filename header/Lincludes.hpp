@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/23 14:30:15 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/23 16:02:59 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,7 @@
 #include <netinet/in.h>  
 #include <sys/time.h> 
 #include <iostream>
+#include <stdint.h>
+#include <fstream>
 
 #endif

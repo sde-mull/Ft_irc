@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 14:01:28 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/23 14:02:07 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/23 15:29:20 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,6 @@
 
 #include "Server.hpp"
 #include "Client.hpp"
+#include "Parse.hpp"
 
 #endif
