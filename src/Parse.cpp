@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/23 17:19:32 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/23 22:11:00 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,9 @@ Parse::Parse(void) : _password("default"), _portStr("6666"), _portNumb(6666)
     std::cout << B_GREEN "Parse default contrutor called" RESET << std::endl;
 }
 
-Parse::Parse(int argc, char *password, char *port) : _portNumb(6666)
+Parse::Parse(std::string port, std::string password) : _portStr(port), _password(password), _portNumb(6666)
 {
     std::cout << B_GREEN "Parse parametric contrutor called" RESET << std::endl;
-    if (argc != 3)
-        throw WrongArgsNumb();
-    if (password)
-        _password = password;
 }
 
 Parse::~Parse(void)
@@ -40,17 +36,10 @@ Parse::Parse(Parse const &src)
 
 Parse & Parse::operator=(Parse const &rhs)
 {
-    (void)rhs;
+    this->_password = rhs.getPassword();
+    this->_portNumb = rhs.getPortNumb();
+    this->_portStr = rhs.getPortStr();
     return (*this);
-}
-
-//Exceptions
-
-const char* WrongArgsNumb::what() const throw()
-{
-	return (B_RED "Error:\n" B_YELLOW "Usage: ./ircserv <port> <password>\n" \
-                "<port>:" B_WHITE " The port number that the server will be listening to for incoming IRC connections\n" \
-                B_YELLOW "<password>:" B_WHITE " The connection password" RESET);
 }
 
 //Getters
@@ -89,11 +78,25 @@ void    Parse::setPortNumb(uint16_t portNumb)
 
 //Other functions of parse
 
-void    Parse::checkArgs(int argc, char *password, char *port_str)
+bool Parse::checkArgParam(void)
 {
-   
+    this->_portNumb = atoi(this->_portStr.c_str());
+    
+    return (true);
+}
+
+bool Parse::checkNumbArgs(int const argc)
+{
+    if (argc != 3)
+    {
+        std::cerr << B_RED "Error:\n" B_YELLOW "Usage: ./ircserv <port> <password>\n" \
+                "<port>:" B_WHITE " The port number that the server will be listening to for incoming IRC connections\n" \
+                B_YELLOW "<password>:" B_WHITE " The connection password" RESET << std::endl;
+        return (false);
+    }
+    return (true);
 }
 
 /*
-linha 15, _port_numb = 6666 como default port, maior parte das ports abaixo de 1024 estao ocupadas por isso convem ficar acima desse valor
+linha 17 e 22, _port_numb = 6666 como default port, maior parte das ports abaixo de 1024 estao ocupadas por isso convem ficar acima desse valor
 */ 
