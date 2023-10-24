@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/23 22:38:56 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/24 12:52:02 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,12 @@ Parse & Parse::operator=(Parse const &rhs)
 
 bool Parse::checkArgParam(std::string port, std::string password)
 {
-    uint16_t    portNumb;
-     
-    portNumb = atoi(port.c_str());
+    std::cout << port << std::endl;
+    if (port.find_first_not_of("0123456789") != std::string::npos)
+    {
+        std::cerr << B_RED "Error:\n" B_YELLOW "Port must be an integer" RESET << std::endl;
+        return (false);
+    }
     
     return (true);
 }
