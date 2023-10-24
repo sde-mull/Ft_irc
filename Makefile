@@ -19,6 +19,10 @@ $(OBJ_PATH)/%.o:%.cpp
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@  $^
 
+init:
+	@make re
+	@./ircserv 3456 password123
+
 clean:
 	rm -rf $(OBJ_PATH)
 

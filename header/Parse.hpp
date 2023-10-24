@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/23 22:34:36 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/24 19:13:44 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Parse
         //Non-member functions
         static  bool    checkArgParam(std::string port, std::string passsword);
         static  bool    checkNumbArgs(int const argc);
+        static  int     printErrorMessage(std::string message, int typeError);
 };
 
 #endif
