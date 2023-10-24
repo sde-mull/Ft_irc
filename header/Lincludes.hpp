@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Lincludes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/23 14:30:15 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/23 22:33:59 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 #define RESET		"\033[0m"
 
 #include <stdio.h>  
-#include <string>
+#include <cstring>
 #include <stdlib.h>  
 #include <errno.h>  
 #include <unistd.h> 
@@ -44,5 +44,7 @@
 #include <netinet/in.h>  
 #include <sys/time.h> 
 #include <iostream>
+#include <stdint.h>
+#include <fstream>
 
 #endif
