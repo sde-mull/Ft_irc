@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Lincludes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/23 22:33:59 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/24 10:47:59 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,7 @@
 #include <iostream>
 #include <stdint.h>
 #include <fstream>
+#include <new>
+#include <string>
 
 #endif

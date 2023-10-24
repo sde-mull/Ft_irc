@@ -18,12 +18,21 @@
 class Server
 {
     private:
+
+        int                 _socket_fd;
+		struct sockaddr_in  *_address;
+        int                 _acceptFd;
         
     public:
+
         Server();
+        Server(char *ip, int port);
         ~Server();
         Server(Server const &src);
         Server & operator=(Server const &rhs);
+
+        int     bound2BeServer(void);
+        void    Accept(void);
 };
 
 #endif
