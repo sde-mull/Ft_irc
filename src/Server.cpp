@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/24 20:24:43 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:47:09 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void    Server::acceptConnection(void)
         received = recv(this->_acceptFd, buf, 1024, 0);
         if (received == -1)
             break ;
-        printf("response: %s\n", buf);
+        printf("response1: %s\n", buf);
         if (!strncmp(buf, "EXIT", 4))
             break ;
         else if (received == 0)
@@ -97,7 +97,7 @@ void    Server::acceptConnection(void)
         while (i < received)
             buf[i++] = '\0';
     }
-    printf("response: %s\n", buf);
+    printf("response2: %s\n", buf);
     close (_acceptFd);
 }
 
