@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/24 20:24:51 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:46:35 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "Lincludes.hpp"
 #include "Parse.hpp"
+#include "Client.hpp"
 
 
 class Server
@@ -25,6 +26,7 @@ class Server
         int                 _socketFd;
         struct sockaddr_in  *_address;
         int                 _acceptFd;
+        std::vector<Client> _clients;
         
     public:
     //Server Constructors and destructors
@@ -42,7 +44,10 @@ class Server
         void            createIPv4Address(void);
         int             bound2BeServer(void);
         void            acceptConnection(void);
-
+    
+    //Handling messages
+        int      Handle_Message(char *message, int fd);
+        int      Check_Client(int fd);
 };
 
 #endif

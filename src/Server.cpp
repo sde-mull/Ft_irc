@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 13:47:09 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/25 16:47:56 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,25 +79,34 @@ void    Server::acceptConnection(void)
     struct sockaddr *clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
 
+    std::cout << B_GREEN "Server is running..." RESET << std::endl;
     this->_acceptFd = accept(_socketFd, clientAddr, &clientAddrSize);
+
+    const char* createChannelCommands[] = {
+        "NICK yourserver",           // Set a temporary server nickname
+        "USER yourserver 0 * :Your Server", // Set user information
+        "MODE #mychannel +t",        // Set channel modes (topic settable by operator)
+        "JOIN #mychannel",           // JOIN the channel
+    };
+
+    for (const char* command : createChannelCommands) {
+        send(this->_acceptFd, command, strlen(command), 0);
+        send(this->_acceptFd, "\r\n", 2, 0); // Terminate IRC messages with \r\n
+    }
     char    buf[1024];
     size_t     received;
     int     i;
     while (1)
     {
         received = recv(this->_acceptFd, buf, 1024, 0);
+        // Server::Handle_Message(buf, this->_acceptFd);
         if (received == -1)
             break ;
         printf("response1: %s\n", buf);
-        if (!strncmp(buf, "EXIT", 4))
-            break ;
-        else if (received == 0)
-            break ;
         i = 0;
         while (i < received)
             buf[i++] = '\0';
     }
-    printf("response2: %s\n", buf);
     close (_acceptFd);
 }
 
@@ -112,5 +121,32 @@ int    Server::startConnection(void)
     if (bound2BeServer())
         return (2);
     acceptConnection();
+    return (0);
+}
+
+int     Server::Handle_Message(char *message, int fd)
+{
+    if (!Check_Client(fd))
+    {
+        std::cout << "New Client" << std::endl;
+        return (2);
+    }
+    else
+        std::cout << "Old Client" << std::endl;
+    /* char **arr = ft_split(message, 32);
+    if (!strcmp(arr[0], "PASS") && !strncmp(arr[1], this->_password.c_str(), strlen(arr[1]) - 1))
+        std::cout << "TAS A TENTAR PASSAR" << std::endl;
+    else    
+        std::cout << "ATAO" << std::endl; */
+    return (0);
+}
+
+int    Server::Check_Client(int fd)
+{
+    for (int i = 0; i < _clients.size(); i++)
+    {
+        if (_clients[i].getSocketFd() == fd)
+            return (1);
+    }
     return (0);
 }
