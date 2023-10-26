@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 16:47:56 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/26 15:25:46 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,9 @@ void    Server::acceptConnection(void)
     struct sockaddr *clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
 
-    std::cout << B_GREEN "Server is running..." RESET << std::endl;
+    std::cout << B_GREEN "Server is running on port " << this->_port << RESET << std::endl;
     this->_acceptFd = accept(_socketFd, clientAddr, &clientAddrSize);
 
-    const char* createChannelCommands[] = {
-        "NICK yourserver",           // Set a temporary server nickname
-        "USER yourserver 0 * :Your Server", // Set user information
-        "MODE #mychannel +t",        // Set channel modes (topic settable by operator)
-        "JOIN #mychannel",           // JOIN the channel
-    };
-
-    for (const char* command : createChannelCommands) {
-        send(this->_acceptFd, command, strlen(command), 0);
-        send(this->_acceptFd, "\r\n", 2, 0); // Terminate IRC messages with \r\n
-    }
     char    buf[1024];
     size_t     received;
     int     i;
@@ -100,8 +89,7 @@ void    Server::acceptConnection(void)
     {
         received = recv(this->_acceptFd, buf, 1024, 0);
         // Server::Handle_Message(buf, this->_acceptFd);
-        if (received == -1)
-            break ;
+        std::cout << received << std::endl;
         printf("response1: %s\n", buf);
         i = 0;
         while (i < received)
