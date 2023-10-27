@@ -1,6 +1,28 @@
 #include "Lincludes.hpp"
 
-int	string_counter(char const *str, char c)
+void free_2d(char **arr)
+{
+	int i = -1;
+	while (arr[++i])
+		free(arr[i]);
+	free(arr);
+	arr = NULL;
+}
+
+void remove_newline(char *str)
+{
+	int i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '\n')
+		{
+			str[i] = '\0';
+			break ;
+		}
+	}
+}
+
+int	string_counter(char *str, char c)
 {
 	int	i;
 	int	ver;
@@ -28,7 +50,7 @@ int	string_counter(char const *str, char c)
 	return (count);
 }
 
-char	*word(char const *str, int *ptr_i, char c)
+char	*word(char *str, int *ptr_i, char c)
 {
 	int		i;
 	int		n;
@@ -54,13 +76,14 @@ char	*word(char const *str, int *ptr_i, char c)
 	return (word);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char *s, char c)
 {
 	int		count;
 	int		i;
 	int		w;
 	char	**arr;
 
+	remove_newline(s);
 	count = string_counter(s, c);
 	arr = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!arr)

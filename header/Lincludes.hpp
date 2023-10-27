@@ -48,6 +48,7 @@
 #include <fstream>
 #include <vector>
 
-char	**ft_split(char const *s, char c);
+char	**ft_split(char *s, char c);
+void    free_2d(char **arr);
 
 #endif

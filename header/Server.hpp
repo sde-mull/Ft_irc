@@ -26,6 +26,7 @@ class Server
         int                 _socketFd;
         struct sockaddr_in  *_address;
         int                 _acceptFd;
+        
         std::vector<Client> _clients;
         
     public:
@@ -46,8 +47,7 @@ class Server
         void            acceptConnection(void);
     
     //Handling messages
-        int      Handle_Message(char *message, int fd);
-        int      Check_Client(int fd);
+        int      Handle_Message(Client &client);
 };
 
 #endif

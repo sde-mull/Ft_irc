@@ -82,32 +82,12 @@ void    Server::acceptConnection(void)
     std::cout << B_GREEN "Server is running..." RESET << std::endl;
     this->_acceptFd = accept(_socketFd, clientAddr, &clientAddrSize);
 
-    const char* createChannelCommands[] = {
-        "NICK yourserver",           // Set a temporary server nickname
-        "USER yourserver 0 * :Your Server", // Set user information
-        "MODE #mychannel +t",        // Set channel modes (topic settable by operator)
-        "JOIN #mychannel",           // JOIN the channel
-    };
-
-    for (const char* command : createChannelCommands) {
-        send(this->_acceptFd, command, strlen(command), 0);
-        send(this->_acceptFd, "\r\n", 2, 0); // Terminate IRC messages with \r\n
-    }
-    char    buf[1024];
-    size_t     received;
-    int     i;
+    Client client(this->_acceptFd);
     while (1)
     {
-        received = recv(this->_acceptFd, buf, 1024, 0);
-        // Server::Handle_Message(buf, this->_acceptFd);
-        if (received == -1)
+        if (Handle_Message(client))
             break ;
-        printf("response1: %s\n", buf);
-        i = 0;
-        while (i < received)
-            buf[i++] = '\0';
     }
-    close (_acceptFd);
 }
 
 int    Server::startConnection(void)
@@ -124,29 +104,90 @@ int    Server::startConnection(void)
     return (0);
 }
 
-int     Server::Handle_Message(char *message, int fd)
+int     Server::Handle_Message(Client &client)
 {
-    if (!Check_Client(fd))
+    char    buf[1024];
+    size_t     received;
+    int     i;
+    received = recv(client.getSocketFd(), buf, 1024, 0);
+    if (received <= 0 && close(client.getSocketFd()))
+        return (1);
+    std::cout << "response: " << buf << std::endl;
+    char **arr = ft_split(buf, 32);
+    if (!strcmp("PASS", arr[0]) && arr[1])
     {
-        std::cout << "New Client" << std::endl;
-        return (2);
+        if (!strcmp(this->_password.c_str(), arr[1]))
+        {
+            std::cout << "PASSE CERTA" << std::endl;
+            client.f_pass = 1;
+        }
+        else
+        {
+            std::cout << "PASSE ERRADA" << std::endl;
+            client.f_pass = 1;
+        } 
     }
-    else
-        std::cout << "Old Client" << std::endl;
-    /* char **arr = ft_split(message, 32);
-    if (!strcmp(arr[0], "PASS") && !strncmp(arr[1], this->_password.c_str(), strlen(arr[1]) - 1))
-        std::cout << "TAS A TENTAR PASSAR" << std::endl;
-    else    
-        std::cout << "ATAO" << std::endl; */
+    else if (!strcmp("USER", arr[0]) && arr[1])
+    {
+        std::cout << "SET USER" << std::endl;
+        client.f_user = 1;
+        client.setUser(std::string(arr[1]));
+    }
+    else if (!strcmp("NICK", arr[0]) && arr[1])
+    {
+        int taken = 0;
+        for(int i = 0; i < this->_clients.size(); i++)
+        {
+            if (!strcmp(this->_clients[i].getNick().c_str(), arr[1]))
+            {
+                std::cout << "NICK ALREADY TAKEN" << std::endl;
+                taken = 1;
+                break ;
+            }
+        }
+        if (taken == 0)
+        {
+            std::cout << "SET NICK" << std::endl;
+            client.f_nick = 1;
+            client.setNick(std::string(arr[1]));   
+        }
+    }
+    if (client.f_pass == 1 && client.f_nick == 1 && client.f_user == 1)
+        std::cout << "CLIENT AUTHENTICATE" << std::endl;
+    free_2d(arr);
+    i = 0;
+    while (i < received)
+        buf[i++] = '\0';
     return (0);
 }
 
-int    Server::Check_Client(int fd)
+/* COMAND_HANDLER(char *buf)
 {
-    for (int i = 0; i < _clients.size(); i++)
-    {
-        if (_clients[i].getSocketFd() == fd)
-            return (1);
-    }
-    return (0);
+    std::string *options = {"PM", "INFO", "SETNICK", "ERROR"};
+    std::string cleanbuf = (copy buffer till ' ');
+    int i = 0;
+    void (Harl::*function[4])(void);
+
+    while (i++ < 4)
+        if (cleanbuf = options[i])
+
+    switch(4)
+            case 1:
+                PM();
+                break;
+            case 3:
+                SETNICK();
+                break;
+
 }
+
+this->levels[0] = "DEBUG";
+    this->levels[1] = "INFO";
+    this->levels[2] = "WARNING";
+    this->levels[3] = "ERROR";
+
+    this->function[0] = &Harl::debug;
+    this->function[1] = &Harl::info;
+    this->function[2] = &Harl::warning;
+    this->function[3] = &Harl::error;
+} */

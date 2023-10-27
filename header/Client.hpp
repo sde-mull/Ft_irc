@@ -25,12 +25,24 @@ class Client
 		
 	public:
 		Client();
+		Client(int fd);
 		~Client();
 		Client(Client const &src);
 		Client & operator=(Client const &rhs);
 
 		//getters
 		int getSocketFd();
+		std::string getUser();
+		std::string getNick();
+
+		//setters
+		void setUser(std::string user);
+		void setNick(std::string nick);
+
+		//flags
+		int			f_pass;
+		int			f_user;
+		int			f_nick;
 };
 
 #endif
