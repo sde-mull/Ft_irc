@@ -28,16 +28,6 @@
 //         std::cout << BLUE "Server Connected" << std::endl;
 //     else
 //         std::cout << RED "NIET SERVER" << std::endl;
-    
-//     // Client ClientA("127.0.0.1", 2000);
-
-//     // int resultclient = ClientA.Connect_Socket();
-
-//     // if (resultclient == 0)
-//     //     std::cout << GREEN "Connection successfull" << std::endl;
-//     // else
-//     //     std::cout << RED "No Connection" << std::endl;
-    
 //     ServerB.Accept();
 
 //     return (0);
