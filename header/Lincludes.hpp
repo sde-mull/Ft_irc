@@ -47,8 +47,11 @@
 #include <stdint.h>
 #include <fstream>
 #include <vector>
+#include <map>
+#include <sstream>
 
 char	**ft_split(char *s, char c);
 void    free_2d(char **arr);
+char    *remove_newline(char *str);
 
 #endif

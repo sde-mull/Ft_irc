@@ -9,17 +9,29 @@ void free_2d(char **arr)
 	arr = NULL;
 }
 
-void remove_newline(char *str)
+char *remove_newline(char *str)
 {
-	int i = -1;
+	/* int i = -1;
 	while (str[++i])
 	{
-		if (str[i] == '\n')
+		if (str[i] == '\n' || str[i] == '\r')
 		{
 			str[i] = '\0';
 			break ;
 		}
+	} */
+	int len = strlen(str);
+	char *nova = (char *)malloc(sizeof(len) + 1);
+	int i = -1;
+	int j = -1;
+	while (str[++i])
+	{
+		if (str[i] != '\n' && str[i] != '\r')
+			nova[++j] = str[i];
 	}
+	while (++j <= len)
+		nova[j] = '\0';
+	return (nova);
 }
 
 int	string_counter(char *str, char c)
@@ -83,9 +95,12 @@ char	**ft_split(char *s, char c)
 	int		w;
 	char	**arr;
 
-	remove_newline(s);
+	//remove_newline(s);
+	std::cout << "SPLIT 1"  << std::endl;
 	count = string_counter(s, c);
+	std::cout << "SPLIT 2"  << std::endl;
 	arr = (char **)malloc(sizeof(char *) * (count + 1));
+	std::cout << "SPLIT 3"  << std::endl;
 	if (!arr)
 		return (NULL);
 	arr[count] = NULL;
@@ -102,5 +117,6 @@ char	**ft_split(char *s, char c)
 		}
 		i++;
 	}
+	std::cout << "SPLIT 4"  << std::endl;
 	return (arr);
 }

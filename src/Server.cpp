@@ -22,6 +22,9 @@ Server::Server(void)
 Server::Server(uint16_t port, std::string password) : _port(port), _password(password)
 {
     std::cout << B_GREEN "Server parametric constructor called" RESET << std::endl;
+    this->m["PASS"] = &Server::ft_pass;
+    this->m["USER"] = &Server::ft_user;
+    this->m["NICK"] = &Server::ft_nick;
 }
 
 Server::~Server(void)
@@ -113,81 +116,77 @@ int     Server::Handle_Message(Client &client)
     if (received <= 0 && close(client.getSocketFd()))
         return (1);
     std::cout << "response: " << buf << std::endl;
-    char **arr = ft_split(buf, 32);
-    if (!strcmp("PASS", arr[0]) && arr[1])
+    std::vector<std::string> vec = this->ft_split(buf, received);
+    for (int k = 0; k < vec.size(); k++)
     {
-        if (!strcmp(this->_password.c_str(), arr[1]))
-        {
-            std::cout << "PASSE CERTA" << std::endl;
-            client.f_pass = 1;
-        }
-        else
-        {
-            std::cout << "PASSE ERRADA" << std::endl;
-            client.f_pass = 1;
-        } 
-    }
-    else if (!strcmp("USER", arr[0]) && arr[1])
-    {
-        std::cout << "SET USER" << std::endl;
-        client.f_user = 1;
-        client.setUser(std::string(arr[1]));
-    }
-    else if (!strcmp("NICK", arr[0]) && arr[1])
-    {
-        int taken = 0;
-        for(int i = 0; i < this->_clients.size(); i++)
-        {
-            if (!strcmp(this->_clients[i].getNick().c_str(), arr[1]))
-            {
-                std::cout << "NICK ALREADY TAKEN" << std::endl;
-                taken = 1;
-                break ;
-            }
-        }
-        if (taken == 0)
-        {
-            std::cout << "SET NICK" << std::endl;
-            client.f_nick = 1;
-            client.setNick(std::string(arr[1]));   
-        }
+        std::map<std::string, function>::iterator it = m.find(std::string(vec[k]));
+        if (it != m.end() && k < vec.size() - 1)
+            (this->*it->second)(client, vec[k + 1]);
     }
     if (client.f_pass == 1 && client.f_nick == 1 && client.f_user == 1)
+    {
         std::cout << "CLIENT AUTHENTICATE" << std::endl;
-    free_2d(arr);
+        client.f_auth = 1;
+    }
     i = 0;
     while (i < received)
         buf[i++] = '\0';
     return (0);
 }
 
-/* COMAND_HANDLER(char *buf)
+std::vector<std::string>    Server::ft_split(char *buf, int received)
 {
-    std::string *options = {"PM", "INFO", "SETNICK", "ERROR"};
-    std::string cleanbuf = (copy buffer till ' ');
-    int i = 0;
-    void (Harl::*function[4])(void);
-
-    while (i++ < 4)
-        if (cleanbuf = options[i])
-
-    switch(4)
-            case 1:
-                PM();
-                break;
-            case 3:
-                SETNICK();
-                break;
-
+    std::string nova;
+    for (size_t j = 0; j < received; j++)
+    {
+        if (buf[j] != '\n' && buf[j] != '\r')
+            nova += buf[j];
+    }
+    std::istringstream ss(nova);
+    std::vector<std::string> vec;
+    std::string token;
+    while (std::getline(ss, token, ' '))
+        vec.push_back(token);
+    return (vec);
 }
 
-this->levels[0] = "DEBUG";
-    this->levels[1] = "INFO";
-    this->levels[2] = "WARNING";
-    this->levels[3] = "ERROR";
+void    Server::ft_pass(Client &client, std::string str)
+{
+    if (this->_password == str)
+    {
+        std::cout << "PASSE CERTA" << std::endl;
+        client.f_pass = 1;
+    }
+    else
+    {
+        std::cout << "PASSE ERRADA" << std::endl;
+        client.f_pass = 0;
+    } 
+}
 
-    this->function[0] = &Harl::debug;
-    this->function[1] = &Harl::info;
-    this->function[2] = &Harl::warning;
-    this->function[3] = &Harl::error;
-} */
+void    Server::ft_user(Client &client, std::string str)
+{
+    std::cout << "SET USER" << std::endl;
+    client.f_user = 1;
+    client.setUser(str);
+}
+
+void    Server::ft_nick(Client &client, std::string str)
+{
+    int taken = 0;
+    for(int i = 0; i < this->_clients.size(); i++)
+    {
+        if (this->_clients[i].getNick() == str)
+        {
+            std::cout << "NICK ALREADY TAKEN" << std::endl;
+            taken = 1;
+            break ;
+        }
+    }
+    if (taken == 0)
+    {
+        std::cout << "SET NICK" << std::endl;
+        client.f_nick = 1;
+        client.setNick(str);   
+    }
+}

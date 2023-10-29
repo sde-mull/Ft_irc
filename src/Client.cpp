@@ -24,6 +24,7 @@ Client::Client(int fd)
     this->f_pass = 0;
     this->f_nick = 0;
     this->f_user = 0;
+    this->f_auth = 0;
 }
 
 Client::~Client(void)
