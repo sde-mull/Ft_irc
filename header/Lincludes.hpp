@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Lincludes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 15:41:33 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/30 12:15:11 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,14 @@
 #include <fstream>
 #include <vector>
 
-char	**ft_split(char const *s, char c);
+//	Handle_cmds
+int			Handle_commands(char *buf, Client client);
+
+// Handle_cmds_utils
+std::string	strdup_tilspc(char *buf);
+std::string	strdup_aftspc(char *buf);
+int			sendIrcMessage(std::string message, int clientId);
+
+char		**ft_split(char const *s, char c);
 
 #endif
