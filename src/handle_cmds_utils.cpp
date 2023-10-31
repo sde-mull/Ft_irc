@@ -6,14 +6,24 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/10/30 12:14:49 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/10/31 17:07:07 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/Lincludes.hpp"
 #include "../header/Cinclude.hpp"
 
-int	sendIrcMessage(std::string message, int clientId)
+int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::string buffer, Client client)
+{
+	bool	F_banned;
+
+	if (ch_it->Banneduser(client.Getters(GETUSER)) == 0)
+		ch_it->addUser(client.Getters(GETUSER));
+	else
+		return (printErrorMessage("YOU ARE BANNED FROM THE CHANNEL!", 5));
+}
+
+int	Parse::sendIrcMessage(std::string message, int clientId)
 {
 	message = message + "\r\n";
 	std::cout << "Sending message: " << message << std::endl;
@@ -22,7 +32,7 @@ int	sendIrcMessage(std::string message, int clientId)
 	return 0;
 }
 
-std::string	strdup_tilspc(char *buf)
+std::string	Parse::strdup_tilspc(char *buf)
 {
 	std::string	ret;
 
@@ -31,7 +41,7 @@ std::string	strdup_tilspc(char *buf)
 	return (ret);
 }
 
-std::string	strdup_aftspc(char *buf)
+std::string	Parse::strdup_aftspc(char *buf)
 {
 	std::string	ret;
 	int			i;

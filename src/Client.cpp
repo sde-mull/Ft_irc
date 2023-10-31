@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 15:51:40 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:41:50 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,18 @@ Client & Client::operator=(Client const &rhs)
 int Client::getSocketFd()
 {
     return (this->_socketFd);
+}
+
+std::string	Client::Getters(int opt)
+{
+	switch(opt)
+	{
+		case GETNICK:
+			return _nick;
+			break ;
+		case GETUSER:
+			return _user;
+			break;
+	}
+	return NULL;
 }

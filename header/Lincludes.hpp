@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/30 12:15:11 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:38:43 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@
 #define B_WHITE		"\033[1;37m"
 #define RESET		"\033[0m"
 
+//CLIENT MACROS
+
+#define	GETUSER		1
+#define	GETNICK		2
+
 #include <stdio.h>  
 #include <cstring>
 #include <stdlib.h>  
@@ -47,14 +52,6 @@
 #include <stdint.h>
 #include <fstream>
 #include <vector>
-
-//	Handle_cmds
-int			Handle_commands(char *buf, Client client);
-
-// Handle_cmds_utils
-std::string	strdup_tilspc(char *buf);
-std::string	strdup_aftspc(char *buf);
-int			sendIrcMessage(std::string message, int clientId);
 
 char		**ft_split(char const *s, char c);
 
