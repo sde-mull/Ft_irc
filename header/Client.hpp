@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:54:17 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 15:50:53 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/31 14:08:25 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ class Client
 		Client & operator=(Client const &rhs);
 
 		//getters
-		int getSocketFd();
+		int 	getSocketFd() const;
+		void	setSocketFd(int socktFd);
 };
 
 #endif

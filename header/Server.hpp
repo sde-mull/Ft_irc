@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 15:46:35 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/31 15:46:31 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ class Server
         int             startConnection(void);
         void            createIPv4Address(void);
         int             bound2BeServer(void);
-        void            acceptConnection(void);
+        Client             acceptConnection(fd_set &current_sockets);
     
     //Handling messages
-        int      Handle_Message(char *message, int fd);
+        int      Handle_Message(Client client);
         int      Check_Client(int fd);
 };
 

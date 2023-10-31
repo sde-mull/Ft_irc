@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/26 15:25:46 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/31 15:53:02 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,28 +74,17 @@ void   Server::createIPv4Address(void)
     std::cout << B_GREEN "IPv4Address was created successfully!" RESET << std::endl;
 }
 
-void    Server::acceptConnection(void)
+Client  Server::acceptConnection(fd_set &current_sockets)
 {
     struct sockaddr *clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
 
-    std::cout << B_GREEN "Server is running on port " << this->_port << RESET << std::endl;
-    this->_acceptFd = accept(_socketFd, clientAddr, &clientAddrSize);
+    Client newClient;
+    int newSocketFd = accept(_socketFd, clientAddr, &clientAddrSize);
+    newClient.setSocketFd(newSocketFd);
+    FD_SET(newSocketFd, &current_sockets);
+    return (newClient);
 
-    char    buf[1024];
-    size_t     received;
-    int     i;
-    while (1)
-    {
-        received = recv(this->_acceptFd, buf, 1024, 0);
-        // Server::Handle_Message(buf, this->_acceptFd);
-        std::cout << received << std::endl;
-        printf("response1: %s\n", buf);
-        i = 0;
-        while (i < received)
-            buf[i++] = '\0';
-    }
-    close (_acceptFd);
 }
 
 int    Server::startConnection(void)
@@ -108,33 +97,41 @@ int    Server::startConnection(void)
     createIPv4Address();
     if (bound2BeServer())
         return (2);
-    acceptConnection();
+    std::cout << B_GREEN "Server is running on port " << this->_port << RESET << std::endl;
+    
+    fd_set current_sockets, ready_sockets;
+    std::vector<Client>     clients;
+    
+    FD_ZERO(&current_sockets);
+    FD_SET(this->_socketFd, &current_sockets);
+
+    while (true)
+    {
+        ready_sockets = current_sockets;
+        if (select(FD_SETSIZE, &ready_sockets, NULL, NULL, NULL) < 0)
+            return (Parse::printErrorMessage("Select error", 3));
+        for (int i = 0; i < FD_SETSIZE; i++)
+        {
+            if (FD_ISSET(i, &ready_sockets))
+            {
+                if (i == this->_socketFd)
+                {
+                     clients.push_back(acceptConnection(current_sockets));
+                     std::cout << "hello" << std::endl;
+                }
+                else
+                {
+                    std::cout << "other action" << std::endl;
+                }
+                    
+            }
+        }
+    }
     return (0);
 }
 
-int     Server::Handle_Message(char *message, int fd)
+int     Server::Handle_Message(Client client)
 {
-    if (!Check_Client(fd))
-    {
-        std::cout << "New Client" << std::endl;
-        return (2);
-    }
-    else
-        std::cout << "Old Client" << std::endl;
-    /* char **arr = ft_split(message, 32);
-    if (!strcmp(arr[0], "PASS") && !strncmp(arr[1], this->_password.c_str(), strlen(arr[1]) - 1))
-        std::cout << "TAS A TENTAR PASSAR" << std::endl;
-    else    
-        std::cout << "ATAO" << std::endl; */
-    return (0);
-}
-
-int    Server::Check_Client(int fd)
-{
-    for (int i = 0; i < _clients.size(); i++)
-    {
-        if (_clients[i].getSocketFd() == fd)
-            return (1);
-    }
+    std::cout << "other action" << std::endl;
     return (0);
 }

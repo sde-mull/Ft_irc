@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 15:51:40 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/31 15:59:19 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,26 @@ Client::Client(Client const &src)
     *this = src;
 }
 
-Client & Client::operator=(Client const &rhs)
+Client& Client::operator=(const Client& rhs)
 {
-    (void)rhs;
-    return (*this);
+    if (this == &rhs)
+    {
+        return *this;
+    }
+
+    _socketFd = rhs._socketFd;
+    _user = rhs._user;
+    _nick = rhs._nick;
+
+    return *this;
 }
 
-int Client::getSocketFd()
+int     Client::getSocketFd() const
 {
     return (this->_socketFd);
+}
+
+void    Client::setSocketFd(int socketFd)
+{
+    this->_socketFd = socketFd;
 }
