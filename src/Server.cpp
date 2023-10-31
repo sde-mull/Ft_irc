@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/31 15:53:02 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:54:00 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,13 @@ void   Server::createIPv4Address(void)
     std::cout << B_GREEN "IPv4Address was created successfully!" RESET << std::endl;
 }
 
-Client  Server::acceptConnection(fd_set &current_sockets)
+int Server::acceptConnection(void)
 {
     struct sockaddr *clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
 
-    Client newClient;
     int newSocketFd = accept(_socketFd, clientAddr, &clientAddrSize);
-    newClient.setSocketFd(newSocketFd);
-    FD_SET(newSocketFd, &current_sockets);
-    return (newClient);
+    return (newSocketFd);
 
 }
 
@@ -99,34 +96,7 @@ int    Server::startConnection(void)
         return (2);
     std::cout << B_GREEN "Server is running on port " << this->_port << RESET << std::endl;
     
-    fd_set current_sockets, ready_sockets;
-    std::vector<Client>     clients;
     
-    FD_ZERO(&current_sockets);
-    FD_SET(this->_socketFd, &current_sockets);
-
-    while (true)
-    {
-        ready_sockets = current_sockets;
-        if (select(FD_SETSIZE, &ready_sockets, NULL, NULL, NULL) < 0)
-            return (Parse::printErrorMessage("Select error", 3));
-        for (int i = 0; i < FD_SETSIZE; i++)
-        {
-            if (FD_ISSET(i, &ready_sockets))
-            {
-                if (i == this->_socketFd)
-                {
-                     clients.push_back(acceptConnection(current_sockets));
-                     std::cout << "hello" << std::endl;
-                }
-                else
-                {
-                    std::cout << "other action" << std::endl;
-                }
-                    
-            }
-        }
-    }
     return (0);
 }
 
