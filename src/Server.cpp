@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 16:47:56 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/10/31 10:37:53 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,13 @@ int     Server::Handle_Message(Client &client)
     if (received <= 0 && close(client.getSocketFd()))
         return (1);
     std::cout << "response: " << buf << std::endl;
+    if (client.f_auth == 1)
+    {
+        std::cout << "Old Client" << std::endl;
+        return (0);
+    }
+    else
+        std::cout << "New Client" << std::endl;
     std::vector<std::string> vec = this->ft_split(buf, received);
     for (int k = 0; k < vec.size(); k++)
     {
