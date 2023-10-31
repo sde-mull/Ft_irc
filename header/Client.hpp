@@ -41,8 +41,6 @@ class Client
 
 		//flags
 		int			f_pass;
-		int			f_user;
-		int			f_nick;
 		int   		f_auth;
 };
 

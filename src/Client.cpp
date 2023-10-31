@@ -17,14 +17,9 @@ Client::Client(void)
     std::cout << B_GREEN "Client default contrutor called" RESET << std::endl;
 }
 
-Client::Client(int fd)
+Client::Client(int fd) : _socketFd(fd), _nick("\0"), _user("\0"), f_pass(0), f_auth(0)
 {
     std::cout << B_GREEN "Client fd contrutor called" RESET << std::endl;
-    this->_socketFd = fd;
-    this->f_pass = 0;
-    this->f_nick = 0;
-    this->f_user = 0;
-    this->f_auth = 0;
 }
 
 Client::~Client(void)

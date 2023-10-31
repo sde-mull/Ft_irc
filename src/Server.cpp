@@ -130,7 +130,7 @@ int     Server::Handle_Message(Client &client)
         if (it != m.end() && k < vec.size() - 1)
             (this->*it->second)(client, vec[k + 1]);
     }
-    if (client.f_pass == 1 && client.f_nick == 1 && client.f_user == 1)
+    if (client.f_pass == 1 && client.getNick() != "\0" && client.getUser() != "\0")
     {
         std::cout << "CLIENT AUTHENTICATE" << std::endl;
         client.f_auth = 1;
@@ -146,6 +146,8 @@ std::vector<std::string>    Server::ft_split(char *buf, int received)
     std::string nova;
     for (size_t j = 0; j < received; j++)
     {
+        if (buf[j] == '\n')
+            nova += ' ';
         if (buf[j] != '\n' && buf[j] != '\r')
             nova += buf[j];
     }
@@ -174,26 +176,27 @@ void    Server::ft_pass(Client &client, std::string str)
 void    Server::ft_user(Client &client, std::string str)
 {
     std::cout << "SET USER" << std::endl;
-    client.f_user = 1;
     client.setUser(str);
 }
 
 void    Server::ft_nick(Client &client, std::string str)
 {
-    int taken = 0;
+    if (str[0] == '#' || str[0] == '&' || str[0] == '$' || str[0] == ':')
+        return ;
+    for (int i = 0; i < str.size(); i++)
+    {
+        if (str[i] == ' ' || str[i] == ',' || str[i] == '*' || str[i] == '?'\
+        || str[i] == '!' || str[i] == '@' || str[i] == '.')
+            return ;
+    }
     for(int i = 0; i < this->_clients.size(); i++)
     {
         if (this->_clients[i].getNick() == str)
         {
             std::cout << "NICK ALREADY TAKEN" << std::endl;
-            taken = 1;
-            break ;
+            return ;
         }
     }
-    if (taken == 0)
-    {
-        std::cout << "SET NICK" << std::endl;
-        client.f_nick = 1;
-        client.setNick(str);   
-    }
+    std::cout << "SET NICK" << std::endl;
+    client.setNick(str);   
 }
