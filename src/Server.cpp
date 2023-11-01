@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/01 19:11:41 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/01 19:22:10 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,8 @@ int    Server::startConnection(void)
     std::cout << B_GREEN "Server is running on port " << this->_port << RESET << std::endl;
 
     fd_set current_sockets, ready_sockets;
-    char    buf[1024];
-    size_t     received;
     int client_socket;
 
-    Parse::reserveSpaceClients(15);
     FD_ZERO(&current_sockets);
     FD_SET(this->_socketFd, &current_sockets);
 
@@ -133,13 +130,13 @@ int    Server::startConnection(void)
     return (0);
 }
 
-int     Server::Handle_Message(Client &client)
+int     Server::Handle_Message(Client *client)
 {
     char    buf[1024];
     size_t     received;
     int     i;
-    received = recv(client.getSocketFd(), buf, 1024, 0);
-    if (received <= 0 && close(client.getSocketFd()))
+    received = recv(client->getSocketFd(), buf, 1024, 0);
+    if (received <= 0 && close(client->getSocketFd()))
         return (1);
     std::cout << "response: " << buf << std::endl;
     i = 0;
