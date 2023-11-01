@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/31 15:59:19 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/01 18:51:31 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 Client::Client(void)
 {
     std::cout << B_GREEN "Client default contrutor called" RESET << std::endl;
+}
+
+Client::Client(int id) : _socketFd(id)
+{
+    std::cout << "Client parametric constructor called" << std::endl;
 }
 
 Client::~Client(void)
