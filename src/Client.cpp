@@ -62,3 +62,5 @@ void Client::setNick(std::string nick)
 {
     this->_nick = nick;
 }
+
+//Client
