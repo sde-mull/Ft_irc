@@ -17,6 +17,9 @@
 #include "Parse.hpp"
 #include "Client.hpp"
 
+class Server;
+
+typedef void (Server::*function) (Client &client, std::string str);
 
 class Server
 {
@@ -27,6 +30,7 @@ class Server
         struct sockaddr_in  *_address;
         int                 _acceptFd;
         std::vector<Client> _clients;
+        std::map<std::string, function> m;
         
     public:
     //Server Constructors and destructors
@@ -47,7 +51,12 @@ class Server
     
     //Handling messages
         int      Handle_Message(Client &client);
+        std::vector<std::string>    ft_split(char *buf, int received);
+        void    ft_pass(Client &client, std::string str);
+        void    ft_nick(Client &client, std::string str);
+        void    ft_user(Client &client, std::string str);
         int      Check_Client(int fd);
 };
+
 
 #endif

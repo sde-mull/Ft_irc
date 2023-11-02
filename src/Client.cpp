@@ -17,9 +17,10 @@ Client::Client(void)
     std::cout << B_GREEN "Client default contrutor called" RESET << std::endl;
 }
 
-Client::Client(int id) : _socketFd(id)
+
+Client::Client(int id) : _socketFd(fd), _nick("\0"), _user("\0"), f_pass(0), f_auth(0)
 {
-    std::cout << "Client parametric constructor called" << std::endl;
+    std::cout << B_GREEN "Client id contrutor called" RESET << std::endl;
 }
 
 Client::~Client(void)
@@ -49,6 +50,26 @@ Client& Client::operator=(const Client& rhs)
 int     Client::getSocketFd() const
 {
     return (this->_socketFd);
+}
+
+std::string Client::getUser()
+{
+    return (this->_user);
+}
+
+std::string Client::getNick()
+{
+    return (this->_nick);
+}
+
+void Client::setUser(std::string user)
+{
+    this->_user = user;
+}
+
+void Client::setNick(std::string nick)
+{
+    this->_nick = nick;
 }
 
 void    Client::setSocketFd(int socketFd)

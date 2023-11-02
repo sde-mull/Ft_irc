@@ -31,6 +31,18 @@ class Client
 		Client & operator=(Client const &rhs);
 
 		//getters
+
+		std::string getUser();
+		std::string getNick();
+
+		//setters
+		void setUser(std::string user);
+		void setNick(std::string nick);
+
+		//flags
+		int			f_pass;
+		int   		f_auth;
+
 		int 	getSocketFd() const;
 		void	setSocketFd(int socktFd);
 };

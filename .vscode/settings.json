@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "files.associations": {
     "__bit_reference": "cpp",
     "__bits": "cpp",
@@ -66,3 +67,10 @@
     "algorithm": "cpp"
   }
 }
+=======
+    "files.associations": {
+        "ostream": "cpp",
+        "iostream": "cpp"
+    }
+}
+>>>>>>> 97daccaf4864d132c3160930ed5e6f9124b78db6
