@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/01 19:22:38 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/02 14:29:24 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,16 @@ void    Parse::addClient(int id)
     _clients.push_back(Client(id));
 }
 
-Client*  Parse::searchClient(int id)
+Client&  Parse::searchClient(int id)
 {
+    int index;
+
     for (int i = 0; i < _clients.size(); i++)
     {
-        if (_clients[i].getSocketFd() == id)
-            return (&_clients[i]);
+        if (_clients[i].getSocketFd() == id){
+            index = i;
+            break ;
+        }
     }
-    return (NULL);
+    return (_clients[index]);
 }

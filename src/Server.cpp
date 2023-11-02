@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/01 19:22:10 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/02 14:43:02 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ void   Server::createIPv4Address(void)
 
 int Server::acceptConnection(void)
 {
-    struct sockaddr *clientAddr;
+    struct sockaddr clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
 
-    int newSocketFd = accept(this->_socketFd, clientAddr, &clientAddrSize);
+    int newSocketFd = accept(this->_socketFd, (struct sockaddr*)&clientAddr, &clientAddrSize);
     return (newSocketFd);
 }
 
@@ -98,17 +98,17 @@ int    Server::startConnection(void)
     fd_set current_sockets, ready_sockets;
     int client_socket;
 
+    int nbr_clients = 5;
     FD_ZERO(&current_sockets);
     FD_SET(this->_socketFd, &current_sockets);
 
     while (true)
     {
         ready_sockets = current_sockets;
-
-        if (select(FD_SETSIZE, &ready_sockets, NULL, NULL, NULL) < 0)
+        if (select(nbr_clients + 1, &ready_sockets, NULL, NULL, NULL) == -1)
             return (Parse::printErrorMessage("select failed", 3));
-        
-        for (int i = 0; i < FD_SETSIZE; i++)
+
+        for (int i = 0; i <= nbr_clients; i++)
         {
             if (FD_ISSET(i, &ready_sockets))
             {
@@ -117,6 +117,8 @@ int    Server::startConnection(void)
                     client_socket = acceptConnection();
                     FD_SET(client_socket, &current_sockets);
                     Parse::addClient(client_socket);
+                    if (client_socket > nbr_clients)
+                        nbr_clients = client_socket;
                 }
                 else
                 {
@@ -125,18 +127,16 @@ int    Server::startConnection(void)
             }
         }
     }
-    
-
     return (0);
 }
 
-int     Server::Handle_Message(Client *client)
+int     Server::Handle_Message(Client &client)
 {
     char    buf[1024];
     size_t     received;
     int     i;
-    received = recv(client->getSocketFd(), buf, 1024, 0);
-    if (received <= 0 && close(client->getSocketFd()))
+    received = recv(client.getSocketFd(), buf, 1024, 0);
+    if (received <= 0 && close(client.getSocketFd()))
         return (1);
     std::cout << "response: " << buf << std::endl;
     i = 0;
