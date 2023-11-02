@@ -125,7 +125,7 @@ int    Server::startConnection(void)
                 }
                 else
                 {
-                    Handle_Message(Parse::searchClient(i));
+                    Handle_Message(Parse::searchClientById(i));
                 }
             }
         }
@@ -144,19 +144,20 @@ int     Server::Handle_Message(Client &client)
         return (1);
     std::cout << "response: " << buf << std::endl;
     if (client.f_auth == 1)
-    {
-        std::cout << "Old Client" << std::endl;
         return (0);
-    }
-    else
-        std::cout << "New Client" << std::endl;
     std::vector<std::string> vec = this->ft_split(buf, received);
+    int f = 0;
     for (int k = 0; k < vec.size(); k++)
     {
         std::map<std::string, function>::iterator it = m.find(std::string(vec[k]));
         if (it != m.end() && k < vec.size() - 1)
+        {
             (this->*it->second)(client, vec[k + 1]);
+            f = 1;
+        }
     }
+    if (f == 0)
+        std::cout << "client not aunthenticated" << std::endl;
     if (client.f_pass == 1 && client.getNick() != "\0" && client.getUser() != "\0")
     {
         std::cout << "CLIENT AUTHENTICATE" << std::endl;
@@ -189,41 +190,27 @@ std::vector<std::string>    Server::ft_split(char *buf, int received)
 void    Server::ft_pass(Client &client, std::string str)
 {
     if (this->_password == str)
-    {
-        std::cout << "PASSE CERTA" << std::endl;
         client.f_pass = 1;
-    }
     else
-    {
-        std::cout << "PASSE ERRADA" << std::endl;
         client.f_pass = 0;
-    } 
 }
 
 void    Server::ft_user(Client &client, std::string str)
 {
-    std::cout << "SET USER" << std::endl;
     client.setUser(str);
 }
 
-void    Server::ft_nick(Client &client, std::string str)
+void     Server::ft_nick(Client &client, std::string str)
 {
-    if (str[0] == '#' || str[0] == '&' || str[0] == '$' || str[0] == ':')
+    if (!Parse::CheckNickRules(str))
+    {
+        Parse::printErrorMessage("Bad Nick", 2);
         return ;
-    for (int i = 0; i < str.size(); i++)
-    {
-        if (str[i] == ' ' || str[i] == ',' || str[i] == '*' || str[i] == '?'\
-        || str[i] == '!' || str[i] == '@' || str[i] == '.')
-            return ;
     }
-    for(int i = 0; i < this->_clients.size(); i++)
+    if (!Parse::CheckClientByNick(str))
     {
-        if (this->_clients[i].getNick() == str)
-        {
-            std::cout << "NICK ALREADY TAKEN" << std::endl;
-            return ;
-        }
+        Parse::printErrorMessage("Nick Already Taken", 2);
+        return ;
     }
-    std::cout << "SET NICK" << std::endl;
     client.setNick(str);   
 }
