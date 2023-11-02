@@ -205,3 +205,5 @@ void     Server::ft_nick(Client &client, std::string str)
     }
     client.setNick(str);   
 }
+
+//Server
