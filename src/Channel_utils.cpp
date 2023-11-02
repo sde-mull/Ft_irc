@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cinclude.hpp                                       :+:      :+:    :+:   */
+/*   Channel_utils.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 14:01:28 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/31 15:37:36 by pcoimbra         ###   ########.fr       */
+/*   Created: 2023/10/31 15:25:43 by pcoimbra          #+#    #+#             */
+/*   Updated: 2023/10/31 16:54:58 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CINCLUDE_HPP
-# define CINCLUDE_HPP
-
-#include "Server.hpp"
-#include "Client.hpp"
 #include "Channel.hpp"
-#include "Parse.hpp"
 
-#endif
+std::string	Channel::getName(void)
+{
+	return _name;
+}
+
+Channel::Channel(std::string name, std::string superuser) : _superUser(superuser), _name(name)
+{
+	_users.push_back(superuser);
+}

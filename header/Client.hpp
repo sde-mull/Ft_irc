@@ -31,6 +31,7 @@ class Client
 		Client & operator=(Client const &rhs);
 
 		//getters
+		std::string	Getters(int	option);
 
 		std::string getUser();
 		std::string getNick();

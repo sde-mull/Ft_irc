@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Lincludes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/01 18:57:08 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:21:20 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@
 #define B_CYAN		"\033[1;36m"
 #define B_WHITE		"\033[1;37m"
 #define RESET		"\033[0m"
+
+//CLIENT MACROS
+
+#define	GETUSER		1
+#define	GETNICK		2
 
 #include <stdio.h>  
 #include <cstring>

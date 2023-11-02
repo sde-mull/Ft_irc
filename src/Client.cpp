@@ -52,6 +52,20 @@ int     Client::getSocketFd() const
     return (this->_socketFd);
 }
 
+std::string	Client::Getters(int opt)
+{
+	switch(opt)
+	{
+		case GETNICK:
+			return _nick;
+			break ;
+		case GETUSER:
+			return _user;
+			break;
+	}
+	return NULL;
+}
+
 std::string Client::getUser()
 {
     return (this->_user);
