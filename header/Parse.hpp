@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/31 16:49:07 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/02 12:15:10 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,18 @@ class Parse
         ~Parse();
 
         //Non-member functions
-        static  bool    	checkArgParam(std::string port, std::string passsword);
-        static  bool    	checkNumbArgs(int const argc);
-        static  int     	printErrorMessage(std::string message, int typeError);
+        static  bool    					checkArgParam(std::string port, std::string passsword);
+        static  bool    					checkNumbArgs(int const argc);
+        static  int     					printErrorMessage(std::string message, int typeError);
 
 		//Handle_cmds.cpp
-		static	int			Join_cmd(char *buf, Client client);
-		static	int			Handle_commands(char *buf, Client *client);
+		static	int							Join_cmd(std::vector<std::string> buf, Client client);
+		static	int							Handle_commands(char *buf, Client *client);
 
 		//Handle_cmds_utils.cpp
-		static	int			sendIrcMessage(std::string message, int clientId);
-		static	std::string	strdup_tilspc(char *buf);
-		static	std::string	strdup_aftspc(char *buf);
-		static	int			try_joining(std::vector<Channel>::iterator ch_it, std::string buffer, Client client);
+		static	int							sendIrcMessage(std::string message, int clientId);
+		static	int							try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
+		static	std::vector<std::string>	Split_spc(char *buf);
 };
 
 #endif

@@ -6,14 +6,13 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/10/31 17:07:07 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/02 12:17:24 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/Lincludes.hpp"
 #include "../header/Cinclude.hpp"
 
-int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::string buffer, Client client)
+int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::string *buffer, Client client)
 {
 	bool	F_banned;
 
@@ -32,28 +31,22 @@ int	Parse::sendIrcMessage(std::string message, int clientId)
 	return 0;
 }
 
-std::string	Parse::strdup_tilspc(char *buf)
+std::vector<std::string> Parse::Split_spc(char *buf)
 {
-	std::string	ret;
+	int							i = 0;
+	int							j;
+	std::vector<std::string>	ret;
+	std::string					buffer;
 
-	for (int i = 0; buf[i] != ' '; i++)
-		ret[i] = buf[i];
-	return (ret);
-}
-
-std::string	Parse::strdup_aftspc(char *buf)
-{
-	std::string	ret;
-	int			i;
-
-	while (buf[i] != ' ')
-		i++;
-	while (buf[i] == ' ')
-		i++;
-	for (int j = 0; buf[i] != '\0'; j++)
+	while (buf[i])
 	{
-		ret[j] = buf[i];
-		i++;
+		j = 0;
+		while(buf[i] == ' ' && buf[i])
+			i++;
+		while (buf[i] != ' ' && buf[i])
+			buffer[j++] = buf[i++];
+		ret.push_back(buffer);
+		buffer.clear();
 	}
 	return (ret);
 }
