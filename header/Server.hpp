@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 15:46:35 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/02 14:29:47 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ class Server
     //Server run
         int             startConnection(void);
         void            createIPv4Address(void);
-        int             bound2BeServer(void);
-        void            acceptConnection(void);
+        int             bindAndListen(void);
+        int             acceptConnection(void);
     
     //Handling messages
         int      Handle_Message(Client &client);
@@ -55,6 +55,7 @@ class Server
         void    ft_pass(Client &client, std::string str);
         void    ft_nick(Client &client, std::string str);
         void    ft_user(Client &client, std::string str);
+        int      Check_Client(int fd);
 };
 
 

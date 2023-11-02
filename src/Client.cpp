@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 15:51:40 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/01 18:51:31 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ Client::Client(void)
     std::cout << B_GREEN "Client default contrutor called" RESET << std::endl;
 }
 
-Client::Client(int fd) : _socketFd(fd), _nick("\0"), _user("\0"), f_pass(0), f_auth(0)
+
+Client::Client(int id) : _socketFd(fd), _nick("\0"), _user("\0"), f_pass(0), f_auth(0)
 {
-    std::cout << B_GREEN "Client fd contrutor called" RESET << std::endl;
+    std::cout << B_GREEN "Client id contrutor called" RESET << std::endl;
 }
 
 Client::~Client(void)
@@ -32,13 +33,21 @@ Client::Client(Client const &src)
     *this = src;
 }
 
-Client & Client::operator=(Client const &rhs)
+Client& Client::operator=(const Client& rhs)
 {
-    (void)rhs;
-    return (*this);
+    if (this == &rhs)
+    {
+        return *this;
+    }
+
+    _socketFd = rhs._socketFd;
+    _user = rhs._user;
+    _nick = rhs._nick;
+
+    return *this;
 }
 
-int Client::getSocketFd()
+int     Client::getSocketFd() const
 {
     return (this->_socketFd);
 }
@@ -63,4 +72,7 @@ void Client::setNick(std::string nick)
     this->_nick = nick;
 }
 
-//Client
+void    Client::setSocketFd(int socketFd)
+{
+    this->_socketFd = socketFd;
+}

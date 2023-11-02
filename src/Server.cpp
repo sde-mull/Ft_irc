@@ -6,7 +6,7 @@
 /*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/31 10:37:53 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/11/02 14:43:02 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ std::string Server::getPassword(void) const
 
 //Server running system
 
-int Server::bound2BeServer(void)
+int Server::bindAndListen(void)
 {
     if (bind(this->_socketFd, (struct sockaddr*)this->_address, sizeof(*(this->_address))) == -1)
         return (Parse::printErrorMessage(B_YELLOW "Failed to bind ", 1));
@@ -77,20 +77,13 @@ void   Server::createIPv4Address(void)
     std::cout << B_GREEN "IPv4Address was created successfully!" RESET << std::endl;
 }
 
-void    Server::acceptConnection(void)
+int Server::acceptConnection(void)
 {
-    struct sockaddr *clientAddr;
+    struct sockaddr clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
 
-    std::cout << B_GREEN "Server is running..." RESET << std::endl;
-    this->_acceptFd = accept(_socketFd, clientAddr, &clientAddrSize);
-
-    Client client(this->_acceptFd);
-    while (1)
-    {
-        if (Handle_Message(client))
-            break ;
-    }
+    int newSocketFd = accept(this->_socketFd, (struct sockaddr*)&clientAddr, &clientAddrSize);
+    return (newSocketFd);
 }
 
 int    Server::startConnection(void)
@@ -101,11 +94,45 @@ int    Server::startConnection(void)
         return (Parse::printErrorMessage(B_YELLOW "Failed to create socket" RESET , 1));
     std::cout << B_GREEN "TCPIPv4Socket was created successfully!" RESET << std::endl;
     createIPv4Address();
-    if (bound2BeServer())
+    if (bindAndListen())
         return (2);
-    acceptConnection();
+    std::cout << B_GREEN "Server is running on port " << this->_port << RESET << std::endl;
+  
+    fd_set current_sockets, ready_sockets;
+    int client_socket;
+
+    int nbr_clients = 5;
+    FD_ZERO(&current_sockets);
+    FD_SET(this->_socketFd, &current_sockets);
+
+    while (true)
+    {
+        ready_sockets = current_sockets;
+        if (select(nbr_clients + 1, &ready_sockets, NULL, NULL, NULL) == -1)
+            return (Parse::printErrorMessage("select failed", 3));
+
+        for (int i = 0; i <= nbr_clients; i++)
+        {
+            if (FD_ISSET(i, &ready_sockets))
+            {
+                if (i == this->_socketFd)
+                {
+                    client_socket = acceptConnection();
+                    FD_SET(client_socket, &current_sockets);
+                    Parse::addClient(client_socket);
+                    if (client_socket > nbr_clients)
+                        nbr_clients = client_socket;
+                }
+                else
+                {
+                    Handle_Message(Parse::searchClient(i));
+                }
+            }
+        }
+    }
     return (0);
 }
+
 
 int     Server::Handle_Message(Client &client)
 {

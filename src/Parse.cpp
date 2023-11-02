@@ -6,34 +6,13 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 15:08:05 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/02 14:29:24 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Parse.hpp"
 
-//Constructors and Destructors
-
-Parse::Parse(void)
-{
-    std::cout << B_GREEN "Parse default contrutor called" RESET << std::endl;
-}
-
-Parse::~Parse(void)
-{
-    std::cout << B_RED "Parse destructor called" RESET << std::endl;
-}
-
-Parse::Parse(Parse const &src)
-{
-    *this = src;
-}
-
-Parse & Parse::operator=(Parse const &rhs)
-{
-    (void)rhs;
-    return (*this);
-}
+std::vector<Client> Parse::_clients;
 
 //Non-member functions of parse
 
@@ -72,4 +51,23 @@ int Parse::printErrorMessage(std::string message, int typeError)
 {
     std::cerr << RED "Error:\n" << message << std::endl;
     return (typeError);
+}
+
+void    Parse::addClient(int id)
+{
+    _clients.push_back(Client(id));
+}
+
+Client&  Parse::searchClient(int id)
+{
+    int index;
+
+    for (int i = 0; i < _clients.size(); i++)
+    {
+        if (_clients[i].getSocketFd() == id){
+            index = i;
+            break ;
+        }
+    }
+    return (_clients[index]);
 }
