@@ -46,6 +46,8 @@ class Parse
         static  Client&  searchClientById(int id);
         static  bool    CheckClientByNick(std::string nick);
         static  bool    CheckNickRules(std::string nick);
+        static  void    PrintClientArgs(Client &client);
+        static  std::vector<std::string> ft_split(char *buf, int received);
 };
 
 #endif
