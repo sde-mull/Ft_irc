@@ -18,7 +18,7 @@ Client::Client(void)
 }
 
 
-Client::Client(int id) : _socketFd(fd), _nick("\0"), _user("\0"), f_pass(0), f_auth(0)
+Client::Client(int id) : _socketFd(id), _nick("\0"), _user("\0"), f_pass(0), f_auth(0)
 {
     std::cout << B_GREEN "Client id contrutor called" RESET << std::endl;
 }

@@ -29,7 +29,6 @@ class Server
         int                 _socketFd;
         struct sockaddr_in  *_address;
         int                 _acceptFd;
-        std::vector<Client> _clients;
         std::map<std::string, function> m;
         
     public:
@@ -55,7 +54,6 @@ class Server
         void    ft_pass(Client &client, std::string str);
         void    ft_nick(Client &client, std::string str);
         void    ft_user(Client &client, std::string str);
-        int      Check_Client(int fd);
 };
 
 

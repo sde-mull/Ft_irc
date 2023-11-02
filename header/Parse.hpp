@@ -27,7 +27,9 @@ class Parse
         static  bool    checkNumbArgs(int const argc);
         static  int     printErrorMessage(std::string message, int typeError);
         static  void    addClient(int id);
-        static  Client&  searchClient(int id);
+        static  Client&  searchClientById(int id);
+        static  bool    CheckClientByNick(std::string nick);
+        static  bool    CheckNickRules(std::string nick);
 };
 
 #endif
