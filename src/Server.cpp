@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/25 16:47:56 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/02 14:43:02 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ std::string Server::getPassword(void) const
 
 //Server running system
 
-int Server::bound2BeServer(void)
+int Server::bindAndListen(void)
 {
     if (bind(this->_socketFd, (struct sockaddr*)this->_address, sizeof(*(this->_address))) == -1)
         return (Parse::printErrorMessage(B_YELLOW "Failed to bind ", 1));
@@ -74,40 +74,13 @@ void   Server::createIPv4Address(void)
     std::cout << B_GREEN "IPv4Address was created successfully!" RESET << std::endl;
 }
 
-void    Server::acceptConnection(void)
+int Server::acceptConnection(void)
 {
-    struct sockaddr *clientAddr;
+    struct sockaddr clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
 
-    std::cout << B_GREEN "Server is running..." RESET << std::endl;
-    this->_acceptFd = accept(_socketFd, clientAddr, &clientAddrSize);
-
-    const char* createChannelCommands[] = {
-        "NICK yourserver",           // Set a temporary server nickname
-        "USER yourserver 0 * :Your Server", // Set user information
-        "MODE #mychannel +t",        // Set channel modes (topic settable by operator)
-        "JOIN #mychannel",           // JOIN the channel
-    };
-
-    for (const char* command : createChannelCommands) {
-        send(this->_acceptFd, command, strlen(command), 0);
-        send(this->_acceptFd, "\r\n", 2, 0); // Terminate IRC messages with \r\n
-    }
-    char    buf[1024];
-    size_t     received;
-    int     i;
-    while (1)
-    {
-        received = recv(this->_acceptFd, buf, 1024, 0);
-        // Server::Handle_Message(buf, this->_acceptFd);
-        if (received == -1)
-            break ;
-        printf("response1: %s\n", buf);
-        i = 0;
-        while (i < received)
-            buf[i++] = '\0';
-    }
-    close (_acceptFd);
+    int newSocketFd = accept(this->_socketFd, (struct sockaddr*)&clientAddr, &clientAddrSize);
+    return (newSocketFd);
 }
 
 int    Server::startConnection(void)
@@ -118,35 +91,56 @@ int    Server::startConnection(void)
         return (Parse::printErrorMessage(B_YELLOW "Failed to create socket" RESET , 1));
     std::cout << B_GREEN "TCPIPv4Socket was created successfully!" RESET << std::endl;
     createIPv4Address();
-    if (bound2BeServer())
+    if (bindAndListen())
         return (2);
-    acceptConnection();
+    std::cout << B_GREEN "Server is running on port " << this->_port << RESET << std::endl;
+
+    fd_set current_sockets, ready_sockets;
+    int client_socket;
+
+    int nbr_clients = 5;
+    FD_ZERO(&current_sockets);
+    FD_SET(this->_socketFd, &current_sockets);
+
+    while (true)
+    {
+        ready_sockets = current_sockets;
+        if (select(nbr_clients + 1, &ready_sockets, NULL, NULL, NULL) == -1)
+            return (Parse::printErrorMessage("select failed", 3));
+
+        for (int i = 0; i <= nbr_clients; i++)
+        {
+            if (FD_ISSET(i, &ready_sockets))
+            {
+                if (i == this->_socketFd)
+                {
+                    client_socket = acceptConnection();
+                    FD_SET(client_socket, &current_sockets);
+                    Parse::addClient(client_socket);
+                    if (client_socket > nbr_clients)
+                        nbr_clients = client_socket;
+                }
+                else
+                {
+                    Handle_Message(Parse::searchClient(i));
+                }
+            }
+        }
+    }
     return (0);
 }
 
-int     Server::Handle_Message(char *message, int fd)
+int     Server::Handle_Message(Client &client)
 {
-    if (!Check_Client(fd))
-    {
-        std::cout << "New Client" << std::endl;
-        return (2);
-    }
-    else
-        std::cout << "Old Client" << std::endl;
-    /* char **arr = ft_split(message, 32);
-    if (!strcmp(arr[0], "PASS") && !strncmp(arr[1], this->_password.c_str(), strlen(arr[1]) - 1))
-        std::cout << "TAS A TENTAR PASSAR" << std::endl;
-    else    
-        std::cout << "ATAO" << std::endl; */
-    return (0);
-}
-
-int    Server::Check_Client(int fd)
-{
-    for (int i = 0; i < _clients.size(); i++)
-    {
-        if (_clients[i].getSocketFd() == fd)
-            return (1);
-    }
+    char    buf[1024];
+    size_t     received;
+    int     i;
+    received = recv(client.getSocketFd(), buf, 1024, 0);
+    if (received <= 0 && close(client.getSocketFd()))
+        return (1);
+    std::cout << "response: " << buf << std::endl;
+    i = 0;
+    while (i < received)
+        buf[i++] = '\0';
     return (0);
 }
