@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/31 16:38:43 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:21:20 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@
 #include <stdint.h>
 #include <fstream>
 #include <vector>
+#include <map>
 
 char		**ft_split(char const *s, char c);
 

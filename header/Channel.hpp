@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/10/31 17:03:57 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:21:02 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class Channel
 			std::string 				_topic;
 			// std::string 				_password;
 			std::string					_superUser;
-			std::vector<std::string>	_BanUsers;
+			std::map<char, int>			_modes;
 		
 	public:
 	

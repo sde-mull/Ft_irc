@@ -6,18 +6,18 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/02 12:17:24 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:25:38 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/Cinclude.hpp"
+#include "Cinclude.hpp"
 
-int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::string *buffer, Client client)
+int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client)
 {
 	bool	F_banned;
 
-	if (ch_it->Banneduser(client.Getters(GETUSER)) == 0)
-		ch_it->addUser(client.Getters(GETUSER));
+	if (mode invite only is on)
+		
 	else
 		return (printErrorMessage("YOU ARE BANNED FROM THE CHANNEL!", 5));
 }
@@ -41,7 +41,7 @@ std::vector<std::string> Parse::Split_spc(char *buf)
 	while (buf[i])
 	{
 		j = 0;
-		while(buf[i] == ' ' && buf[i])
+		while((buf[i] == ' ' || buf[i] == '\r') && buf[i])
 			i++;
 		while (buf[i] != ' ' && buf[i])
 			buffer[j++] = buf[i++];
