@@ -12,28 +12,7 @@
 
 #include "Parse.hpp"
 
-//Constructors and Destructors
-
-Parse::Parse(void)
-{
-    std::cout << B_GREEN "Parse default contrutor called" RESET << std::endl;
-}
-
-Parse::~Parse(void)
-{
-    std::cout << B_RED "Parse destructor called" RESET << std::endl;
-}
-
-Parse::Parse(Parse const &src)
-{
-    *this = src;
-}
-
-Parse & Parse::operator=(Parse const &rhs)
-{
-    (void)rhs;
-    return (*this);
-}
+std::vector<Client> Parse::_clients;
 
 //Non-member functions of parse
 
@@ -70,6 +49,49 @@ bool Parse::checkNumbArgs(int const argc)
 
 int Parse::printErrorMessage(std::string message, int typeError)
 {
-    std::cerr << RED "Error:\n" << message << std::endl;
+    if (typeError)
+        std::cerr << RED "Error: " << message << RESET << std::endl;
     return (typeError);
+}
+
+void    Parse::addClient(int id)
+{
+    _clients.push_back(Client(id));
+}
+
+Client&  Parse::searchClientById(int id)
+{
+    int index;
+
+    for (int i = 0; i < _clients.size(); i++)
+    {
+        if (_clients[i].getSocketFd() == id){
+            index = i;
+            break ;
+        }
+    }
+    return (_clients[index]);
+}
+
+bool  Parse::CheckClientByNick(std::string nick)
+{
+    for (int i = 0; i < _clients.size(); i++)
+    {
+        if (!_clients[i].getNick().compare(nick))
+            return (false);
+    }
+    return (true);
+}
+
+bool Parse::CheckNickRules(std::string str)
+{
+    if (str[0] == '#' || str[0] == '&' || str[0] == '$' || str[0] == ':')
+        return (false);
+    for (int i = 0; i < str.size(); i++)
+    {
+        if (str[i] == ' ' || str[i] == ',' || str[i] == '*' || str[i] == '?'\
+        || str[i] == '!' || str[i] == '@' || str[i] == '.')
+            return (false);
+    }
+    return (true);
 }
