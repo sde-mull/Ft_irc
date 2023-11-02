@@ -50,10 +50,11 @@ class Server
     
     //Handling messages
         int      Handle_Message(Client &client);
-        std::vector<std::string>    ft_split(char *buf, int received);
         void    ft_pass(Client &client, std::string str);
         void    ft_nick(Client &client, std::string str);
         void    ft_user(Client &client, std::string str);
+        void    Client_Authenticate(Client &client, char *buf, int received);
+        int     Call_Functions(Client &client, char *buf, int received);
 };
 
 

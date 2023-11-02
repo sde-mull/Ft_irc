@@ -95,3 +95,39 @@ bool Parse::CheckNickRules(std::string str)
     }
     return (true);
 }
+
+void    Parse::PrintClientArgs(Client &client)
+{
+    if (client.f_pass)
+        std::cout << "You have set the correct password " << GREEN "✔" RESET << std::endl;
+    else
+        std::cout << "You have not set the correct passoword " << RED "✘" RESET << std::endl;
+    std::cout << "This is your Nick: ";
+    if (client.getNick() != "\0")
+        std::cout << GREEN << client.getNick() << " ✔" << RESET << std::endl;
+    else
+        std::cout << RED "✘" RESET << std::endl;
+    std::cout << "This is your User: ";
+    if (client.getUser() != "\0")
+        std::cout << GREEN << client.getUser() << " ✔" << RESET << std::endl;
+    else
+        std::cout << RED "✘" RESET << std::endl;
+}
+
+std::vector<std::string>    Parse::ft_split(char *buf, int received)
+{
+    std::string nova;
+    for (size_t j = 0; j < received; j++)
+    {
+        if (buf[j] == '\n')
+            nova += ' ';
+        if (buf[j] != '\n' && buf[j] != '\r')
+            nova += buf[j];
+    }
+    std::istringstream ss(nova);
+    std::vector<std::string> vec;
+    std::string token;
+    while (std::getline(ss, token, ' '))
+        vec.push_back(token);
+    return (vec);
+}

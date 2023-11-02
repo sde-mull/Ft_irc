@@ -21,7 +21,7 @@ $(NAME): $(OBJS)
 
 init:
 	@make re
-	@./ircserv 3456 password123
+	@./ircserv 3456 pass123
 
 clean:
 	rm -rf $(OBJ_PATH)

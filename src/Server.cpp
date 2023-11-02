@@ -133,19 +133,38 @@ int    Server::startConnection(void)
     return (0);
 }
 
-
 int     Server::Handle_Message(Client &client)
 {
     char    buf[1024];
     size_t     received;
-    int     i;
     received = recv(client.getSocketFd(), buf, 1024, 0);
     if (received <= 0 && close(client.getSocketFd()))
         return (1);
-    std::cout << "response: " << buf << std::endl;
+    std::cout << std::endl << "response: " << buf << std::endl;
     if (client.f_auth == 1)
         return (0);
-    std::vector<std::string> vec = this->ft_split(buf, received);
+    else
+        Client_Authenticate(client, buf, received);
+    for (size_t i = 0; i < received; i++)
+        buf[i] = '\0';
+    return (0);
+}
+
+void Server::Client_Authenticate(Client &client, char *buf, int received)
+{
+    if (!Call_Functions(client, buf, received))
+        std::cout << RED "Client not authenticated " << RESET << std::endl;
+    Parse::PrintClientArgs(client);
+    if (client.f_pass == 1 && client.getNick() != "\0" && client.getUser() != "\0")
+    {
+        std::cout << GREEN "CLIENT AUTHENTICATE" << RESET << std::endl;
+        client.f_auth = 1;
+    }
+}
+
+int Server::Call_Functions(Client &client, char *buf, int received)
+{
+    std::vector<std::string> vec = Parse::ft_split(buf, received);
     int f = 0;
     for (int k = 0; k < vec.size(); k++)
     {
@@ -156,35 +175,7 @@ int     Server::Handle_Message(Client &client)
             f = 1;
         }
     }
-    if (f == 0)
-        std::cout << "client not aunthenticated" << std::endl;
-    if (client.f_pass == 1 && client.getNick() != "\0" && client.getUser() != "\0")
-    {
-        std::cout << "CLIENT AUTHENTICATE" << std::endl;
-        client.f_auth = 1;
-    }
-    i = 0;
-    while (i < received)
-        buf[i++] = '\0';
-    return (0);
-}
-
-std::vector<std::string>    Server::ft_split(char *buf, int received)
-{
-    std::string nova;
-    for (size_t j = 0; j < received; j++)
-    {
-        if (buf[j] == '\n')
-            nova += ' ';
-        if (buf[j] != '\n' && buf[j] != '\r')
-            nova += buf[j];
-    }
-    std::istringstream ss(nova);
-    std::vector<std::string> vec;
-    std::string token;
-    while (std::getline(ss, token, ' '))
-        vec.push_back(token);
-    return (vec);
+    return (f);
 }
 
 void    Server::ft_pass(Client &client, std::string str)
