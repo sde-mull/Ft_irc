@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/02 11:49:04 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/06 23:41:56 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Lincludes.hpp"
 #include "Parse.hpp"
 #include "Client.hpp"
+#include "Exceptions.hpp"
 
 class Server;
 
@@ -24,12 +25,13 @@ typedef void (Server::*function) (Client &client, std::string str);
 class Server
 {
     private:
-        uint16_t            _port;
-        std::string         _password;
-        int                 _socketFd;
-        struct sockaddr_in  *_address;
-        int                 _acceptFd;
+        uint16_t                        _port;
+        std::string                     _password;
+        int                             _serverSocketFd;
+        struct sockaddr_in              *_address;
+        int                             _acceptFd;
         std::map<std::string, function> m;
+        fd_set                          _currentSockets;
         
     public:
     //Server Constructors and destructors
@@ -44,9 +46,11 @@ class Server
     
     //Server run
         int             startConnection(void);
-        void            createIPv4Address(void);
-        int             bindAndListen(void);
+        void            CreatingSocket(int domain, int type, int protocol);
+        void            creatingIPv4Address(void);
+        int             bindAndListenServer(void);
         int             acceptConnection(void);
+        int             ServerRunning(void);
     
     //Handling messages
         int      Handle_Message(Client &client);

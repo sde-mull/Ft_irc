@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/03 01:57:51 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/06 21:02:09 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,16 @@ class Parse
 		static	int							try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
 		static	std::vector<std::string>	Split_spc(char *buf);
         //Non-member functions
-        static  bool    checkArgParam(std::string port, std::string passsword);
-        static  bool    checkNumbArgs(int const argc);
-        static  int     printErrorMessage(std::string message, int typeError);
-        static  void    addClient(int id);
-        static  Client&  searchClientById(int id);
-        static  bool    CheckClientByNick(std::string nick);
-        static  bool    CheckNickRules(std::string nick);
-        static  void    PrintClientArgs(Client &client);
-        static  std::vector<std::string> ft_split(char *buf, int received);
+        static  bool                        checkArgParam(std::string port, std::string passsword);
+        static  bool                        checkNumbArgs(int const argc);
+        static  int                         printErrorMessage(std::string message, int typeError);
+        static  void                        printMessage(std::string message, std::string color = WHITE);
+        static  void                        addClient(int id);
+        static  Client&                     searchClientById(int id);
+        static  bool                        CheckClientByNick(std::string nick);
+        static  bool                        CheckNickRules(std::string nick);
+        static  void                        PrintClientArgs(Client &client);
+        static  std::vector<std::string>    ft_split(char *buf, int received);
 };
 
 #endif
