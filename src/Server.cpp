@@ -246,44 +246,27 @@ void    Server::PrintClientArgs(Client &client)
     if (client.f_pass)
     {
         SendMsg(client, "\nYou have set the correct password");
-        SendMsg(client, GREEN);
-        SendMsg(client, " ✔\n");
-        SendMsg(client, RESET);
+        SendMsg(client, GREEN " ✔\n" RESET);
     } 
     else
     {
         SendMsg(client, "You have not set the correct password");
-        SendMsg(client, RED);
-        SendMsg(client, " ✘\n");
-        SendMsg(client, RESET);
+        SendMsg(client, RED " ✘\n" RESET);
     }
     SendMsg(client, "This is your Nick: ");
     if (client.getNick() != "\0")
     {
         SendMsg(client, client.getNick().c_str());
-        SendMsg(client, GREEN);
-        SendMsg(client, " ✔\n");
-        SendMsg(client, RESET);
+        SendMsg(client, GREEN " ✔\n" RESET);
     }  
     else
-    {
-        SendMsg(client, RED);
-        SendMsg(client, " ✘\n");
-        SendMsg(client, RESET);
-    }
+        SendMsg(client, RED " ✘\n" RESET);
     SendMsg(client, "This is your User: ");
     if (client.getUser() != "\0")
     {
         SendMsg(client, client.getUser().c_str());
-        SendMsg(client, GREEN);
-        SendMsg(client, " ✔\n");
-        SendMsg(client, RESET);
-
+        SendMsg(client, GREEN " ✔\n" RESET);
     }
     else
-    {
-        SendMsg(client, RED);
-        SendMsg(client, " ✘\n");
-        SendMsg(client, RESET);
-    }
+        SendMsg(client, RED " ✘\n" RESET);
 }
