@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/02 11:49:04 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/06 17:15:00 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ class Server
         void    ft_user(Client &client, std::string str);
         void    Client_Authenticate(Client &client, char *buf, int received);
         int     Call_Functions(Client &client, char *buf, int received);
+
+        void    ReceiveFile(int socketFd);
 };
 
 #endif

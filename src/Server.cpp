@@ -6,7 +6,7 @@
 /*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/02 14:43:02 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/06 17:33:54 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,12 @@ void Server::Client_Authenticate(Client &client, char *buf, int received)
 int Server::Call_Functions(Client &client, char *buf, int received)
 {
     std::vector<std::string> vec = Parse::ft_split(buf, received);
+    if (vec[0] == "SEND")
+    {
+        if (client.SendFile(client.getSocketFd(), vec[1].c_str()) == 2)
+            return (2);
+        //ReceiveFile(client.getSocketFd());
+    } 
     int f = 0;
     for (int k = 0; k < vec.size(); k++)
     {
@@ -206,4 +212,26 @@ void     Server::ft_nick(Client &client, std::string str)
     client.setNick(str);   
 }
 
-//Server
+void    Server::ReceiveFile(int socketFd)
+{
+    char *filename = "file2.txt";
+    FILE *fp;
+    char buffer[1024];
+    int received;
+
+    fp = fopen(filename, "w");
+    if (fp == NULL)
+    {
+        perror("Error creating file\n");
+        return ;
+    }
+    while (1)
+    {
+        received = recv(socketFd, buffer, 1024, 0);
+        if (received <= 0)
+            return ;
+        fprintf(fp, "%s", buffer);
+        bzero(buffer, 1024);
+    }
+    return ;
+}

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmds_utils.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/02 17:25:38 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/06 17:15:51 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Cinclude.hpp"
+/* #include "Cinclude.hpp"
 
 int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client)
 {
@@ -49,4 +49,4 @@ std::vector<std::string> Parse::Split_spc(char *buf)
 		buffer.clear();
 	}
 	return (ret);
-}
+} */

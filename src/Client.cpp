@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/01 18:51:31 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/06 17:28:34 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,27 @@ void Client::setNick(std::string nick)
 void    Client::setSocketFd(int socketFd)
 {
     this->_socketFd = socketFd;
+}
+
+int     Client::SendFile(int socketFd, const char *filename)
+{
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL)
+    {
+        std::cout << "Error opening file" << std::endl;
+        return (2);
+    }
+    char data[1024] = {0};
+    while (fgets(data, 1024, fp) != NULL)
+    {
+        if (send(socketFd, data, strlen(data), 0) == -1)
+        {
+            std::cout << "Error sending data" << std::endl;
+            return (2);
+        }
+        bzero(data, 1024);
+    }
+    char *end = "eof";
+    send(socketFd, end, strlen(end), 0);
+    return (0);
 }

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_cmds.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/02 17:22:53 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/06 17:15:57 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Cinclude.hpp"
+/* #include "Cinclude.hpp"
 
 int	Privmsg_cmd(std::vector<std::string> buf, Client client)
 {
@@ -84,4 +84,4 @@ int	Parse::Handle_commands(char *buf, Client *client)
 	for (Ite; Ite != parsed_buffer.end(); Ite++)
 		message = message + ' ' + *Ite;
 	sendIrcMessage(message, client->getSocketFd());
-}
+} */
