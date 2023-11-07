@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/06 23:54:01 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/07 00:10:35 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,14 +107,14 @@ int    Server::ServerRunning(void)
 {
     fd_set  ready_sockets;
     int     client_socket;
-    int     nbr_clients = 1;
+    int     nbr_clients = 5;
 
     FD_ZERO(&this->_currentSockets);
     FD_SET(this->_serverSocketFd, &this->_currentSockets);
 
     while (true){
         ready_sockets = this->_currentSockets;
-        if (select(nbr_clients, &ready_sockets, NULL, NULL, NULL) == -1){
+        if (select(nbr_clients + 1, &ready_sockets, NULL, NULL, NULL) == -1){
             Parse::printErrorMessage("Select Failed", 2);
             continue ;
         }
