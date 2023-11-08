@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/06 17:16:05 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:43:58 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* #include "Channel.hpp"
+
+Channel::Channel(void)
+{
+    std::cout << B_GREEN "Channel default contrutor called" RESET << std::endl;
+}
+
+Channel::~Channel(void)
+{
+    std::cout << B_RED "Channel destructor called" RESET << std::endl;
+}
 
 Channel::Channel(std::string name, std::string CreatingUser) : _superUser(CreatingUser), _name(name)
 {
@@ -31,4 +41,10 @@ int	Channel::Banneduser(std::string user)
 void	Channel::addUser(std::string user)
 {
 	_users.push_back(user);
-} */
+}
+
+std::string	Channel::getName(void)
+{
+	return _name;
+}
+>>>>>>> main

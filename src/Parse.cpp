@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/02 17:27:09 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/06 21:02:15 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,13 @@ bool Parse::checkNumbArgs(int const argc)
 
 int Parse::printErrorMessage(std::string message, int typeError)
 {
-    if (typeError)
-        std::cerr << RED "Error: " << message << RESET << std::endl;
+    std::cerr << RED "Error: " << message << RESET << std::endl;
     return (typeError);
+}
+
+void Parse::printMessage(std::string message, std::string color)
+{
+    std::cout << color << message << RESET << std::endl;
 }
 
 void    Parse::addClient(int id)
