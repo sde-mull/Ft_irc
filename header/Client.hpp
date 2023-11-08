@@ -47,8 +47,6 @@ class Client
 
 		int 	getSocketFd() const;
 		void	setSocketFd(int socktFd);
-		
-		int		SendFile(int socketFd, const char *filename);
 };
 
 #endif

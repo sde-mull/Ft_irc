@@ -90,26 +90,3 @@ void    Client::setSocketFd(int socketFd)
 {
     this->_socketFd = socketFd;
 }
-
-int     Client::SendFile(int socketFd, const char *filename)
-{
-    FILE *fp = fopen(filename, "r");
-    if (fp == NULL)
-    {
-        std::cout << "Error opening file" << std::endl;
-        return (2);
-    }
-    char data[1024] = {0};
-    while (fgets(data, 1024, fp) != NULL)
-    {
-        if (send(socketFd, data, strlen(data), 0) == -1)
-        {
-            std::cout << "Error sending data" << std::endl;
-            return (2);
-        }
-        bzero(data, 1024);
-    }
-    char *end = "eof";
-    send(socketFd, end, strlen(end), 0);
-    return (0);
-}

@@ -56,7 +56,6 @@ class Server
         void    Client_Authenticate(Client &client, char *buf, int received);
         int     Call_Functions(Client &client, char *buf, int received);
 
-        void    ReceiveFile(int socketFd);
         void    SendMsg(Client &client, const char *data);
         void    PrintClientArgs(Client &client);
 };
