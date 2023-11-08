@@ -23,8 +23,8 @@ class Client
 		std::string _user;
 		std::string _nick;
 		//flags
-		int			f_pass;
-		int   		f_auth;
+		int			_f_pass;
+		int   		_f_auth;
 		
 	public:
 		Client();
@@ -34,22 +34,12 @@ class Client
 		Client & operator=(Client const &rhs);
 
 		//getters
-		std::string	Getters(int	option);
-
-		std::string getUser() const;
-		std::string getNick() const;
-		int 		getSocketFd() const;
-		int     	getFAuth() const;
-		int     	getFPass() const;
+		std::string	Getters(int	opt) const;
+		int			GettersInt(int opt) const;
 
 		//setters
-		void 		setUser(std::string user);
-		void 		setNick(std::string nick);
-		void		setSocketFd(int socktFd);
-		void    	setFAuth(int f_auth);
-		void    	setFPass(int f_pass);
-
-		int 		f_file;
+		void		Setters(int opt, std::string str);
+		void		SettersInt(int opt, int n);
 };
 
 #endif

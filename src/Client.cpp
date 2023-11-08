@@ -13,7 +13,7 @@
 
 Client::Client(void){}
 
-Client::Client(int id) : _socketFd(id), _nick("\0"), _user("\0"), f_pass(0), f_auth(0){}
+Client::Client(int id) : _socketFd(id), _nick("\0"), _user("\0"), _f_pass(0), _f_auth(0){}
 
 Client::~Client(void){}
 
@@ -24,18 +24,18 @@ Client::Client(Client const &src)
 
 Client& Client::operator=(const Client& rhs)
 {
-    this->_socketFd = rhs.getSocketFd();
-    this->f_pass = rhs.getFPass();
-    this->f_auth = rhs.getFAuth();
-    this->_user = rhs.getUser();
-    this->_nick = rhs.getNick();
+    this->_socketFd = rhs.GettersInt(GETCLIENTFD);
+    this->_f_pass = rhs.GettersInt(GETPASS);
+    this->_f_auth = rhs.GettersInt(GETAUTH);
+    this->_user = rhs.Getters(GETUSER);
+    this->_nick = rhs.Getters(GETNICK);
 
     return *this;
 }
 
 //Getters
 
-std::string	Client::Getters(int opt)
+std::string	Client::Getters(int opt) const
 {
 	switch(opt)
 	{
@@ -49,54 +49,49 @@ std::string	Client::Getters(int opt)
 	return NULL;
 }
 
-int     Client::getSocketFd() const
+int Client::GettersInt(int opt) const
 {
-    return (this->_socketFd);
-}
-
-std::string Client::getUser() const
-{
-    return (this->_user);
-}
-
-std::string Client::getNick() const
-{
-    return (this->_nick);
-}
-
-int     Client::getFAuth() const
-{
-    return (this->f_auth);
-}
-
-int     Client::getFPass() const
-{
-    return (this->f_pass);
+	switch(opt)
+	{
+		case GETCLIENTFD:
+			return  _socketFd;
+			break ;
+		case GETAUTH:
+			return _f_auth;
+			break;
+        case GETPASS:
+            return _f_pass;
+	}
+	return NULL;
 }
 
 //Setters
 
-void Client::setUser(std::string user)
+void Client::Setters(int opt, std::string str)
 {
-    this->_user = user;
+    switch(opt)
+	{
+		case SETUSER:
+			this->_user = str;
+			break ;
+		case SETNICK:
+			this->_nick = str; 
+			break;
+	}
 }
 
-void Client::setNick(std::string nick)
+void Client::SettersInt(int opt, int n)
 {
-    this->_nick = nick;
-}
-
-void    Client::setSocketFd(int socketFd)
-{
-    this->_socketFd = socketFd;
-}
-
-void    Client::setFAuth(int f_auth)
-{
-    this->f_auth = f_auth;
-}
-
-void    Client::setFPass(int f_pass)
-{
-    this->f_pass = f_pass;
+    switch(opt)
+	{
+		case SETCLIENTFD:
+			this->_socketFd = n;
+			break ;
+		case SETAUTH:
+			this->_f_auth = n; 
+			break;
+        case SETPASS:
+            this->_f_pass = n;
+            break ;
+	}
 }

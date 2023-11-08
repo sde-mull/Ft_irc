@@ -43,6 +43,12 @@
 #define GETAUTH         4
 #define GETPASS         5
 
+#define SETUSER         6
+#define SETNICK         7
+#define SETCLIENTFD     8
+#define SETAUTH         9
+#define SETPASS         10
+
 #include <stdio.h>  
 #include <cstring>
 #include <stdlib.h>  

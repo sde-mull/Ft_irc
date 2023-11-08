@@ -163,11 +163,11 @@ int     Server::Handle_Message(Client &client)
 {
     char    buf[1024];
     size_t     received;
-    received = recv(client.getSocketFd(), buf, 1024, 0);
-    if (received <= 0 && close(client.getSocketFd()))
+    received = recv(client.GettersInt(GETCLIENTFD), buf, 1024, 0);
+    if (received <= 0 && close(client.GettersInt(GETCLIENTFD)))
         return (1);
     std::cout << std::endl << "response: " << buf << std::endl;
-    if (client.getFAuth() == 1)
+    if (client.GettersInt(GETAUTH) == 1)
         return (0);
     else
         Client_Authenticate(client, buf, received);
@@ -180,11 +180,11 @@ void Server::Client_Authenticate(Client &client, char *buf, int received)
 {
     if (!Call_Functions(client, buf, received))
         std::cout << RED "Client not authenticated " << RESET << std::endl;
-    Parse::PrintClientArgs(client);
-    if (client.getFPass()== 1 && client.getNick() != "\0" && client.getUser() != "\0")
+    PrintClientArgs(client);
+    if (client.GettersInt(GETPASS) == 1 && client.Getters(GETNICK) != "\0" && client.Getters(GETUSER) != "\0")
     {
         std::cout << GREEN "CLIENT AUTHENTICATE" << RESET << std::endl;
-        client.setFAuth(1);
+        client.SettersInt(SETAUTH, 1);
     }
 }
 
@@ -207,14 +207,14 @@ int Server::Call_Functions(Client &client, char *buf, int received)
 void    Server::ft_pass(Client &client, std::string str)
 {
     if (this->_password == str)
-        client.setFPass(1);
+        client.SettersInt(SETPASS, 1);
     else
-        client.setFPass(0);
+        client.SettersInt(SETPASS, 0);
 }
 
 void    Server::ft_user(Client &client, std::string str)
 {
-    client.setUser(str);
+    client.Setters(SETUSER, str);
 }
 
 void     Server::ft_nick(Client &client, std::string str)
@@ -229,17 +229,17 @@ void     Server::ft_nick(Client &client, std::string str)
         Parse::printErrorMessage("Nick Already Taken", 2);
         return ;
     }
-    client.setNick(str);   
+    client.Setters(SETNICK, str);  
 }
 
 void    Server::SendMsg(Client &client, const char *data)
 {
-    send(client.getSocketFd(), data, strlen(data), 0);
+    send(client.GettersInt(GETCLIENTFD), data, strlen(data), 0);
 }
 
 void    Server::PrintClientArgs(Client &client)
 {
-    if (client.f_pass)
+    if (client.GettersInt(GETPASS))
     {
         SendMsg(client, "\nYou have set the correct password");
         SendMsg(client, GREEN " ✔\n" RESET);
@@ -250,17 +250,17 @@ void    Server::PrintClientArgs(Client &client)
         SendMsg(client, RED " ✘\n" RESET);
     }
     SendMsg(client, "This is your Nick: ");
-    if (client.getNick() != "\0")
+    if (client.Getters(GETNICK) != "\0")
     {
-        SendMsg(client, client.getNick().c_str());
+        SendMsg(client, client.Getters(GETNICK).c_str());
         SendMsg(client, GREEN " ✔\n" RESET);
     }  
     else
         SendMsg(client, RED " ✘\n" RESET);
     SendMsg(client, "This is your User: ");
-    if (client.getUser() != "\0")
+    if (client.Getters(GETUSER) != "\0")
     {
-        SendMsg(client, client.getUser().c_str());
+        SendMsg(client, client.Getters(GETUSER).c_str());
         SendMsg(client, GREEN " ✔\n" RESET);
     }
     else

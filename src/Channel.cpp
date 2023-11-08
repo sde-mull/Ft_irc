@@ -46,5 +46,4 @@ void	Channel::addUser(std::string user)
 std::string	Channel::getName(void)
 {
 	return _name;
-}
->>>>>>> main
+} */
