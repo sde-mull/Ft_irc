@@ -24,7 +24,7 @@ class Parse
     private:
         static std::vector<Client> _clients;
     public:
-		static std::vector<Channel>	_Channels;
+		//static std::vector<Channel>	_Channels;
 	
         //constructors and destructors
         Parse();
@@ -37,9 +37,9 @@ class Parse
 		static	int							Handle_commands(char *buf, Client *client);
 
 		//Handle_cmds_utils.cpp
-		static	int							sendIrcMessage(std::string message, int clientId);
+		/* static	int							sendIrcMessage(std::string message, int clientId);
 		static	int							try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
-		static	std::vector<std::string>	Split_spc(char *buf);
+		static	std::vector<std::string>	Split_spc(char *buf); */
         //Non-member functions
         static  bool                        checkArgParam(std::string port, std::string passsword);
         static  bool                        checkNumbArgs(int const argc);
