@@ -132,9 +132,10 @@ int    Server::ServerRunning(void)
                     if (client_socket > nbr_clients)
                         nbr_clients = client_socket;
                 }
-                else
-                {
-                    Handle_Message(Parse::searchClientById(i));
+                else{
+                    if (Handle_Message(Parse::searchClientById(i)) == 1){
+                        
+                    }
                 }
             }
         }
@@ -167,7 +168,7 @@ int     Server::Handle_Message(Client &client)
     if (received <= 0 && close(client.getSocketFd()))
         return (1);
     std::cout << std::endl << "response: " << buf << std::endl;
-    if (client.f_auth == 1)
+    if (client.getFAuth() == 1)
         return (0);
     else
         Client_Authenticate(client, buf, received);
@@ -181,10 +182,10 @@ void Server::Client_Authenticate(Client &client, char *buf, int received)
     if (!Call_Functions(client, buf, received))
         std::cout << RED "Client not authenticated " << RESET << std::endl;
     Parse::PrintClientArgs(client);
-    if (client.f_pass == 1 && client.getNick() != "\0" && client.getUser() != "\0")
+    if (client.getFPass()== 1 && client.getNick() != "\0" && client.getUser() != "\0")
     {
         std::cout << GREEN "CLIENT AUTHENTICATE" << RESET << std::endl;
-        client.f_auth = 1;
+        client.setFAuth(1);
     }
 }
 
@@ -207,9 +208,9 @@ int Server::Call_Functions(Client &client, char *buf, int received)
 void    Server::ft_pass(Client &client, std::string str)
 {
     if (this->_password == str)
-        client.f_pass = 1;
+        client.setFPass(1);
     else
-        client.f_pass = 0;
+        client.setFPass(0);
 }
 
 void    Server::ft_user(Client &client, std::string str)

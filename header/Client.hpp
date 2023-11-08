@@ -22,6 +22,9 @@ class Client
 	    int         _socketFd;
 		std::string _user;
 		std::string _nick;
+		//flags
+		int			f_pass;
+		int   		f_auth;
 		
 	public:
 		Client();
@@ -33,19 +36,18 @@ class Client
 		//getters
 		std::string	Getters(int	option);
 
-		std::string getUser();
-		std::string getNick();
+		std::string getUser() const;
+		std::string getNick() const;
+		int 		getSocketFd() const;
+		int     	getFAuth() const;
+		int     	getFPass() const;
 
 		//setters
-		void setUser(std::string user);
-		void setNick(std::string nick);
-
-		//flags
-		int			f_pass;
-		int   		f_auth;
-
-		int 	getSocketFd() const;
-		void	setSocketFd(int socktFd);
+		void 		setUser(std::string user);
+		void 		setNick(std::string nick);
+		void		setSocketFd(int socktFd);
+		void    	setFAuth(int f_auth);
+		void    	setFPass(int f_pass);
 };
 
 #endif

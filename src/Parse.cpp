@@ -102,7 +102,7 @@ bool Parse::CheckNickRules(std::string str)
 
 void    Parse::PrintClientArgs(Client &client)
 {
-    if (client.f_pass)
+    if (client.getFPass())
         std::cout << "You have set the correct password " << GREEN "✔" RESET << std::endl;
     else
         std::cout << "You have not set the correct passoword " << RED "✘" RESET << std::endl;
