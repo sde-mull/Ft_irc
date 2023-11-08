@@ -13,6 +13,8 @@
 #ifndef LINCLUDES_HPP
 # define LINCLUDES_HPP
 
+//COLOR MACROS
+
 #define BLACK		"\033[30m"
 #define RED			"\033[31m"
 #define GREEN		"\033[32m"
@@ -35,8 +37,11 @@
 
 //CLIENT MACROS
 
-#define	GETUSER		1
-#define	GETNICK		2
+#define	GETUSER		    1
+#define	GETNICK		    2
+#define GETCLIENTFD     3
+#define GETAUTH         4
+#define GETPASS         5
 
 #include <stdio.h>  
 #include <cstring>
