@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/01 18:51:31 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/07 00:15:13 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ Client::Client(int id) : _socketFd(id), _nick("\0"), _user("\0"), f_pass(0), f_a
     std::cout << B_GREEN "Client id contrutor called" RESET << std::endl;
 }
 
-Client::~Client(void)
-{
-    std::cout << B_RED "Client destructor called" RESET << std::endl;
-}
+Client::~Client(void){}
 
 Client::Client(Client const &src)
 {
@@ -41,6 +38,7 @@ Client& Client::operator=(const Client& rhs)
     }
 
     _socketFd = rhs._socketFd;
+    f_pass = rhs.f_pass;
     _user = rhs._user;
     _nick = rhs._nick;
 

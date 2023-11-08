@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/02 14:43:02 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/07 00:10:35 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ Server::Server(void)
 
 Server::Server(uint16_t port, std::string password) : _port(port), _password(password)
 {
-    std::cout << B_GREEN "Server parametric constructor called" RESET << std::endl;
     this->m["PASS"] = &Server::ft_pass;
     this->m["USER"] = &Server::ft_user;
     this->m["NICK"] = &Server::ft_nick;
+    Parse::printMessage("Server Object Constructed!", CYAN);
 }
 
 Server::~Server(void)
@@ -58,23 +58,27 @@ std::string Server::getPassword(void) const
 
 //Server running system
 
-int Server::bindAndListen(void)
+int Server::bindAndListenServer(void)
 {
-    if (bind(this->_socketFd, (struct sockaddr*)this->_address, sizeof(*(this->_address))) == -1)
-        return (Parse::printErrorMessage(B_YELLOW "Failed to bind ", 1));
-    if (listen(this->_socketFd, 10) == -1)
-        return (Parse::printErrorMessage(B_YELLOW "Failed to listen ", 1));
+    Parse::printMessage("Binding Server Socket to IPv4 Address", YELLOW);
+    if (bind(this->_serverSocketFd, (struct sockaddr*)this->_address, sizeof(*(this->_address))) == -1)
+        throw FailedBind();
+    Parse::printMessage("Bind Successfull!", GREEN);
+    if (listen(this->_serverSocketFd, 10) == -1)
+        throw FailedListen();
+    Parse::printMessage("Server is listening...", GREEN);
     return (0);
 }
 
-void   Server::createIPv4Address(void)
+void   Server::creatingIPv4Address(void)
 {
-    struct sockaddr_in *address = static_cast<struct sockaddr_in*>(malloc((sizeof(struct sockaddr_in))));
+    Parse::printMessage("Creating IPv4 Address", YELLOW);
+    struct sockaddr_in *address = static_cast<struct sockaddr_in*>(new struct sockaddr_in);
     address->sin_family = AF_INET;
     address->sin_port = htons(this->_port);
     address->sin_addr.s_addr = INADDR_ANY;
     this->_address = address;
-    std::cout << B_GREEN "IPv4Address was created successfully!" RESET << std::endl;
+    Parse::printMessage("IPv4 Address Created Sucessfully", GREEN);
 }
 
 int Server::acceptConnection(void)
@@ -82,44 +86,49 @@ int Server::acceptConnection(void)
     struct sockaddr clientAddr;
     socklen_t clientAddrSize = sizeof(clientAddr);
 
-    int newSocketFd = accept(this->_socketFd, (struct sockaddr*)&clientAddr, &clientAddrSize);
+    Parse::printMessage("Server is accepting a new client", YELLOW);
+    int newSocketFd = accept(this->_serverSocketFd, (struct sockaddr*)&clientAddr, &clientAddrSize);
     return (newSocketFd);
 }
 
-int    Server::startConnection(void)
+void    Server::CreatingSocket(int domain, int type, int protocol) // We can use this way in case we need to create other type of sockets beside this one
 {
-    std::cout << B_YELLOW "Server is starting the connection" RESET << std::endl;
-    this->_socketFd = socket(AF_INET, SOCK_STREAM, 0);
-    if (this->_socketFd == -1)
-        return (Parse::printErrorMessage(B_YELLOW "Failed to create socket" RESET , 1));
-    std::cout << B_GREEN "TCPIPv4Socket was created successfully!" RESET << std::endl;
-    createIPv4Address();
-    if (bindAndListen())
-        return (2);
-    std::cout << B_GREEN "Server is running on port " << this->_port << RESET << std::endl;
-  
-    fd_set current_sockets, ready_sockets;
-    int client_socket;
+    int enable = 1;
 
-    int nbr_clients = 5;
-    FD_ZERO(&current_sockets);
-    FD_SET(this->_socketFd, &current_sockets);
+    this->_serverSocketFd = socket(domain, type, protocol);
+    if (this->_serverSocketFd == -1)
+        throw FailedSocketCreation();
+    Parse::printMessage("Server Socket Created Successfully!", GREEN);
+    if (setsockopt(this->_serverSocketFd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) == -1)
+        throw FailedSetSockopt();
+}
 
-    while (true)
-    {
-        ready_sockets = current_sockets;
-        if (select(nbr_clients + 1, &ready_sockets, NULL, NULL, NULL) == -1)
-            return (Parse::printErrorMessage("select failed", 3));
+int    Server::ServerRunning(void)
+{
+    fd_set  ready_sockets;
+    int     client_socket;
+    int     nbr_clients = 5;
 
-        for (int i = 0; i <= nbr_clients; i++)
-        {
-            if (FD_ISSET(i, &ready_sockets))
-            {
-                if (i == this->_socketFd)
-                {
+    FD_ZERO(&this->_currentSockets);
+    FD_SET(this->_serverSocketFd, &this->_currentSockets);
+
+    while (true){
+        ready_sockets = this->_currentSockets;
+        if (select(nbr_clients + 1, &ready_sockets, NULL, NULL, NULL) == -1){
+            Parse::printErrorMessage("Select Failed", 2);
+            continue ;
+        }
+        for (int i = 0; i <= nbr_clients; i++){
+            if (FD_ISSET(i, &ready_sockets)){
+                if (i == this->_serverSocketFd){
                     client_socket = acceptConnection();
-                    FD_SET(client_socket, &current_sockets);
+                    if (client_socket == -1){
+                        Parse::printErrorMessage("Failed to accept the new Client", 1);
+                        continue ;
+                    }
+                    FD_SET(client_socket, &this->_currentSockets);
                     Parse::addClient(client_socket);
+                    Parse::printMessage("New Client Accepted", GREEN);
                     if (client_socket > nbr_clients)
                         nbr_clients = client_socket;
                 }
@@ -131,6 +140,23 @@ int    Server::startConnection(void)
         }
     }
     return (0);
+}
+
+int    Server::startConnection(void)
+{
+    try{
+        Parse::printMessage("---------Initializing Server---------", GREEN);
+        Parse::printMessage("Creating Server Socket", YELLOW);
+        CreatingSocket(AF_INET, SOCK_STREAM, 0);
+        creatingIPv4Address();
+        bindAndListenServer();
+        std::cout << GREEN "---------Server is running on port " << this->_port << "---------" <<RESET << std::endl;
+    }
+    catch(const std::exception& e){
+        std::cerr << RED "Error: " << e.what() << RESET << std::endl;
+        return (2);
+    }
+    return (ServerRunning());
 }
 
 int     Server::Handle_Message(Client &client)
