@@ -69,7 +69,7 @@ Client&  Parse::searchClientById(int id)
 
     for (int i = 0; i < _clients.size(); i++)
     {
-        if (_clients[i].getSocketFd() == id){
+        if (_clients[i].GettersInt(GETCLIENTFD) == id){
             index = i;
             break ;
         }
@@ -81,7 +81,7 @@ bool  Parse::CheckClientByNick(std::string nick)
 {
     for (int i = 0; i < _clients.size(); i++)
     {
-        if (!_clients[i].getNick().compare(nick))
+        if (!_clients[i].Getters(GETNICK).compare(nick))
             return (false);
     }
     return (true);
