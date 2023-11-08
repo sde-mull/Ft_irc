@@ -6,7 +6,6 @@
 /*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/07 00:10:35 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +179,7 @@ void Server::Client_Authenticate(Client &client, char *buf, int received)
 {
     if (!Call_Functions(client, buf, received))
         std::cout << RED "Client not authenticated " << RESET << std::endl;
-    Parse::PrintClientArgs(client);
+    PrintClientArgs(client);
     if (client.f_pass == 1 && client.getNick() != "\0" && client.getUser() != "\0")
     {
         std::cout << GREEN "CLIENT AUTHENTICATE" << RESET << std::endl;
@@ -230,4 +229,39 @@ void     Server::ft_nick(Client &client, std::string str)
         return ;
     }
     client.setNick(str);   
+}
+
+void    Server::SendMsg(Client &client, const char *data)
+{
+    send(client.getSocketFd(), data, strlen(data), 0);
+}
+
+void    Server::PrintClientArgs(Client &client)
+{
+    if (client.f_pass)
+    {
+        SendMsg(client, "\nYou have set the correct password");
+        SendMsg(client, GREEN " ✔\n" RESET);
+    } 
+    else
+    {
+        SendMsg(client, "You have not set the correct password");
+        SendMsg(client, RED " ✘\n" RESET);
+    }
+    SendMsg(client, "This is your Nick: ");
+    if (client.getNick() != "\0")
+    {
+        SendMsg(client, client.getNick().c_str());
+        SendMsg(client, GREEN " ✔\n" RESET);
+    }  
+    else
+        SendMsg(client, RED " ✘\n" RESET);
+    SendMsg(client, "This is your User: ");
+    if (client.getUser() != "\0")
+    {
+        SendMsg(client, client.getUser().c_str());
+        SendMsg(client, GREEN " ✔\n" RESET);
+    }
+    else
+        SendMsg(client, RED " ✘\n" RESET);
 }

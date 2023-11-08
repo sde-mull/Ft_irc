@@ -59,6 +59,9 @@ class Server
         void    ft_user(Client &client, std::string str);
         void    Client_Authenticate(Client &client, char *buf, int received);
         int     Call_Functions(Client &client, char *buf, int received);
+
+        void    SendMsg(Client &client, const char *data);
+        void    PrintClientArgs(Client &client);
 };
 
 #endif

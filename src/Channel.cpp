@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
+/* #include "Channel.hpp"
 
 Channel::Channel(void)
 {
@@ -47,3 +47,4 @@ std::string	Channel::getName(void)
 {
 	return _name;
 }
+>>>>>>> main

@@ -37,7 +37,6 @@
 // 	int							j;
 // 	std::vector<std::string>	ret;
 // 	std::string					buffer;
-
 // 	while (buf[i])
 // 	{
 // 		j = 0;

@@ -79,7 +79,6 @@
 // 			return (function[i](parsed_buffer, *client));
 // 	std::string	message;
 // 	std::vector<std::string>::iterator Ite = parsed_buffer.begin();
-
 // 	std::advance(Ite, 2);
 // 	for (Ite; Ite != parsed_buffer.end(); Ite++)
 // 		message = message + ' ' + *Ite;
