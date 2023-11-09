@@ -68,8 +68,4 @@
 #include <deque>
 #include <list>
 
-char	**ft_split(char *s, char c);
-void    free_2d(char **arr);
-char    *remove_newline(char *str);
-
 #endif

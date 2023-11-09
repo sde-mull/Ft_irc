@@ -62,7 +62,7 @@ int Client::GettersInt(int opt) const
         case GETPASS:
             return _f_pass;
 	}
-	return NULL;
+	return 0;
 }
 
 //Setters

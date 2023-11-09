@@ -22,15 +22,6 @@
 // 		return (printErrorMessage("YOU ARE BANNED FROM THE CHANNEL!", 5));
 // }
 
-// int	Parse::sendIrcMessage(std::string message, int clientId)
-// {
-// 	message = message + "\r\n";
-// 	std::cout << "Sending message: " << message << std::endl;
-// 	if (send(clientId, message.c_str(), message.length(), 0) == -1)
-// 		exit(1);
-// 	return 0;
-// }
-
 // std::vector<std::string> Parse::Split_spc(char *buf)
 // {
 // 	int							i = 0;
