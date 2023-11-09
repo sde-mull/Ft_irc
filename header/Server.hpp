@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/09 17:47:11 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:04:26 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 # define SERVER_HPP
 
 #include "Lincludes.hpp"
-<<<<<<< HEAD
-=======
-#include "Parse.hpp"
-#include "Client.hpp"
 
 class Server;
 
 typedef void (Server::*function) (Client &client, std::string str);
->>>>>>> aa3353f04ed5dede577e4ef620202bd7a931883a
 
 class Server
 {

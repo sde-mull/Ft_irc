@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/09 17:17:46 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:11:02 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@
 #define	GETUSER		1
 #define	GETNICK		2
 
+//Parser MACROS
+
+#define NOMODERR			6
+#define NOCHERR				7
+#define	NOUSERERR			8
+#define NOTENOUGHPERMSERR	9
+
 #include <stdio.h>  
 #include <cstring>
 #include <stdlib.h>  
@@ -57,13 +64,10 @@
 #include <deque>
 #include <list>
 
-<<<<<<< HEAD
 char		**ft_split(char const *s, char c);
 std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
-=======
-char	**ft_split(char *s, char c);
+
 void    free_2d(char **arr);
 char    *remove_newline(char *str);
->>>>>>> aa3353f04ed5dede577e4ef620202bd7a931883a
 
 #endif

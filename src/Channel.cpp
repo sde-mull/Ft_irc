@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/09 17:20:24 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:12:26 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,39 @@ int	Channel::invitedUsers(std::string user)
 		ite = _invitedUsers.erase(ite);
 		return 1;
 	}
+}
+
+int	Channel::IsUserMod(std::string user)
+{
+	std::vector<std::string>::iterator ite = vectorFind(_mods, user);
+
+	if (ite == _mods.end())
+		return 0;
+	else
+		return 1;
+}
+
+int	Channel::SearchForUser(std::string user)
+{
+	std::vector<std::string>::iterator ite = vectorFind(_users, user);
+
+	if (ite == _users.end())
+		return 0;
+	else
+		return 1;
+}
+
+void	rmUser(std::string user)
+{
+	std::vector<std::string>::iterator ite = vectorFind(_users, user);
+	
+	if (ite == _users.end())
+		std::cout << "error on rmUser" << std::endl;
+	else
+		ite = _users.erase(ite);
+}
+
+std::string	getSuperUser(void)
+{
+	return _superUser;
 }

@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/09 17:46:46 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:13:07 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,23 @@ int	Invite_cmd(std::vector<std::string> buf, Client client)
 	
 }
 
-int	Kick_cmd(std::vector<std::string> buf, Client client)
+int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 {
-	
+	std::vector<Channel>::iterator	ch_it = _Channels.begin();
+
+	while (ch_it != _Channels.end() && *ch_it != buf[1])
+		ch_it++;
+	if (ch_it == _Channels.end())
+		printErrorMessage("Error: Channel not found!", NOCHERR);
+	else if (ch_ite->IsUserMod(client.getUser()) == 0)
+		printErrorMessage("Error: You are not a moderator of this channel!", NOMODERR);
+	else if (ch_ite->SearchForUser(buf[2]) == 0)
+		printErrorMessage("Error: There is no such user.", NOUSERERR)
+	else if (ch_ite->IsUserMod(buf[2]) == 1 && (ch_ite->getSuperUser() != client.getUser()))
+		printErrorMessage("Error: The user you are trying to kick is also a mod.", NOTENOUGHPERMSERR);
+	else
+		rmUser(buf[2]);
+	return 0;
 }
 
 int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
@@ -64,6 +78,7 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 			else
 			{
 				std::cout << "This channel is invite only and you are not invited!" << std::endl;
+				return 1;
 			}
 		}
 		ch_it++;
