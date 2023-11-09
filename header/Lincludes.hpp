@@ -53,8 +53,17 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <sstream>
+#include <deque>
+#include <list>
 
+<<<<<<< HEAD
 char		**ft_split(char const *s, char c);
 std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
+=======
+char	**ft_split(char *s, char c);
+void    free_2d(char **arr);
+char    *remove_newline(char *str);
+>>>>>>> aa3353f04ed5dede577e4ef620202bd7a931883a
 
 #endif

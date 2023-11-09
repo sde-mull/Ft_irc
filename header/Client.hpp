@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:54:17 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/10/31 16:38:35 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/01 18:51:05 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,27 @@ class Client
 		
 	public:
 		Client();
+		Client(int id);
 		~Client();
 		Client(Client const &src);
 		Client & operator=(Client const &rhs);
 
 		//getters
-		int 		getSocketFd();
 		std::string	Getters(int	option);
+
+		std::string getUser();
+		std::string getNick();
+
+		//setters
+		void setUser(std::string user);
+		void setNick(std::string nick);
+
+		//flags
+		int			f_pass;
+		int   		f_auth;
+
+		int 	getSocketFd() const;
+		void	setSocketFd(int socktFd);
 };
 
 #endif

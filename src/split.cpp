@@ -1,6 +1,31 @@
 #include "Lincludes.hpp"
 
-int	string_counter(char const *str, char c)
+void free_2d(char **arr)
+{
+	int i = -1;
+	while (arr[++i])
+		free(arr[i]);
+	free(arr);
+	arr = NULL;
+}
+
+char *remove_newline(char *str)
+{
+	int len = strlen(str);
+	char *nova = (char *)malloc(sizeof(len) + 1);
+	int i = -1;
+	int j = -1;
+	while (str[++i])
+	{
+		if (str[i] != '\n' && str[i] != '\r')
+			nova[++j] = str[i];
+	}
+	while (++j <= len)
+		nova[j] = '\0';
+	return (nova);
+}
+
+int	string_counter(char *str, char c)
 {
 	int	i;
 	int	ver;
@@ -28,7 +53,7 @@ int	string_counter(char const *str, char c)
 	return (count);
 }
 
-char	*word(char const *str, int *ptr_i, char c)
+char	*word(char *str, int *ptr_i, char c)
 {
 	int		i;
 	int		n;
@@ -54,7 +79,7 @@ char	*word(char const *str, int *ptr_i, char c)
 	return (word);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char *s, char c)
 {
 	int		count;
 	int		i;
@@ -79,5 +104,6 @@ char	**ft_split(char const *s, char c)
 		}
 		i++;
 	}
+	std::cout << "SPLIT 4"  << std::endl;
 	return (arr);
 }
