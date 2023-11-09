@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/02 17:22:53 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/09 17:22:29 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,19 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	{
 		if (ChannelName == ch_it->getName())
 		{
-			Parse::try_joining(ch_it, buf, client);
 			exist = true;
+			if (Parse::try_joining(ch_it, buf, client) == 1)
+			{
+				std::cout << "joined channel!" << std::endl;
+				exist = false;
+				return 1;
+			}
 		}
 		ch_it++;
 	}
 	if (!exist)
 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
+	return 0;
 }
 
 int	Parse::Handle_commands(char *buf, Client *client)

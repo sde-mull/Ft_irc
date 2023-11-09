@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/02 17:27:09 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/09 17:17:15 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,16 @@ Parse & Parse::operator=(Parse const &rhs)
 }
 
 //Non-member functions of parse
+
+// std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle)
+// {
+// 	std::vector<std::string>::iterator ite;
+
+// 	for (ite = vector.begin(); ite != vector.end(); ite++)
+// 		if (*ite == needle)
+// 			return ite;
+// 	return (vector.end());
+// }
 
 bool Parse::checkArgParam(std::string port, std::string password)
 {

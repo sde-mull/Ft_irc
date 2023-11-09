@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/02 17:21:20 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/09 17:17:46 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@
 #include <map>
 
 char		**ft_split(char const *s, char c);
+std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
 
 #endif
