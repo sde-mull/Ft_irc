@@ -25,21 +25,21 @@ checkArgParam is a function that will check:
 */
 bool Parse::checkArgParam(std::string port, std::string password)
 {
-    int portNumb;
+	int portNumb;
 
-    portNumb = atoi(port.c_str());
-    if (port.length() == 0 || port.find_first_not_of("0123456789") != std::string::npos || \
-        portNumb < 0 || portNumb > 65535)
-    {
-        std::cerr << B_RED "Error:\n" B_YELLOW "Port must be an integer between 0 and 65535" RESET << std::endl;
-        return (false);
-    }
-    if (password.length() == 0)
-    {
-        std::cerr << B_RED "Error:\n" B_YELLOW "Server password doesn't exist" RESET << std::endl;
-        return (false);
-    }
-    return (true);
+	portNumb = atoi(port.c_str());
+	if (port.length() == 0 || port.find_first_not_of("0123456789") != std::string::npos || \
+		portNumb < 0 || portNumb > 65535)
+	{
+		std::cerr << B_RED "Error:\n" B_YELLOW "Port must be an integer between 0 and 65535" RESET << std::endl;
+		return (false);
+	}
+	if (password.length() == 0)
+	{
+		std::cerr << B_RED "Error:\n" B_YELLOW "Server password doesn't exist" RESET << std::endl;
+		return (false);
+	}
+	return (true);
 }
 /*
 checkNumbArgs have only one job. This function will check if the number of arguments passed is not different from 2.
@@ -48,14 +48,14 @@ executable  arg1  arg2   ----> 3 args that's why if (argc != 3)
 */
 bool Parse::checkNumbArgs(int const argc)
 {
-    if (argc != 3)
-    {
-        std::cerr << B_RED "Error:\n" B_YELLOW "Usage: ./ircserv <port> <password>\n" \
-                "<port>:" B_WHITE " The port number that the server will be listening to for incoming IRC connections\n" \
-                B_YELLOW "<password>:" B_WHITE " The connection password" RESET << std::endl;
-        return (false);
-    }
-    return (true);
+	if (argc != 3)
+	{
+		std::cerr << B_RED "Error:\n" B_YELLOW "Usage: ./ircserv <port> <password>\n" \
+				"<port>:" B_WHITE " The port number that the server will be listening to for incoming IRC connections\n" \
+				B_YELLOW "<password>:" B_WHITE " The connection password" RESET << std::endl;
+		return (false);
+	}
+	return (true);
 }
 
 /*
@@ -66,8 +66,8 @@ typeError
 */
 int Parse::printErrorMessage(std::string message, int typeError)
 {
-    std::cerr << RED "Error: " << message << RESET << std::endl;
-    return (typeError);
+	std::cerr << RED "Error: " << message << RESET << std::endl;
+	return (typeError);
 }
 
 /*
@@ -78,7 +78,7 @@ You can check how to make a argument default in the definition of this function 
 
 void Parse::printMessage(std::string message, std::string color)
 {
-    std::cout << color << message << RESET << std::endl;
+	std::cout << color << message << RESET << std::endl;
 }
 
 /*
@@ -88,7 +88,7 @@ Everytime the client is added we call the constructor of the client and push_bac
 
 void    Parse::addClient(int id)
 {
-    _clients.push_back(Client(id));
+	_clients.push_back(Client(id));
 }
 
 
@@ -100,16 +100,16 @@ once found it will return the reference of the client inside the vector
 
 Client&  Parse::searchClientById(int id)
 {
-    int index;
+	int index;
 
-    for (int i = 0; i < _clients.size(); i++)
-    {
-        if (_clients[i].GettersInt(GETCLIENTFD) == id){
-            index = i;
-            break ;
-        }
-    }
-    return (_clients[index]);
+	for (int i = 0; i < _clients.size(); i++)
+	{
+		if (_clients[i].GettersInt(GETCLIENTFD) == id){
+			index = i;
+			break ;
+		}
+	}
+	return (_clients[index]);
 }
 
 /*
@@ -119,12 +119,12 @@ Returns true in case it doesn't find an equal nick
 */
 bool  Parse::CheckClientByNick(std::string nick)
 {
-    for (int i = 0; i < _clients.size(); i++)
-    {
-        if (!_clients[i].Getters(GETNICK).compare(nick))
-            return (false);
-    }
-    return (true);
+	for (int i = 0; i < _clients.size(); i++)
+	{
+		if (!_clients[i].Getters(GETNICK).compare(nick))
+			return (false);
+	}
+	return (true);
 }
 
 /*
@@ -132,15 +132,15 @@ CheckNickRules will check if the nickname chosen is respecting the nickname rule
 */
 bool Parse::CheckNickRules(std::string str)
 {
-    if (str[0] == '#' || str[0] == '&' || str[0] == '$' || str[0] == ':')
-        return (false);
-    for (int i = 0; i < str.size(); i++)
-    {
-        if (str[i] == ' ' || str[i] == ',' || str[i] == '*' || str[i] == '?'\
-        || str[i] == '!' || str[i] == '@' || str[i] == '.')
-            return (false);
-    }
-    return (true);
+	if (str[0] == '#' || str[0] == '&' || str[0] == '$' || str[0] == ':')
+		return (false);
+	for (int i = 0; i < str.size(); i++)
+	{
+		if (str[i] == ' ' || str[i] == ',' || str[i] == '*' || str[i] == '?'\
+		|| str[i] == '!' || str[i] == '@' || str[i] == '.')
+			return (false);
+	}
+	return (true);
 }
 
 /*
@@ -149,20 +149,20 @@ quem fez que explique aqui
 
 std::vector<std::string>    Parse::ft_split(char *buf, int received)
 {
-    std::string nova;
-    for (size_t j = 0; j < received; j++)
-    {
-        if (buf[j] == '\n')
-            nova += ' ';
-        if (buf[j] != '\n' && buf[j] != '\r')
-            nova += buf[j];
-    }
-    std::istringstream ss(nova);
-    std::vector<std::string> vec;
-    std::string token;
-    while (std::getline(ss, token, ' '))
-        vec.push_back(token);
-    return (vec);
+	std::string nova;
+	for (size_t j = 0; j < received; j++)
+	{
+		if (buf[j] == '\n')
+			nova += ' ';
+		if (buf[j] != '\n' && buf[j] != '\r')
+			nova += buf[j];
+	}
+	std::istringstream ss(nova);
+	std::vector<std::string> vec;
+	std::string token;
+	while (std::getline(ss, token, ' '))
+		vec.push_back(token);
+	return (vec);
 }
 
 /*
@@ -175,4 +175,35 @@ int	Parse::sendIrcMessage(std::string message, int clientId)
 	if (send(clientId, message.c_str(), message.length(), 0) == -1)
 		exit(1);
 	return 0;
+}
+
+void Parse::PrintAllClients(void)
+{
+	for (int i = 0; i < _clients.size(); i++)
+		std::cout << "Client with the id " << _clients[i].GettersInt(GETCLIENTFD) << " is online!" << std::endl;
+}
+
+int  Parse::ReturnClientById(int id)
+{
+	for (int i = 0; i < _clients.size(); i++)
+	{
+		if (_clients[i].GettersInt(GETCLIENTFD) == id)
+			return (i);
+	}
+	return (-1);
+}
+
+void    Parse::RemoveClient(int id)
+{
+	std::string nick;
+
+	nick = Parse::searchClientById(id).Getters(GETNICK);
+	for (int i = 0; i < _clients.size(); i++)
+		_clients.erase(_clients.begin() + Parse::ReturnClientById(id));
+
+	if (nick.length() == 0)
+		std::cout << CYAN "Anonymous user";
+	else
+		std::cout << CYAN << nick;
+	Parse::printMessage(" was disconnected", RED);
 }
