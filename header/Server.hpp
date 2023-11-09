@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/09 16:51:40 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/09 17:47:11 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 # define SERVER_HPP
 
 #include "Lincludes.hpp"
-#include "Parse.hpp"
-#include "Client.hpp"
-
 
 class Server
 {
