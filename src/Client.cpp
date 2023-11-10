@@ -19,18 +19,18 @@ Client::~Client(void){}
 
 Client::Client(Client const &src)
 {
-    *this = src;
+	*this = src;
 }
 
 Client& Client::operator=(const Client& rhs)
 {
-    this->_socketFd = rhs.GettersInt(GETCLIENTFD);
-    this->_f_pass = rhs.GettersInt(GETPASS);
-    this->_f_auth = rhs.GettersInt(GETAUTH);
-    this->_user = rhs.Getters(GETUSER);
-    this->_nick = rhs.Getters(GETNICK);
+	this->_socketFd = rhs.GettersInt(GETCLIENTFD);
+	this->_f_pass = rhs.GettersInt(GETPASS);
+	this->_f_auth = rhs.GettersInt(GETAUTH);
+	this->_user = rhs.Getters(GETUSER);
+	this->_nick = rhs.Getters(GETNICK);
 
-    return *this;
+	return *this;
 }
 
 //Getters
@@ -59,17 +59,17 @@ int Client::GettersInt(int opt) const
 		case GETAUTH:
 			return _f_auth;
 			break;
-        case GETPASS:
-            return _f_pass;
+		case GETPASS:
+			return _f_pass;
 	}
-	return NULL;
+	return 0;
 }
 
 //Setters
 
 void Client::Setters(int opt, std::string str)
 {
-    switch(opt)
+	switch(opt)
 	{
 		case SETUSER:
 			this->_user = str;
@@ -82,7 +82,7 @@ void Client::Setters(int opt, std::string str)
 
 void Client::SettersInt(int opt, int n)
 {
-    switch(opt)
+	switch(opt)
 	{
 		case SETCLIENTFD:
 			this->_socketFd = n;
@@ -90,8 +90,8 @@ void Client::SettersInt(int opt, int n)
 		case SETAUTH:
 			this->_f_auth = n; 
 			break;
-        case SETPASS:
-            this->_f_pass = n;
-            break ;
+		case SETPASS:
+			this->_f_pass = n;
+			break ;
 	}
 }

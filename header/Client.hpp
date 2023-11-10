@@ -19,7 +19,7 @@
 class Client
 {
 	private:
-	    int         _socketFd;
+		int         _socketFd;
 		std::string _user;
 		std::string _nick;
 		//flags

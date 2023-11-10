@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/06 21:02:09 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/10 03:56:50 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ class Client;
 class Channel;
 class Parse
 {
-    private:
-        static std::vector<Client> _clients;
-    public:
+	private:
+		static std::vector<Client> _clients;
+	public:
 		//static std::vector<Channel>	_Channels;
 	
-        //constructors and destructors
-        Parse();
-        Parse(Parse const &src);
-        Parse & operator=(Parse const &rhs);
-        ~Parse();
+		//constructors and destructors
+		Parse();
+		Parse(Parse const &src);
+		Parse & operator=(Parse const &rhs);
+		~Parse();
 
 		//Handle_cmds.cpp
 		static	int							Join_cmd(std::vector<std::string> buf, Client client);
@@ -40,16 +40,20 @@ class Parse
 		/* static	int							sendIrcMessage(std::string message, int clientId);
 		static	int							try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
 		static	std::vector<std::string>	Split_spc(char *buf); */
-        //Non-member functions
-        static  bool                        checkArgParam(std::string port, std::string passsword);
-        static  bool                        checkNumbArgs(int const argc);
-        static  int                         printErrorMessage(std::string message, int typeError);
-        static  void                        printMessage(std::string message, std::string color = WHITE);
-        static  void                        addClient(int id);
-        static  Client&                     searchClientById(int id);
-        static  bool                        CheckClientByNick(std::string nick);
-        static  bool                        CheckNickRules(std::string nick);
-        static  std::vector<std::string>    ft_split(char *buf, int received);
+		//Non-member functions
+		static  bool                        checkArgParam(std::string port, std::string passsword);
+		static  bool                        checkNumbArgs(int const argc);
+		static  int                         printErrorMessage(std::string message, int typeError);
+		static  void                        printMessage(std::string message, std::string color = WHITE);
+		static  void                        addClient(int id);
+		static  Client&                     searchClientById(int id);
+		static  int                         ReturnClientById(int id);
+		static  bool                        CheckClientByNick(std::string nick);
+		static  bool                        CheckNickRules(std::string nick);
+		static  std::vector<std::string>    ft_split(char *buf, int received);
+		static  int                         sendIrcMessage(std::string message, int clientId);
+		static  void                        PrintAllClients(void);
+		static  void                        RemoveClient(int id);
 };
 
 #endif

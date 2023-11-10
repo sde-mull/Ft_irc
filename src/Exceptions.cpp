@@ -12,6 +12,10 @@
 
 #include "Exceptions.hpp"
 
+/*
+Exceptions used to send specific type of messages inside a try catch block
+*/
+
 const char* FailedSocketCreation::what() const throw()
 {
 	return ("Failed to create the socket!");
