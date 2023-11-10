@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Authentication.cpp                                 :+:      :+:    :+:   */
+/*   ServerUserAuthentication.cpp                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:46:28 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/09 20:46:50 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/10 03:56:10 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void Server::Client_Authenticate(Client &client, char *buf, int received)
 	if (client.GettersInt(GETPASS) == 1 && client.Getters(GETNICK) != "\0" && client.Getters(GETUSER) != "\0")
 	{
 		std::cout << GREEN "CLIENT AUTHENTICATE" << RESET << std::endl;
+		Parse::printMessage(client.Getters(GETNICK) + " joined the server", CYAN);
 		client.SettersInt(SETAUTH, 1);
 	}
 }
@@ -95,4 +96,13 @@ void    Server::PrintClientArgs(Client &client)
 	}
 	else
 		SendMsg(client, " ✘\n");
+}
+
+bool	Server::checkUserAuthentication(Client &client, char *buf, int received)
+{
+	if (client.GettersInt(GETAUTH) == 1)
+		return (true);
+	else
+		Client_Authenticate(client, buf, received);
+	return (false);
 }

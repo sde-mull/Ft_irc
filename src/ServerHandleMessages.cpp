@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HandleMessages.cpp                                 :+:      :+:    :+:   */
+/*   ServerHandleMessages.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:47:25 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/09 20:47:32 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/10 03:07:58 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int     Server::Handle_Message(Client &client)
 {
-	char    buf[1024];
+	char    buf[8192];
 	size_t     received;
 	received = recv(client.GettersInt(GETCLIENTFD), buf, 1024, 0);
+	std::cout << "RESPONSE: " << buf << std::endl;
 	if (received <= 0)
 		return (-1);
-	if (client.GettersInt(GETAUTH) == 1)
-		return (0);
-	else
-		Client_Authenticate(client, buf, received);
+	if (checkUserAuthentication(client, buf, received)){
+		std::cout << "Passa para o pedro " << std::endl;
+	}
 	for (size_t i = 0; i < received; i++)
 		buf[i] = '\0';
 	return (0);

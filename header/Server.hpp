@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/06 23:41:56 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/10 02:47:03 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ class Server
 
 		void    SendMsg(Client &client, const char *data);
 		void    PrintClientArgs(Client &client);
+		bool	checkUserAuthentication(Client &client, char *buf, int received);
 };
 
 #endif
