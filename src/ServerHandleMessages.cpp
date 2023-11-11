@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerHandleMessages.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:47:25 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/10 03:07:58 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:46:16 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int     Server::Handle_Message(Client &client)
 	if (received <= 0)
 		return (-1);
 	if (checkUserAuthentication(client, buf, received)){
-		std::cout << "Passa para o pedro " << std::endl;
+		Parse::Handle_commands(buf, &client);
 	}
 	for (size_t i = 0; i < received; i++)
 		buf[i] = '\0';

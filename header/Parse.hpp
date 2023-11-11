@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/11 15:21:34 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:36:35 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Parse
 	private:
 		static std::vector<Client> _clients;
 	public:
-		//static std::vector<Channel>	_Channels;
+		static std::vector<Channel>	_Channels;
 	
 		//constructors and destructors
 		Parse();

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Channel_utils.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:25:43 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/06 17:16:09 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/11/11 16:34:09 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* #include "Channel.hpp"
+#include "Channel.hpp"
 
-std::string	Channel::getName(void)
+/* std::string	Channel::getName(void)
 {
 	return _name;
 }

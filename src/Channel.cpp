@@ -6,11 +6,11 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/11 15:22:38 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 16:33:54 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* #include "Channel.hpp"
+#include "Channel.hpp"
 
 Channel::Channel(void)
 {
@@ -89,7 +89,7 @@ int	Channel::SearchForUser(std::string user)
 		return 1;
 }
 
-void	rmUser(std::string user)
+void	Channel::rmUser(std::string user)
 {
 	std::vector<std::string>::iterator ite = vectorFind(_users, user);
 	
@@ -99,7 +99,7 @@ void	rmUser(std::string user)
 		ite = _users.erase(ite);
 }
 
-std::string	getSuperUser(void)
+std::string	Channel::getSuperUser(void)
 {
 	return _superUser;
 }
@@ -107,5 +107,5 @@ std::string	getSuperUser(void)
 std::string	Channel::getName(void)
 {
 	return _name;
-} */
+}
 

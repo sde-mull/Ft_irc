@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/11 15:24:07 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 16:33:08 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,7 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 		ch_it->addUser(buffer[1]);
 		return (0);
 	}
-}
-
-int	Parse::sendIrcMessage(std::string message, int clientId)
-{
-	message = message + "\r\n";
-	std::cout << "Sending message: " << message << std::endl;
-	if (send(clientId, message.c_str(), message.length(), 0) == -1)
-		exit(1);
-	return 0;
+	return (0);
 }
 
 std::vector<std::string> Parse::Split_spc(char *buf)
