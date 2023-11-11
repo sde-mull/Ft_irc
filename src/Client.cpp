@@ -3,56 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/01 18:51:31 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 
-Client::Client(void)
-{
-    std::cout << B_GREEN "Client default contrutor called" RESET << std::endl;
-}
+Client::Client(void){}
 
+Client::Client(int id) : _socketFd(id), _nick("\0"), _user("\0"), _f_pass(0), _f_auth(0){}
 
-Client::Client(int id) : _socketFd(id), _nick("\0"), _user("\0"), f_pass(0), f_auth(0)
-{
-    std::cout << B_GREEN "Client id contrutor called" RESET << std::endl;
-}
-
-Client::~Client(void)
-{
-    std::cout << B_RED "Client destructor called" RESET << std::endl;
-}
+Client::~Client(void){}
 
 Client::Client(Client const &src)
 {
-    *this = src;
+	*this = src;
 }
 
 Client& Client::operator=(const Client& rhs)
 {
-    if (this == &rhs)
-    {
-        return *this;
-    }
+	this->_socketFd = rhs.GettersInt(GETCLIENTFD);
+	this->_f_pass = rhs.GettersInt(GETPASS);
+	this->_f_auth = rhs.GettersInt(GETAUTH);
+	this->_user = rhs.Getters(GETUSER);
+	this->_nick = rhs.Getters(GETNICK);
 
-    _socketFd = rhs._socketFd;
-    _user = rhs._user;
-    _nick = rhs._nick;
-
-    return *this;
+	return *this;
 }
 
-int     Client::getSocketFd() const
-{
-    return (this->_socketFd);
-}
+//Getters
 
-std::string	Client::Getters(int opt)
+std::string	Client::Getters(int opt) const
 {
 	switch(opt)
 	{
@@ -66,27 +49,49 @@ std::string	Client::Getters(int opt)
 	return NULL;
 }
 
-std::string Client::getUser()
+int Client::GettersInt(int opt) const
 {
-    return (this->_user);
+	switch(opt)
+	{
+		case GETCLIENTFD:
+			return  _socketFd;
+			break ;
+		case GETAUTH:
+			return _f_auth;
+			break;
+		case GETPASS:
+			return _f_pass;
+	}
+	return 0;
 }
 
-std::string Client::getNick()
+//Setters
+
+void Client::Setters(int opt, std::string str)
 {
-    return (this->_nick);
+	switch(opt)
+	{
+		case SETUSER:
+			this->_user = str;
+			break ;
+		case SETNICK:
+			this->_nick = str; 
+			break;
+	}
 }
 
-void Client::setUser(std::string user)
+void Client::SettersInt(int opt, int n)
 {
-    this->_user = user;
-}
-
-void Client::setNick(std::string nick)
-{
-    this->_nick = nick;
-}
-
-void    Client::setSocketFd(int socketFd)
-{
-    this->_socketFd = socketFd;
+	switch(opt)
+	{
+		case SETCLIENTFD:
+			this->_socketFd = n;
+			break ;
+		case SETAUTH:
+			this->_f_auth = n; 
+			break;
+		case SETPASS:
+			this->_f_pass = n;
+			break ;
+	}
 }

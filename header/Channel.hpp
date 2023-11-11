@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/09 18:11:18 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:26:03 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-# include "Lincludes.hpp"
+#include "Lincludes.hpp"
+#include "Parse.hpp"
 
 class Channel
 {

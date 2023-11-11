@@ -1,0 +1,2 @@
+-> Se ligar o server e fizer reconnect enquanto está ligado ao server dá segfault. Recebe uma mensagem do tipo "QUIT :leaving".
+Temos de desconnectar o client quando aparece esta mensagem mesmo que não seja authenticado, tem de se verificar este tipo de resposta antes.

@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/09 18:12:26 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:22:38 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
+/* #include "Channel.hpp"
+
+Channel::Channel(void)
+{
+    std::cout << B_GREEN "Channel default contrutor called" RESET << std::endl;
+}
+
+Channel::~Channel(void)
+{
+    std::cout << B_RED "Channel destructor called" RESET << std::endl;
+}
 
 Channel::Channel(std::string name, std::string CreatingUser) : _superUser(CreatingUser), _name(name)
 {
@@ -93,3 +103,9 @@ std::string	getSuperUser(void)
 {
 	return _superUser;
 }
+
+std::string	Channel::getName(void)
+{
+	return _name;
+} */
+

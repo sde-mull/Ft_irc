@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:54:17 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/09 18:03:05 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:18:48 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,12 @@
 class Client
 {
 	private:
-	    int         _socketFd;
+		int         _socketFd;
 		std::string _user;
 		std::string _nick;
+		//flags
+		int			_f_pass;
+		int   		_f_auth;
 		
 	public:
 		Client();
@@ -30,21 +33,12 @@ class Client
 		Client & operator=(Client const &rhs);
 
 		//getters
-		std::string	Getters(int	option);
-
-		std::string getUser();
-		std::string getNick();
+		std::string	Getters(int	opt) const;
+		int			GettersInt(int opt) const;
 
 		//setters
-		void setUser(std::string user);
-		void setNick(std::string nick);
-
-		//flags
-		int			f_pass;
-		int   		f_auth;
-
-		int 	getSocketFd() const;
-		void	setSocketFd(int socktFd);
+		void		Setters(int opt, std::string str);
+		void		SettersInt(int opt, int n);
 };
 
 #endif

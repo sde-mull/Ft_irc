@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Lincludes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/09 18:11:02 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:24:37 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LINCLUDES_HPP
 # define LINCLUDES_HPP
+
+//COLOR MACROS
 
 #define BLACK		"\033[30m"
 #define RED			"\033[31m"
@@ -35,8 +37,17 @@
 
 //CLIENT MACROS
 
-#define	GETUSER		1
-#define	GETNICK		2
+#define	GETUSER		    1
+#define	GETNICK		    2
+#define GETCLIENTFD     3
+#define GETAUTH         4
+#define GETPASS         5
+
+#define SETUSER         6
+#define SETNICK         7
+#define SETCLIENTFD     8
+#define SETAUTH         9
+#define SETPASS         10
 
 //Parser MACROS
 
@@ -64,10 +75,10 @@
 #include <deque>
 #include <list>
 
-char		**ft_split(char const *s, char c);
+char		                        **ft_split(char const *s, char c);
 std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
 
-void    free_2d(char **arr);
-char    *remove_newline(char *str);
+void                                free_2d(char **arr);
+char                                *remove_newline(char *str);
 
 #endif
