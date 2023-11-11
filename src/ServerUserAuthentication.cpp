@@ -66,7 +66,7 @@ void     Server::ft_nick(Client &client, std::string str)
 		SendMsg(client, "\nNick Already Taken");
 		return ;
 	}
-	client.Setters(SETNICK, str);  
+	client.Setters(SETNICK, str);
 }
 
 void    Server::SendMsg(Client &client, const char *data)
