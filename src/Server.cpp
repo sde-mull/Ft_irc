@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/10 03:47:01 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 17:40:57 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ startConnection is a function to construct the sockets, creates an ipv4 address,
 */
 int    Server::startConnection(void)
 {
+	Parse::CreateNumerics();
 	try{
 		Parse::printMessage("---------Initializing Server---------", GREEN); //print message in the terminal
 		Parse::printMessage("Creating Server Socket", YELLOW); 

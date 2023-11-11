@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerUserAuthentication.cpp                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:46:28 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/10 03:56:10 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 17:46:26 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void Server::Client_Authenticate(Client &client, char *buf, int received)
 	{
 		std::cout << GREEN "CLIENT AUTHENTICATE" << RESET << std::endl;
 		Parse::printMessage(client.Getters(GETNICK) + " joined the server", CYAN);
+		Parse::SendCommandIRC(001, client);
+		//Parse::sendIrcMessage(":localhost 001 " + client.Getters(GETNICK) + " :Welcome to the ft_irc Network ", client.GettersInt(GETCLIENTFD));
 		client.SettersInt(SETAUTH, 1);
 	}
 }

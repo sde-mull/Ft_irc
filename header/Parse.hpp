@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/11 15:36:35 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 17:41:40 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class Parse
 	private:
 		static std::vector<Client> _clients;
 	public:
+		static std::map<int, std::string> _numerics;
 		static std::vector<Channel>	_Channels;
 	
 		//constructors and destructors
@@ -60,6 +61,8 @@ class Parse
 		static  int                         sendIrcMessage(std::string message, int clientId);
 		static  void                        PrintAllClients(void);
 		static  void                        RemoveClient(int id);
+		static 	void						SendCommandIRC(int numeric, Client &client);
+		static  void						CreateNumerics(void);
 };
 
 #endif
