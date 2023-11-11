@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/11 16:33:08 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 16:57:35 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,26 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 	return (0);
 }
 
-std::vector<std::string> Parse::Split_spc(char *buf)
-{
-	int							i = 0;
-	int							j;
-	std::vector<std::string>	ret;
-	std::string					buffer;
+std::vector<std::string> Parse::Split_spc(char* buf) {
+    int i = 0;
+    int j;
+    std::vector<std::string> ret;
+    std::string buffer;
 
-	while (buf[i])
+    while (buf[i]) 
 	{
-		j = 0;
-		while((buf[i] == ' ' || buf[i] == '\r') && buf[i])
-			i++;
-		while (buf[i] != ' ' && buf[i])
-			buffer[j++] = buf[i++];
-		ret.push_back(buffer);
-		buffer.clear();
-	}
-	return (ret);
+        j = 0;
+        while ((buf[i] == ' ' || buf[i] == '\r') && buf[i])
+            i++;
+        while (buf[i] != ' ' && buf[i]) 
+		{
+            buffer.push_back(buf[i]);
+            i++;
+        }
+
+        ret.push_back(buffer);
+        buffer.clear();
+    }
+    return (ret);
 }
+

@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/11 15:28:17 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 16:58:10 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,9 @@ quem fez que explique aqui
 std::vector<std::string>    Parse::ft_split(char *buf, int received)
 {
 	std::string nova;
+	std::vector<std::string> vec;
+	std::string token;
+	
 	for (size_t j = 0; j < received; j++)
 	{
 		if (buf[j] == '\n')
@@ -169,8 +172,6 @@ std::vector<std::string>    Parse::ft_split(char *buf, int received)
 			nova += buf[j];
 	}
 	std::istringstream ss(nova);
-	std::vector<std::string> vec;
-	std::string token;
 	while (std::getline(ss, token, ' '))
 		vec.push_back(token);
 	return (vec);

@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/11 16:34:39 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 16:59:03 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	Parse::Handle_commands(char *buf, Client *client)
 {
 	std::string					opts[6] = {"JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG"};
 	int 						(*function[6])(std::vector<std::string> buf, Client client)	= {&Join_cmd, &Kick_cmd, &Invite_cmd, &Topic_cmd, &Mode_cmd, &Privmsg_cmd};
-	std::vector<std::string>	parsed_buffer = Parse::Split_spc(buf);
+	std::vector<std::string>	parsed_buffer = Parse::ft_split(buf, strlen(buf));
 	std::string	message;
 	
 	if (!buf)
