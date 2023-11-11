@@ -18,7 +18,7 @@ int     Server::Handle_Message(Client &client)
 	size_t     received;
 	received = recv(client.GettersInt(GETCLIENTFD), buf, 1024, 0);
 	std::cout << "RESPONSE: " << buf << std::endl;
-	if (received <= 0)
+	if (received <= 0 || !strcmp(buf, "QUIT :Leaving\r\n"))
 		return (-1);
 	if (checkUserAuthentication(client, buf, received)){
 		Parse::Handle_commands(buf, &client);
