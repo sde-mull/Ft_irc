@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:54:17 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/06 17:27:50 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:18:48 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define CLIENT_HPP
 
 #include "Lincludes.hpp"
-#include "Parse.hpp"
 
 class Client
 {

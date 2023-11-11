@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Lincludes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/06 23:06:39 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:24:37 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,13 @@
 #define SETAUTH         9
 #define SETPASS         10
 
+//Parser MACROS
+
+#define NOMODERR			6
+#define NOCHERR				7
+#define	NOUSERERR			8
+#define NOTENOUGHPERMSERR	9
+
 #include <stdio.h>  
 #include <cstring>
 #include <stdlib.h>  
@@ -67,5 +74,11 @@
 #include <sstream>
 #include <deque>
 #include <list>
+
+char		                        **ft_split(char const *s, char c);
+std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
+
+void                                free_2d(char **arr);
+char                                *remove_newline(char *str);
 
 #endif

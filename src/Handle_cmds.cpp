@@ -6,8 +6,7 @@
 /*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/03 14:39:56 by sde-mull         ###   ########.fr       */
-/*                                                                            */
+/*   Updated: 2023/11/09 18:13:07 by pcoimbra         ###   ########.fr       */                                                                        */
 /* ************************************************************************** */
 
 // #include "Channel.hpp"
@@ -39,28 +38,52 @@
 	
 // }
 
-// int	Kick_cmd(std::vector<std::string> buf, Client client)
-// {
-	
-// }
+int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
+{
+	std::vector<Channel>::iterator	ch_it = _Channels.begin();
+
+	while (ch_it != _Channels.end() && *ch_it != buf[1])
+		ch_it++;
+	if (ch_it == _Channels.end())
+		printErrorMessage("Error: Channel not found!", NOCHERR);
+	else if (ch_ite->IsUserMod(client.getUser()) == 0)
+		printErrorMessage("Error: You are not a moderator of this channel!", NOMODERR);
+	else if (ch_ite->SearchForUser(buf[2]) == 0)
+		printErrorMessage("Error: There is no such user.", NOUSERERR)
+	else if (ch_ite->IsUserMod(buf[2]) == 1 && (ch_ite->getSuperUser() != client.getUser()))
+		printErrorMessage("Error: The user you are trying to kick is also a mod.", NOTENOUGHPERMSERR);
+	else
+		rmUser(buf[2]);
+	return 0;
+}
 
 // int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 // {
 // 	std::string						ChannelName = buf[1];
 // 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 // 	bool							exist = false;
-
 // 	while (ch_it != _Channels.end())
 // 	{
 // 		if (ChannelName == ch_it->getName())
 // 		{
-// 			Parse::try_joining(ch_it, buf, client);
 // 			exist = true;
+// 			if (Parse::try_joining(ch_it, buf, client) == 1)
+// 			{
+// 				std::cout << "joined channel!" << std::endl;
+// 				exist = false;
+// 				return 1;
+// 			}
+// 			else
+// 			{
+// 				std::cout << "This channel is invite only and you are not invited!" << std::endl;
+// 				return 1;
+// 			}
 // 		}
 // 		ch_it++;
 // 	}
 // 	if (!exist)
 // 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
+// 	return 0;
 // }
 
 // int	Parse::Handle_commands(char *buf, Client *client)

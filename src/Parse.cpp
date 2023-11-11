@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/10 03:56:27 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:28:17 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@ std::vector<Client> Parse::_clients;
 
 //Non-member functions of parse
 
+// std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle)
+// {
+// 	std::vector<std::string>::iterator ite;
+
+// 	for (ite = vector.begin(); ite != vector.end(); ite++)
+// 		if (*ite == needle)
+// 			return ite;
+// 	return (vector.end());
+// }
+
 /*
 checkArgParam is a function that will check:
 -> If the port is a number between 0 and 65535
@@ -23,6 +33,7 @@ checkArgParam is a function that will check:
 -> If the port isn't different from a number
 -> If the password exists 
 */
+
 bool Parse::checkArgParam(std::string port, std::string password)
 {
 	int portNumb;

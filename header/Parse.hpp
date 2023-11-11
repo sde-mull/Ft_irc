@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/10 03:56:50 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/11 15:21:34 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,17 @@ class Parse
 		Parse & operator=(Parse const &rhs);
 		~Parse();
 
+
+
 		//Handle_cmds.cpp
-		static	int							Join_cmd(std::vector<std::string> buf, Client client);
-		static	int							Handle_commands(char *buf, Client *client);
+		static	int		Join_cmd(std::vector<std::string> buf, Client client);
+		static	int		Handle_commands(char *buf, Client *client);
+		static	int		Kick_cmd(std::vector<std::string> buf, Client client);
 
 		//Handle_cmds_utils.cpp
+		static	int									try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
+		static	std::vector<std::string>			Split_spc(char *buf);
+		// static	std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
 		/* static	int							sendIrcMessage(std::string message, int clientId);
 		static	int							try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
 		static	std::vector<std::string>	Split_spc(char *buf); */
