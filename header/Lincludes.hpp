@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Lincludes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/11 15:24:37 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/13 14:57:30 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,34 @@
 
 //CLIENT MACROS
 
-#define	GETUSER		    1
-#define	GETNICK		    2
-#define GETCLIENTFD     3
-#define GETAUTH         4
-#define GETPASS         5
+#define	GETUSER		    	1
+#define	GETNICK		    	2
+#define GETCLIENTFD     	3
+#define GETAUTH         	4
+#define GETPASS         	5
 
-#define SETUSER         6
-#define SETNICK         7
-#define SETCLIENTFD     8
-#define SETAUTH         9
-#define SETPASS         10
+#define SETUSER         	6
+#define SETNICK         	7
+#define SETCLIENTFD     	8
+#define SETAUTH         	9
+#define SETPASS         	10
 
 //Parser MACROS
 
-#define NOMODERR			6
-#define NOCHERR				7
-#define	NOUSERERR			8
-#define NOTENOUGHPERMSERR	9
+#define	GENERICERROR		-2
+
+#define NOCHANNELERR		-4
+#define	NOUSERERR			-5
+#define NOTENOUGHPERMSERR	-6
+#define	NOTENOUGHARGS		-7
+
+//Channel modes flags
+
+#define	MODEPASSWORD		'k'
+#define	MODEINVITEONLY		'i'
+#define	MODETOPIC			't'
+#define	MODECHANNELOP		'o'
+#define	MODEUSERLIMIT		'l'
 
 #include <stdio.h>  
 #include <cstring>
