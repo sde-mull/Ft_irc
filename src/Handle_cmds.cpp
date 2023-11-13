@@ -74,6 +74,10 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 			if (Parse::try_joining(ch_it, buf, client) == 1)
 			{
 				std::cout << "joined channel!" << std::endl;
+				if (ch_it->getTopic() != "\0")
+					Parse::sendIrcMessage(":localhost 332 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :" + ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
+				else
+					Parse::sendIrcMessage(":localhost 331 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :No topic is set", client.GettersInt(GETCLIENTFD));
 				exist = false;
 				return 1;
 			}
@@ -86,7 +90,12 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	}
 	if (!exist)
+	{
 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
+		std::cout << "joined channel!" << std::endl;
+		return 1;
+	}
+		
 	return 0;
 }
 

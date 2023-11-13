@@ -42,6 +42,7 @@ class Channel
 			int			SearchForUser(std::string user);
 			void		rmUser(std::string user);
 			std::string	getSuperUser(void);
+			std::string getTopic(void);
 };
 
 #endif

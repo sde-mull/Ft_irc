@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/11 18:07:01 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/13 10:10:07 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Parse.hpp"
 
 std::vector<Client> Parse::_clients;
-std::map<int, std::string> Parse::_numerics;
 
 //Non-member functions of parse
 
@@ -223,16 +222,7 @@ void    Parse::RemoveClient(int id)
 
 void	Parse::SendCommandIRC(int numeric, Client &client)
 {
-	std::map<int, std::string>::iterator it = _numerics.find(numeric);
-	if (it != _numerics.end())
-	{
-		Parse::sendIrcMessage(it->second, client.GettersInt(GETAUTH));
-	}
+
 }
 
-void	Parse::CreateNumerics(void)
-{
-	_numerics[001] = "Message 001";
-	_numerics[002] = "Message 002";
-	_numerics[324] = "Message 324";
-}
+
