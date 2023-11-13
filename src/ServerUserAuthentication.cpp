@@ -65,7 +65,8 @@ void     Server::ft_nick(Client &client, std::string str)
 	}
 	if (!Parse::CheckClientByNick(str))
 	{
-		SendMsg(client, "\nNick Already Taken");
+		Parse::sendIrcMessage(":localhost 433 " + client.Getters(GETNICK) + " " + " :Nickname is already in use", client.GettersInt(GETCLIENTFD));
+		//SendMsg(client, "\nNick Already Taken");
 		return ;
 	}
 	Parse::sendIrcMessage(":localhost 001 " + str + "", client.GettersInt(GETCLIENTFD));

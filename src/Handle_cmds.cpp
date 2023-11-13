@@ -73,7 +73,6 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 			exist = true;
 			if (Parse::try_joining(ch_it, buf, client) == 1)
 			{
-				std::cout << "joined channel!" << std::endl;
 				if (ch_it->getTopic() != "\0")
 					Parse::sendIrcMessage(":localhost 332 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :" + ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
 				else
@@ -89,10 +88,16 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		}
 		ch_it++;
 	}
-	if (!exist)
+	if (!exist) //":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost JOIN " + channel.getName()
 	{
 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
-		std::cout << "joined channel!" << std::endl;
+		Channel channel = _Channels.back();
+		Parse::sendIrcMessage(Parse::SendCommandIRC("", client, channel, "", 3), client.GettersInt(GETCLIENTFD));
+		Parse::sendIrcMessage(Parse::SendCommandIRC("331", client, channel, " :No topic is set", 1), client.GettersInt(GETCLIENTFD));
+		Parse::sendIrcMessage(Parse::SendCommandIRC("353", client, channel, " :" + channel.getPrefix(client.Getters(GETUSER)) + client.Getters(GETUSER), 2), client.GettersInt(GETCLIENTFD));
+		Parse::sendIrcMessage(Parse::SendCommandIRC("366", client, channel, " :End of NAMES list", 1), client.GettersInt(GETCLIENTFD));
+		Parse::sendIrcMessage(Parse::SendCommandIRC("324", client, channel, channel.getModeString(), 1), client.GettersInt(GETCLIENTFD));
+		Parse::sendIrcMessage(Parse::SendCommandIRC("315", client, channel, " :End of WHO list", 1), client.GettersInt(GETCLIENTFD));
 		return 1;
 	}
 		

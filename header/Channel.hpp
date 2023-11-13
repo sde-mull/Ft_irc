@@ -20,6 +20,7 @@ class Channel
 {
 	private:
 			std::vector<std::string>	_users;
+			std::map<std::string, std::string> _uprefix;
 			std::vector<std::string>	_mods;
 			std::string					_name;
 			std::string 				_topic;
@@ -43,6 +44,9 @@ class Channel
 			void		rmUser(std::string user);
 			std::string	getSuperUser(void);
 			std::string getTopic(void);
+			std::string getSymbol(void);
+			std::string getPrefix(std::string nick);
+			std::string getModeString(void);
 };
 
 #endif
