@@ -25,6 +25,7 @@ Channel::~Channel(void)
 Channel::Channel(std::string name, std::string CreatingUser) : _superUser(CreatingUser), _name(name)
 {
 	_users.push_back(CreatingUser);
+	_uprefix[CreatingUser] = "@";
 	_topic	= "Default topic. Ask an operator to change this.";
 	_mods.push_back(CreatingUser);
 	_modes.insert(std::make_pair('i', 0));
@@ -182,6 +183,7 @@ int	Channel::getUserAmount(void)
 void	Channel::addUser(std::string user)
 {
 	_users.push_back(user);
+	_uprefix[user] = "%";
 }
 
 int	Channel::invitedUsers(std::string user)
@@ -282,3 +284,33 @@ int	Channel::getUserLimit(void)
 	return _maxusers;
 }
 
+std::string Channel::getSymbol(void)
+{
+	if (getMode('i') == 0)
+		return ("=");
+	else
+		return ("*");
+}
+
+std::string	Channel::getPrefix(std::string nick)
+{
+	return(_uprefix.find(nick)->second);
+}
+
+std::string Channel::getModeString(void)
+{
+	std::string str;
+
+	std::map<char, int>::iterator it = _modes.begin();
+	while (it != _modes.end())
+	{
+		str.push_back(' ');
+		if (it->second == 0)
+			str.push_back('-');
+		else
+			str.push_back('+');
+		str.push_back(it->first);
+		it++;
+	}
+	return (str);
+}

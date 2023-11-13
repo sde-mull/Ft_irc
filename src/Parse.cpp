@@ -220,9 +220,20 @@ void    Parse::RemoveClient(int id)
 	Parse::printMessage(" was disconnected", RED);
 }
 
-void	Parse::SendCommandIRC(int numeric, Client &client)
+std::string	Parse::SendCommandIRC(std::string code, Client &client, Channel &channel, std::string str, int i)
 {
+	std::string msg;
 
+	switch(i)
+	{
+		case (1) :
+			return (":localhost " + code + " " + client.Getters(GETNICK) + " " + channel.getName() + str);
+		case (2) :
+			return (":localhost " + code + " " + client.Getters(GETNICK) + " " + channel.getSymbol() + " " + channel.getName() + str);
+		case (3) :
+			return (":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost JOIN " + channel.getName());
+	}
+	
 }
 
 

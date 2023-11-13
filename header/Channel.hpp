@@ -20,6 +20,7 @@ class Channel
 {
 	private:
 			std::vector<std::string>	_users;
+			std::map<std::string, std::string> _uprefix;
 			std::vector<std::string>	_mods;
 			std::string					_name;
 			std::string 				_topic;
@@ -35,10 +36,6 @@ class Channel
 			Channel(std::string	name, std::string CreatingUser);
 			~Channel();
 
-			std::string	getName(void);
-			std::string	getSuperUser(void);
-			int			getMode(char c);
-			std::string getTopic(void);
 			int			getIsMod(std::string user);
 			int			getUserAmount(void);
 			int			getUserLimit(void);
@@ -61,6 +58,11 @@ class Channel
 			int			mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
 			int			mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
 			int			mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
+  
+      //idk
+			std::string getSymbol(void);
+			std::string getPrefix(std::string nick);
+			std::string getModeString(void);
 };
 
 #endif

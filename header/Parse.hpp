@@ -63,8 +63,9 @@ class Parse
 		static  int                         sendIrcMessage(std::string message, int clientId);
 		static  void                        PrintAllClients(void);
 		static  void                        RemoveClient(int id);
-		static 	void						SendCommandIRC(int numeric, Client &client);
+		static 	std::string					SendCommandIRC(std::string code, Client &client, Channel &channel, std::string str, int i);
 		static  void						CreateNumerics(void);
+
 };
 
 #endif
