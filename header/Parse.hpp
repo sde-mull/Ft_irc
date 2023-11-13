@@ -24,7 +24,6 @@ class Parse
 	private:
 		static std::vector<Client> _clients;
 	public:
-		static std::map<int, std::string> _numerics;
 		static std::vector<Channel>	_Channels;
 	
 		//constructors and destructors

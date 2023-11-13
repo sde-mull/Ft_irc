@@ -27,14 +27,17 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 	if (ch_it->getMode('i') == 1)
 	{
 		if (ch_it->invitedUsers(buffer[1]) == 1)
-			return (0);
+		{
+			ch_it->addUser(buffer[1]);
+			return (1);
+		}
 		else
 			return (printErrorMessage("This channel is invite only and you haven't been invited!", 5));	
 	}
 	else
 	{
 		ch_it->addUser(buffer[1]);
-		return (0);
+		return (1);
 	}
 	return (0);
 }

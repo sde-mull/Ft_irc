@@ -22,7 +22,7 @@ Channel::~Channel(void)
     std::cout << B_RED "Channel destructor called" RESET << std::endl;
 }
 
-Channel::Channel(std::string name, std::string CreatingUser) : _superUser(CreatingUser), _name(name)
+Channel::Channel(std::string name, std::string CreatingUser) : _superUser(CreatingUser), _name(name), _topic("\0")
 {
 	_users.push_back(CreatingUser);
 	_topic	= "Default topic. Ask an operator to change this.";
@@ -107,5 +107,10 @@ std::string	Channel::getSuperUser(void)
 std::string	Channel::getName(void)
 {
 	return _name;
+}
+
+std::string	Channel::getTopic(void)
+{
+	return _topic;
 }
 

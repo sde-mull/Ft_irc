@@ -61,7 +61,6 @@ startConnection is a function to construct the sockets, creates an ipv4 address,
 */
 int    Server::startConnection(void)
 {
-	Parse::CreateNumerics();
 	try{
 		Parse::printMessage("---------Initializing Server---------", GREEN); //print message in the terminal
 		Parse::printMessage("Creating Server Socket", YELLOW); 
