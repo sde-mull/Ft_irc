@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 17:55:08 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/14 18:52:38 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
     Parse::sendIrcNumeric(3, "", "", client, &channel);
 		Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &channel);
 		Parse::sendIrcNumeric(1, "353", " " + channel.getSymbol() + " " + \
-		channel.getName() + " :" + channel.getPrefix(client.Getters(GETUSER)) + client.Getters(GETUSER), client, &channel);
+		channel.getName() + " :" + channel.getPrefix(client.Getters(GETNICK)) + client.Getters(GETNICK), client, &channel);
 		Parse::sendIrcNumeric(2, "366", " :End of NAMES list", client, &channel);
 		Parse::sendIrcNumeric(2, "324", channel.getModeString(), client, &channel);
 		Parse::sendIrcNumeric(2, "315", " :End of WHO list", client, &channel);
