@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_cmds.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/13 17:24:04 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/14 01:12:47 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,14 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 {
 	std::string						ChannelName = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
+	
   
 	while (ch_it != _Channels.end() && ch_it->getName() != ChannelName)
 		ch_it++;
 	if (ch_it == _Channels.end())
 	{
 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
+		Channel channel = _Channels.back();
     Parse::sendIrcMessage(Parse::SendCommandIRC("", client, channel, "", 3), client.GettersInt(GETCLIENTFD));
 		Parse::sendIrcMessage(Parse::SendCommandIRC("331", client, channel, " :No topic is set", 1), client.GettersInt(GETCLIENTFD));
 		Parse::sendIrcMessage(Parse::SendCommandIRC("353", client, channel, " :" + channel.getPrefix(client.Getters(GETUSER)) + client.Getters(GETUSER), 2), client.GettersInt(GETCLIENTFD));
@@ -149,7 +151,7 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	else if (ch_it->getMode(MODEUSERLIMIT) == 1 && ch_it->getUserAmount() >= ch_it->getUserLimit())
 		printErrorMessage("Error: Channel is already full.", GENERICERROR);
 	else
-		return (try_joining(ch_it, buf, client));nflicting files
+		return (try_joining(ch_it, buf, client));
 	return 0;
   
 // =======
