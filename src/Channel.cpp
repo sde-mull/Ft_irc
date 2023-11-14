@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 16:04:15 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/14 18:24:57 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ int	Channel::inviteUser(std::string user)
 		_invitedUsers.push_back(user);
 	else
 		return 0;
-	return 0;
+	return 1;
 }
 
 int	Channel::getIsUser(std::string user)
