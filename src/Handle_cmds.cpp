@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 16:56:22 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/14 17:55:08 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	Parse::Mode_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 		printErrorMessage("Error: Channel not found!", NOCHANNELERR);
-	else if (ch_it->getIsMod(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getIsMod(client.Getters(GETNICK)) == 0)
 		printErrorMessage("Error: You are not a moderator of this channel!", NOTENOUGHPERMSERR);
 	else if (buf.size() == 2)
 	{
@@ -79,9 +79,9 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 		printErrorMessage("Error: Channel not found.", NOCHANNELERR);
-	else if (ch_it->getMode(MODETOPIC) == 0 && ch_it->getIsMod(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getMode(MODETOPIC) == 0 && ch_it->getIsMod(client.Getters(GETNICK)) == 0)
 		printErrorMessage("Error: You are not a moderator of this channel and the channel is flagged to invite only.", NOTENOUGHPERMSERR);
-	else if (ch_it->getIsUser(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
 		printErrorMessage("Error: You must be an user in this channel.", GENERICERROR);
 	else if (buf.size() > 2)
 	{
@@ -103,9 +103,9 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 		printErrorMessage("Error: Channel not found.", NOCHANNELERR);
-	else if (ch_it->getIsUser(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
 		printErrorMessage("Error: You must be an user in this channel.", NOCHANNELERR);
-	else if (ch_it->getMode(MODEINVITEONLY) == 1 && ch_it->getIsMod(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getMode(MODEINVITEONLY) == 1 && ch_it->getIsMod(client.Getters(GETNICK)) == 0)
 		printErrorMessage("Error: You are not a moderator of this channel and the channel is flagged to invite only.", NOTENOUGHPERMSERR);
 	else if (ch_it->getIsUser(buf[1]) == 1)
 		printErrorMessage("Error: The invitee is already an user.", GENERICERROR);
@@ -129,11 +129,11 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 		printErrorMessage("Error: Channel not found!", NOCHANNELERR);
-	else if (ch_it->getIsMod(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getIsMod(client.Getters(GETNICK)) == 0)
 		printErrorMessage("Error: You are not a moderator of this channel!", NOTENOUGHPERMSERR);
 	else if (ch_it->getIsUser(buf[2]) == 0)
 		printErrorMessage("Error: There is no such user.", NOUSERERR);
-	else if (ch_it->getIsMod(buf[2]) == 1 && (ch_it->getSuperUser() != client.Getters(GETUSER)))
+	else if (ch_it->getIsMod(buf[2]) == 1 && (ch_it->getSuperUser() != client.Getters(GETNICK)))
 		printErrorMessage("Error: The user you are trying to kick is also a mod.", NOTENOUGHPERMSERR);
 	else
 		return ch_it->rmUser(buf[2]);;
@@ -155,11 +155,11 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 	{
-		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
+		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK)));
 		Channel channel = _Channels.back();
     	Parse::sendIrcNumeric("", client, channel, "", 3);
 		Parse::sendIrcNumeric("331", client, channel, " :No topic is set", 2);
-		Parse::sendIrcNumeric("353", client, channel, " " + channel.getSymbol() + " " + channel.getName() + " :" + channel.getPrefix(client.Getters(GETUSER)) + client.Getters(GETUSER), 1);
+		Parse::sendIrcNumeric("353", client, channel, " " + channel.getSymbol() + " " + channel.getName() + " :" + channel.getPrefix(client.Getters(GETNICK)) + client.Getters(GETNICK), 1);
 		Parse::sendIrcNumeric("366", client, channel, " :End of NAMES list", 2);
 		Parse::sendIrcNumeric("324", client, channel, channel.getModeString(), 2);
 		Parse::sendIrcNumeric("315", client, channel, " :End of WHO list", 2);
@@ -195,13 +195,13 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 // 		}
 // 		ch_it++;
 // 	}
-// 	if (!exist) //":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost JOIN " + channel.getName()
+// 	if (!exist) //":" + client.Getters(GETNICK) + "!" + client.Getters(GETNICK) + "@localhost JOIN " + channel.getName()
 // 	{
-// 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
+// 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK)));
 // 		Channel channel = _Channels.back();
 // 		Parse::sendIrcMessage(Parse::SendCommandIRC("", client, channel, "", 3), client.GettersInt(GETCLIENTFD));
 // 		Parse::sendIrcMessage(Parse::SendCommandIRC("331", client, channel, " :No topic is set", 1), client.GettersInt(GETCLIENTFD));
-// 		Parse::sendIrcMessage(Parse::SendCommandIRC("353", client, channel, " :" + channel.getPrefix(client.Getters(GETUSER)) + client.Getters(GETUSER), 2), client.GettersInt(GETCLIENTFD));
+// 		Parse::sendIrcMessage(Parse::SendCommandIRC("353", client, channel, " :" + channel.getPrefix(client.Getters(GETNICK)) + client.Getters(GETNICK), 2), client.GettersInt(GETCLIENTFD));
 // 		Parse::sendIrcMessage(Parse::SendCommandIRC("366", client, channel, " :End of NAMES list", 1), client.GettersInt(GETCLIENTFD));
 // 		Parse::sendIrcMessage(Parse::SendCommandIRC("324", client, channel, channel.getModeString(), 1), client.GettersInt(GETCLIENTFD));
 // 		Parse::sendIrcMessage(Parse::SendCommandIRC("315", client, channel, " :End of WHO list", 1), client.GettersInt(GETCLIENTFD));

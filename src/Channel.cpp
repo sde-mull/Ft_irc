@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 17:13:44 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/14 18:10:50 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,19 @@ int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char,
  	if (buf.size() != 4)
 		Parse::printErrorMessage("Error: arguments should be: MODE <channel> +-o <client's user>.", NOTENOUGHARGS);
 	else if (getIsUser(buf[3]) == 0)
-		Parse::printErrorMessage("Error: target not in channel.", GENERICERROR);
+		Parse::printErrorMessage("Error: target not in channel.", NOUSERERR);
 	else if (buf[2][0] == '+')
 	{
 		std::cout << "ola ;)" << std::endl;
 		if (addModder(buf[3]) == 0)
-			Parse::printErrorMessage("Error: user was already a moderator.", GENERICERROR);
+			Parse::printErrorMessage("Error: user was already a moderator.", NOTENOUGHPERMSERR);
 		std::cout << "mod added" << std::endl;
 		return 1;
 	}
 	else if (buf[2][0] == '-')
 	{
 		if (rmModder(buf[3]) == 0)
-			Parse::printErrorMessage("Error: user isn't a moderator.", GENERICERROR);
+			Parse::printErrorMessage("Error: user isn't a moderator.", NOTENOUGHPERMSERR);
 		std::cout << "mod removed" << std::endl;
 		return 1;
 	}
@@ -84,20 +84,23 @@ int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char,
 
 int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
-	if (buf[3].empty() && getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
-		Parse::printErrorMessage("Error: you need to specify the new limit.", NOTENOUGHARGS);
+	if (buf.size() < 3)
+		Parse::printErrorMessage("Error: arguments should be: MODE <channel> +-l <User's limit>.", NOTENOUGHARGS);
+	else if (buf.size() == 3 && buf[2][0] == '+')
+		Parse::printErrorMessage("Error: +l flag should come with user's limit specifications.", NOTENOUGHARGS);
 	else if (getMode(MODEUSERLIMIT) == 1 && buf[2][0] == '-')
 	{
 		ite->second = 0;
 		_maxusers = -1;
 		return 1;
 	}
-	else if (getMode(MODEUSERLIMIT) && buf[2][0] == '+')
+	else if (getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
 	{
+		if (buf[3].find_first_not_of("0123456789") != -1)
+			return Parse::printErrorMessage("Error: User limit must be an integer.", WRONGARGSERR);
 		int	number = std::atoi(buf[3].c_str());
-		
 		if (number <= 0)
-			Parse::printErrorMessage("Error: The user limit must be higher than 0.", GENERICERROR);
+			Parse::printErrorMessage("Error: The user limit must be higher than 0.", WRONGARGSERR);
 		else
 		{
 			_maxusers = number;
