@@ -157,12 +157,13 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	{
 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK)));
 		Channel channel = _Channels.back();
-    	Parse::sendIrcNumeric("", client, channel, "", 3);
-		Parse::sendIrcNumeric("331", client, channel, " :No topic is set", 2);
-		Parse::sendIrcNumeric("353", client, channel, " " + channel.getSymbol() + " " + channel.getName() + " :" + channel.getPrefix(client.Getters(GETNICK)) + client.Getters(GETNICK), 1);
-		Parse::sendIrcNumeric("366", client, channel, " :End of NAMES list", 2);
-		Parse::sendIrcNumeric("324", client, channel, channel.getModeString(), 2);
-		Parse::sendIrcNumeric("315", client, channel, " :End of WHO list", 2);
+    Parse::sendIrcNumeric(3, "", "", client, &channel);
+		Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &channel);
+		Parse::sendIrcNumeric(1, "353", " " + channel.getSymbol() + " " + \
+		channel.getName() + " :" + channel.getPrefix(client.Getters(GETUSER)) + client.Getters(GETUSER), client, &channel);
+		Parse::sendIrcNumeric(2, "366", " :End of NAMES list", client, &channel);
+		Parse::sendIrcNumeric(2, "324", channel.getModeString(), client, &channel);
+		Parse::sendIrcNumeric(2, "315", " :End of WHO list", client, &channel);
 		return 1;
 	}
 	else if (ch_it->getMode(MODEUSERLIMIT) == 1 && ch_it->getUserAmount() >= ch_it->getUserLimit())

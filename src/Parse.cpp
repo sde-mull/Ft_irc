@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/13 10:10:07 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/11/14 15:36:31 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,9 @@ int	Parse::sendIrcMessage(std::string message, int clientId)
 	return 0;
 }
 
-int	Parse::sendIrcNumeric(std::string code, Client &client, Channel &channel, std::string str, int i)
+int	Parse::sendIrcNumeric(int i, std::string code, std::string str, Client client, Channel *channel)
 {
-	std::string message = Parse::SendCommandIRC(code, client, channel, str, i) + "\r\n";
+	std::string message = Parse::SendCommandIRC(i, code, str, client, channel) + "\r\n";
 	std::cout << "Sending message: " << message << std::endl;
 	if (send(client.GettersInt(GETCLIENTFD), message.c_str(), message.length(), 0) == -1)
 		exit(1);
@@ -229,7 +229,7 @@ void    Parse::RemoveClient(int id)
 	Parse::printMessage(" was disconnected", RED);
 }
 
-std::string	Parse::SendCommandIRC(std::string code, Client &client, Channel &channel, std::string str, int i)
+std::string	Parse::SendCommandIRC(int i, std::string code, std::string str, Client client, Channel *channel)
 {
 	std::string msg;
 
@@ -238,9 +238,9 @@ std::string	Parse::SendCommandIRC(std::string code, Client &client, Channel &cha
 		case (1):
 			return (":localhost " + code + " " + client.Getters(GETNICK) + str);
 		case (2) :
-			return (":localhost " + code + " " + client.Getters(GETNICK) + " " + channel.getName() + str);
+			return (":localhost " + code + " " + client.Getters(GETNICK) + " " + channel->getName() + str);
 		case (3) :
-			return (":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost JOIN " + channel.getName());
+			return (":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost JOIN " + channel->getName());
 	}
 	
 }
