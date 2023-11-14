@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/13 14:09:08 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/14 15:36:49 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ class Parse
 		static  bool                        CheckNickRules(std::string nick);
 		static  std::vector<std::string>    ft_split(char *buf, int received);
 		static  int                         sendIrcMessage(std::string message, int clientId);
-		static	int							sendIrcNumeric(std::string code, Client &client, Channel &channel, std::string str, int i);
+		static	int							sendIrcNumeric(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static  void                        PrintAllClients(void);
 		static  void                        RemoveClient(int id);
-		static 	std::string					SendCommandIRC(std::string code, Client &client, Channel &channel, std::string str, int i);
+		static 	std::string					SendCommandIRC(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static  void						CreateNumerics(void);
 
 };

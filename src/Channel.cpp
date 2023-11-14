@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/13 17:21:30 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/14 16:04:15 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@ Channel::~Channel(void)
     std::cout << B_RED "Channel destructor called" RESET << std::endl;
 }
 
-Channel::Channel(std::string name, std::string CreatingUser) : _superUser(CreatingUser), _name(name)
+Channel::Channel(std::string name, std::string CreatingUser) : _superUser(CreatingUser), _name(name), _topic("\0")
 {
 	_users.push_back(CreatingUser);
 	_uprefix[CreatingUser] = "@";
-	_topic	= "Default topic. Ask an operator to change this.";
 	_mods.push_back(CreatingUser);
 	_modes.insert(std::make_pair('i', 0));
 	_modes.insert(std::make_pair('t', 0));

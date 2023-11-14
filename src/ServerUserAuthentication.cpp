@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerUserAuthentication.cpp                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:46:28 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/13 10:38:00 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/11/14 15:18:24 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void Server::Client_Authenticate(Client &client, char *buf, int received)
 	{
 		std::cout << GREEN "CLIENT AUTHENTICATE" << RESET << std::endl;
 		Parse::printMessage(client.Getters(GETNICK) + " joined the server", CYAN);
-		Channel channel;
-		Parse::sendIrcNumeric("001", client, channel, " :Welcome to the ft_irc Network ", 1);
+		Parse::sendIrcNumeric(1, "001", " :Welcome to the ft_irc Network ", client);
 		client.SettersInt(SETAUTH, 1);
 	}
 }
@@ -50,8 +49,7 @@ void    Server::ft_pass(Client &client, std::string str)
 	else
 	{
 		client.SettersInt(SETPASS, 0);
-		Channel channel;
-		Parse::sendIrcNumeric("464", client, channel, " :Password incorrect", 1);
+		Parse::sendIrcNumeric(1, "464", " :Password incorrect", client);
 	}
 		
 }
@@ -63,18 +61,17 @@ void    Server::ft_user(Client &client, std::string str)
 
 void     Server::ft_nick(Client &client, std::string str)
 {
-	Channel channel;
 	if (!Parse::CheckNickRules(str))
 	{
-		Parse::sendIrcNumeric("432", client, channel, ":Erroneus nickname", 1);
+		Parse::sendIrcNumeric(1, "432", ":Erroneus nickname", client);
 		return ;
 	}
 	if (!Parse::CheckClientByNick(str))
 	{
-		Parse::sendIrcNumeric("433", client, channel, " :Nickname is already in use", 1);
+		Parse::sendIrcNumeric(1, "433", " :Nickname is already in use", client);
 		return ;
 	}
-	Parse::sendIrcNumeric("001", client, channel, str + "", 1);
+	Parse::sendIrcNumeric(1, "001", str + "", client);
 	client.Setters(SETNICK, str);
 }
 
