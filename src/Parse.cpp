@@ -189,6 +189,15 @@ int	Parse::sendIrcMessage(std::string message, int clientId)
 	return 0;
 }
 
+int	Parse::sendIrcNumeric(std::string code, Client &client, Channel &channel, std::string str, int i)
+{
+	std::string message = Parse::SendCommandIRC(code, client, channel, str, i) + "\r\n";
+	std::cout << "Sending message: " << message << std::endl;
+	if (send(client.GettersInt(GETCLIENTFD), message.c_str(), message.length(), 0) == -1)
+		exit(1);
+	return 0;
+}
+
 void Parse::PrintAllClients(void)
 {
 	for (int i = 0; i < _clients.size(); i++)
@@ -226,10 +235,10 @@ std::string	Parse::SendCommandIRC(std::string code, Client &client, Channel &cha
 
 	switch(i)
 	{
-		case (1) :
-			return (":localhost " + code + " " + client.Getters(GETNICK) + " " + channel.getName() + str);
+		case (1):
+			return (":localhost " + code + " " + client.Getters(GETNICK) + str);
 		case (2) :
-			return (":localhost " + code + " " + client.Getters(GETNICK) + " " + channel.getSymbol() + " " + channel.getName() + str);
+			return (":localhost " + code + " " + client.Getters(GETNICK) + " " + channel.getName() + str);
 		case (3) :
 			return (":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost JOIN " + channel.getName());
 	}

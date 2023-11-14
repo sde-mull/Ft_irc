@@ -21,8 +21,8 @@ void Server::Client_Authenticate(Client &client, char *buf, int received)
 	{
 		std::cout << GREEN "CLIENT AUTHENTICATE" << RESET << std::endl;
 		Parse::printMessage(client.Getters(GETNICK) + " joined the server", CYAN);
-		//Parse::SendCommandIRC(001, client);
-		Parse::sendIrcMessage(":localhost 001 " + client.Getters(GETNICK) + " :Welcome to the ft_irc Network ", client.GettersInt(GETCLIENTFD));
+		Channel channel;
+		Parse::sendIrcNumeric("001", client, channel, " :Welcome to the ft_irc Network ", 1);
 		client.SettersInt(SETAUTH, 1);
 	}
 }
@@ -48,7 +48,12 @@ void    Server::ft_pass(Client &client, std::string str)
 	if (this->_password == str)
 		client.SettersInt(SETPASS, 1);
 	else
+	{
 		client.SettersInt(SETPASS, 0);
+		Channel channel;
+		Parse::sendIrcNumeric("464", client, channel, " :Password incorrect", 1);
+	}
+		
 }
 
 void    Server::ft_user(Client &client, std::string str)
@@ -58,18 +63,18 @@ void    Server::ft_user(Client &client, std::string str)
 
 void     Server::ft_nick(Client &client, std::string str)
 {
+	Channel channel;
 	if (!Parse::CheckNickRules(str))
 	{
-		SendMsg(client, "\nBad Nick");
+		Parse::sendIrcNumeric("432", client, channel, ":Erroneus nickname", 1);
 		return ;
 	}
 	if (!Parse::CheckClientByNick(str))
 	{
-		Parse::sendIrcMessage(":localhost 433 " + client.Getters(GETNICK) + " " + " :Nickname is already in use", client.GettersInt(GETCLIENTFD));
-		//SendMsg(client, "\nNick Already Taken");
+		Parse::sendIrcNumeric("433", client, channel, " :Nickname is already in use", 1);
 		return ;
 	}
-	Parse::sendIrcMessage(":localhost 001 " + str + "", client.GettersInt(GETCLIENTFD));
+	Parse::sendIrcNumeric("001", client, channel, str + "", 1);
 	client.Setters(SETNICK, str);
 }
 

@@ -141,8 +141,13 @@ void	Channel::displayModes(void)
 {
 	std::map<char, int>::iterator ite;
 	
+	std::cout << "ft display modes" << std::endl;
 	for (ite = _modes.begin(); ite != _modes.end(); ite++)
+	{
+		std::cout << "loop" << std::endl;
 		std::cout<< ite->first << " -> " << ite->second << std::endl;
+	}
+		
 }
 
 int	Channel::getMode(char c)
