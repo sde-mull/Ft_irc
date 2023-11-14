@@ -66,6 +66,7 @@ class Parse
 		static  void                        RemoveClient(int id);
 		static 	std::string					SendCommandIRC(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static  void						CreateNumerics(void);
+		static  std::string					PrefixString(Client client, Channel channel);
 
 };
 

@@ -318,3 +318,8 @@ std::string Channel::getModeString(void)
 	}
 	return (str);
 }
+
+std::map<std::string, std::string> Channel::getPrefixs(void)
+{
+	return(_uprefix);
+}
