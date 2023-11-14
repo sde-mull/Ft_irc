@@ -31,9 +31,9 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 		{
 			ch_it->addUser(buffer[1]);
 			if (ch_it->getTopic() != "\0")
-				Parse::sendIrcMessage(":localhost 332 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :" + ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
+				Parse::sendIrcNumeric("332", client, (*ch_it), " :" + ch_it->getTopic(), 2);
 			else
-				Parse::sendIrcMessage(":localhost 331 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :No topic is set", client.GettersInt(GETCLIENTFD));
+				Parse::sendIrcNumeric("331", client, (*ch_it), " :No topic is set", 2);
 			return (1);
 		}
 		else
@@ -42,9 +42,9 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 	else
 	{
 		if (ch_it->getTopic() != "\0")
-			Parse::sendIrcMessage(":localhost 332 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :" + ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
+			Parse::sendIrcNumeric("332", client, (*ch_it), " :" + ch_it->getTopic(), 2);
 		else
-			Parse::sendIrcMessage(":localhost 331 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :No topic is set", client.GettersInt(GETCLIENTFD));
+			Parse::sendIrcNumeric("331", client, (*ch_it), " :No topic is set", 2);
 		ch_it->addUser(buffer[1]);
 		return (1);
 	}

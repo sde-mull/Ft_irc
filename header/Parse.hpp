@@ -61,6 +61,7 @@ class Parse
 		static  bool                        CheckNickRules(std::string nick);
 		static  std::vector<std::string>    ft_split(char *buf, int received);
 		static  int                         sendIrcMessage(std::string message, int clientId);
+		static	int							sendIrcNumeric(std::string code, Client &client, Channel &channel, std::string str, int i);
 		static  void                        PrintAllClients(void);
 		static  void                        RemoveClient(int id);
 		static 	std::string					SendCommandIRC(std::string code, Client &client, Channel &channel, std::string str, int i);

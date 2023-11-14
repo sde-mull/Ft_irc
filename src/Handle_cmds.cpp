@@ -37,14 +37,15 @@ int	Parse::Mode_cmd(std::vector<std::string> buf, Client client)
 		printErrorMessage("Error: No arg for target channel!", NOTENOUGHARGS);
 		return 0;
 	}
-	else if (buf[2].empty())
+	else if (buf.size() == 2)
 	{
 		ch_it->displayModes();
 		return 1;
 	}
 	else if (buf[2].size() != 2 || (buf[2][0] != '-' && buf[2][0] != '+'))
 	{
-		printErrorMessage("Error: flag not correctly sent.", GENERICERROR);
+		std::string testing = "ERROR:" + buf[2];
+		printErrorMessage(testing, GENERICERROR);
 		return 0;
 	}
 		
@@ -140,12 +141,12 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	{
 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
 		Channel channel = _Channels.back();
-    Parse::sendIrcMessage(Parse::SendCommandIRC("", client, channel, "", 3), client.GettersInt(GETCLIENTFD));
-		Parse::sendIrcMessage(Parse::SendCommandIRC("331", client, channel, " :No topic is set", 1), client.GettersInt(GETCLIENTFD));
-		Parse::sendIrcMessage(Parse::SendCommandIRC("353", client, channel, " :" + channel.getPrefix(client.Getters(GETUSER)) + client.Getters(GETUSER), 2), client.GettersInt(GETCLIENTFD));
-		Parse::sendIrcMessage(Parse::SendCommandIRC("366", client, channel, " :End of NAMES list", 1), client.GettersInt(GETCLIENTFD));
-		Parse::sendIrcMessage(Parse::SendCommandIRC("324", client, channel, channel.getModeString(), 1), client.GettersInt(GETCLIENTFD));
-		Parse::sendIrcMessage(Parse::SendCommandIRC("315", client, channel, " :End of WHO list", 1), client.GettersInt(GETCLIENTFD));
+    	Parse::sendIrcNumeric("", client, channel, "", 3);
+		Parse::sendIrcNumeric("331", client, channel, " :No topic is set", 2);
+		Parse::sendIrcNumeric("353", client, channel, " " + channel.getSymbol() + " " + channel.getName() + " :" + channel.getPrefix(client.Getters(GETUSER)) + client.Getters(GETUSER), 1);
+		Parse::sendIrcNumeric("366", client, channel, " :End of NAMES list", 2);
+		Parse::sendIrcNumeric("324", client, channel, channel.getModeString(), 2);
+		Parse::sendIrcNumeric("315", client, channel, " :End of WHO list", 2);
 		return 1;
 	}
 	else if (ch_it->getMode(MODEUSERLIMIT) == 1 && ch_it->getUserAmount() >= ch_it->getUserLimit())
@@ -197,7 +198,7 @@ int	Parse::Handle_commands(char *buf, Client *client)
 	int 						(*function[6])(std::vector<std::string> buf, Client client)	= {&Join_cmd, &Kick_cmd, &Invite_cmd, &Topic_cmd, &Mode_cmd, &Privmsg_cmd};
 	std::vector<std::string>	parsed_buffer = Parse::ft_split(buf, strlen(buf));
 	std::string	message;
-	
+
 	if (!buf)
 	{
 		std::cout << RED << "No buffer in Handle_commands" << std::endl;
@@ -208,7 +209,7 @@ int	Parse::Handle_commands(char *buf, Client *client)
 			return (function[i](parsed_buffer, *client));
 
 	std::vector<std::string>::iterator Ite = parsed_buffer.begin();
-	std::advance(Ite, 2);
+	//std::advance(Ite, 2);
 	for (Ite; Ite != parsed_buffer.end(); Ite++)
 		message = message + ' ' + *Ite;
 	sendIrcMessage(message, client->GettersInt(GETCLIENTFD));
