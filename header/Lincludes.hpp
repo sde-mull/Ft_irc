@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/13 14:57:30 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/14 16:41:42 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@
 #define	NOUSERERR			-5
 #define NOTENOUGHPERMSERR	-6
 #define	NOTENOUGHARGS		-7
+#define WRONGARGSERR		0
 
 //Channel modes flags
 
@@ -84,9 +85,9 @@
 #include <sstream>
 #include <deque>
 #include <list>
+#include <algorithm>
 
 char		                        **ft_split(char const *s, char c);
-std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
 
 void                                free_2d(char **arr);
 char                                *remove_newline(char *str);
