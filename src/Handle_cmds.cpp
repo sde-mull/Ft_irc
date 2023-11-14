@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_cmds.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 01:12:47 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/14 16:56:22 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,38 +29,38 @@ int	Privmsg_cmd(std::vector<std::string> buf, Client client)
 
 int	Parse::Mode_cmd(std::vector<std::string> buf, Client client)
 {
-	std::string	channel = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 
-	if (channel.empty())
+	if (buf.size() == 1)
 	{
-		printErrorMessage("Error: No arg for target channel!", NOTENOUGHARGS);
+		return printErrorMessage("Error: Not enough args: MODE <channel> <flag> <extras>", NOTENOUGHARGS);
 		return 0;
 	}
 	else if (buf.size() == 2)
-	{
-		ch_it->displayModes();
-		return 1;
-	}
+		;
 	else if (buf[2].size() != 2 || (buf[2][0] != '-' && buf[2][0] != '+'))
 	{
 		std::string testing = "ERROR:" + buf[2];
 		printErrorMessage(testing, GENERICERROR);
 		return 0;
 	}
-		
-	char	mode = buf[2][1];
-	
-	while (ch_it->getName() != channel && ch_it != _Channels.end())
+
+	std::cout << "eu chego aqui" << buf.size() << std::endl;
+	while (ch_it->getName() != buf[1] && ch_it != _Channels.end())
 		ch_it++;
 	if (ch_it == _Channels.end())
 		printErrorMessage("Error: Channel not found!", NOCHANNELERR);
 	else if (ch_it->getIsMod(client.Getters(GETUSER)) == 0)
 		printErrorMessage("Error: You are not a moderator of this channel!", NOTENOUGHPERMSERR);
-	else if (ch_it->getMode(mode) == -1)
+	else if (buf.size() == 2)
+	{
+		ch_it->displayModes(); // nao tirar
+		return 1;
+	}
+	else if (ch_it->getMode(buf[2][1]) == -1)
 		printErrorMessage("Error: That mode does not exist!", GENERICERROR);
 	else
-		return (ch_it->changeMode(mode, buf));
+		return (ch_it->changeMode(buf[2][1], buf));
 	return (0);
 }
 
@@ -68,6 +68,13 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 {
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 
+	if (buf.size() < 2)
+		return printErrorMessage("Error: TOPIC <channelname> <OPTIONALextraargs>.", WRONGARGSERR);
+	if (buf.size() == 2)
+	{
+		sendIrcMessage(ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
+		return 1;
+	}
 	while (ch_it != _Channels.end() && ch_it->getName() != buf[1])
 		ch_it++;
 	if (ch_it == _Channels.end())
@@ -76,7 +83,7 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 		printErrorMessage("Error: You are not a moderator of this channel and the channel is flagged to invite only.", NOTENOUGHPERMSERR);
 	else if (ch_it->getIsUser(client.Getters(GETUSER)) == 0)
 		printErrorMessage("Error: You must be an user in this channel.", GENERICERROR);
-	else
+	else if (buf.size() > 2)
 	{
 		if (ch_it->changeTopic(buf) == 0)
 			printErrorMessage("Error: The topic couldnt be changed.", GENERICERROR);
@@ -90,6 +97,8 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 {
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 
+	if (buf.size() != 3)
+		return printErrorMessage("Error: INVITE <Target> #<Channelname>.", WRONGARGSERR);
 	while (ch_it != _Channels.end() && ch_it->getName() != buf[2])
 		ch_it++;
 	if (ch_it == _Channels.end())
@@ -114,6 +123,8 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 {
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 
+	if (buf.size() != 3)
+		return printErrorMessage("Error: KICK <Channelname> <Target>.", WRONGARGSERR);
 	while (ch_it != _Channels.end() && ch_it->getName() != buf[1])
 		ch_it++;
 	if (ch_it == _Channels.end())
@@ -134,7 +145,12 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	std::string						ChannelName = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 	
-  
+	std::cout << buf[1][0] << std::endl;
+	if (buf.size() != 2)
+		return	printErrorMessage("Error: JOIN #<Channelname>.", WRONGARGSERR);
+	else if (buf[1][0] != '&' && buf[1][0] != '#')
+		return printErrorMessage("Error: JOIN #<Channelname>.", WRONGARGSERR);
+	std::cout << "buf size:" << buf.size() << std::endl;
 	while (ch_it != _Channels.end() && ch_it->getName() != ChannelName)
 		ch_it++;
 	if (ch_it == _Channels.end())
@@ -199,6 +215,10 @@ int	Parse::Handle_commands(char *buf, Client *client)
 	std::vector<std::string>	parsed_buffer = Parse::ft_split(buf, strlen(buf));
 	std::string	message;
 
+	// std::vector<std::string>::iterator It = parsed_buffer.begin();
+	// for (It; It != parsed_buffer.end(); It++)
+	// 	std::cout << *It << " ";
+	// std::cout << std::endl;
 	if (!buf)
 	{
 		std::cout << RED << "No buffer in Handle_commands" << std::endl;
@@ -209,7 +229,8 @@ int	Parse::Handle_commands(char *buf, Client *client)
 			return (function[i](parsed_buffer, *client));
 
 	std::vector<std::string>::iterator Ite = parsed_buffer.begin();
-	//std::advance(Ite, 2);
+	message = parsed_buffer[0];
+	std::advance(Ite, 1);
 	for (Ite; Ite != parsed_buffer.end(); Ite++)
 		message = message + ' ' + *Ite;
 	sendIrcMessage(message, client->GettersInt(GETCLIENTFD));

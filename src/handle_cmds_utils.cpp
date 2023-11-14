@@ -6,30 +6,22 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/13 16:41:41 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/14 17:16:24 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle)
-{
-	std::vector<std::string>::iterator ite;
 
-	for (ite = vector.begin(); ite != vector.end(); ite++)
-		if (*ite == needle)
-			return ite;
-	return (vector.end());
-}
 
 int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client)
 {
-	if (ch_it->getMode(MODEUSERLIMIT) == 1)
+	// if (ch_it->getMode(MODEUSERLIMIT) == 1)
 	if (ch_it->getMode('i') == 1)
 	{
-		if (ch_it->invitedUsers(buffer[1]) == 1)
+		if (ch_it->invitedUsers(client.Getters(GETNICK)) == 1)
 		{
-			ch_it->addUser(buffer[1]);
+			ch_it->addUser(client.Getters(GETNICK));
 			if (ch_it->getTopic() != "\0")
 				Parse::sendIrcNumeric("332", client, (*ch_it), " :" + ch_it->getTopic(), 2);
 			else
@@ -45,7 +37,7 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 			Parse::sendIrcNumeric("332", client, (*ch_it), " :" + ch_it->getTopic(), 2);
 		else
 			Parse::sendIrcNumeric("331", client, (*ch_it), " :No topic is set", 2);
-		ch_it->addUser(buffer[1]);
+		ch_it->addUser(client.Getters(GETNICK));
 		return (1);
 	}
 	return (0);
