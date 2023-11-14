@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/11 17:41:40 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/13 14:09:08 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ class Parse
 		static	int		Join_cmd(std::vector<std::string> buf, Client client);
 		static	int		Handle_commands(char *buf, Client *client);
 		static	int		Kick_cmd(std::vector<std::string> buf, Client client);
-
+		static	int		Mode_cmd(std::vector<std::string> buf, Client client);
+		static	int		Invite_cmd(std::vector<std::string> buf, Client client);
+		static	int		Topic_cmd(std::vector<std::string> buf, Client client);
+		
 		//Handle_cmds_utils.cpp
 		static	int									try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
 		static	std::vector<std::string>			Split_spc(char *buf);

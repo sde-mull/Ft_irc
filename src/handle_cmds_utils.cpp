@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmds_utils.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/11 16:57:35 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/13 16:41:41 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,16 @@ std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, s
 
 int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client)
 {
+	if (ch_it->getMode(MODEUSERLIMIT) == 1)
 	if (ch_it->getMode('i') == 1)
 	{
 		if (ch_it->invitedUsers(buffer[1]) == 1)
 		{
 			ch_it->addUser(buffer[1]);
+			if (ch_it->getTopic() != "\0")
+				Parse::sendIrcMessage(":localhost 332 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :" + ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
+			else
+				Parse::sendIrcMessage(":localhost 331 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :No topic is set", client.GettersInt(GETCLIENTFD));
 			return (1);
 		}
 		else
@@ -36,6 +41,10 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 	}
 	else
 	{
+		if (ch_it->getTopic() != "\0")
+			Parse::sendIrcMessage(":localhost 332 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :" + ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
+		else
+			Parse::sendIrcMessage(":localhost 331 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :No topic is set", client.GettersInt(GETCLIENTFD));
 		ch_it->addUser(buffer[1]);
 		return (1);
 	}
