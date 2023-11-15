@@ -192,23 +192,25 @@ void	Channel::addUser(std::string user)
 
 int	Channel::invitedUsers(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_invitedUsers, user);
+	std::vector<std::string>::iterator ite = std::find(_invitedUsers.begin(), _invitedUsers.end(), user);
 
+	std::cout << user << std::endl;
 	if (ite == _invitedUsers.end())
 		return (0);
 	else
-	{
 		ite = _invitedUsers.erase(ite);
-		return 1;
-	}
+	return 1;
 }
 
 int	Channel::changeTopic(std::vector<std::string> buf)
 {
 	std::string	topic;
 	std::vector<std::string>::iterator ite;
-	
-	for (ite = buf.begin(); ite != buf.end(); ite++)
+
+	ite = buf.begin();
+	topic = buf[2];
+	std::advance(ite, 3);
+	for (ite; ite != buf.end(); ite++)
 		topic = topic + " " + *ite;
 	_topic = topic;
 	return 1;
@@ -216,28 +218,28 @@ int	Channel::changeTopic(std::vector<std::string> buf)
 
 int	Channel::inviteUser(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_invitedUsers, user);
+	std::vector<std::string>::iterator ite = std::find(_invitedUsers.begin(), _invitedUsers.end(), user);
 	
 	if (ite == _invitedUsers.end())
 		_invitedUsers.push_back(user);
 	else
 		return 0;
-	return 0;
+	return 1;
 }
 
 int	Channel::getIsUser(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_users, user);
+	std::vector<std::string>::iterator ite = std::find(_users.begin(), _users.end(), user);
 
 	if (ite == _users.end())
 		return 0;
-	else
-		return 1;
+	std::cout << "asdadas" << std::endl;
+	return 1;
 }
 
 int	Channel::getIsMod(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_mods, user);
+	std::vector<std::string>::iterator ite = std::find(_mods.begin(), _mods.end(), user);
 
 	if (ite == _mods.end())
 		return 0;
@@ -247,7 +249,7 @@ int	Channel::getIsMod(std::string user)
 
 int		Channel::rmModder(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_mods, user);
+	std::vector<std::string>::iterator ite = std::find(_mods.begin(), _mods.end(), user);
 
 	if (ite == _mods.end())
 		return 0;
@@ -258,7 +260,7 @@ int		Channel::rmModder(std::string user)
 
 int	Channel::rmUser(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_users, user);
+	std::vector<std::string>::iterator ite = std::find(_users.begin(), _users.end(), user);
 
 	rmModder(user);
 	if (ite == _users.end())
