@@ -64,6 +64,7 @@ class Channel
   
       //idk
 			std::string getSymbol(void);
+			std::map<std::string, std::string> getPrefixs(void);
 			std::string getPrefix(std::string nick);
 			std::string getModeString(void);
 			int			getMode(char c);

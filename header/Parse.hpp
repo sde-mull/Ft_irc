@@ -35,6 +35,7 @@ class Parse
 
 
 		//Handle_cmds.cpp
+		static  int 	Nick_cmd(std::vector<std::string> buf, Client client);
 		static	int		Join_cmd(std::vector<std::string> buf, Client client);
 		static	int		Handle_commands(char *buf, Client *client);
 		static	int		Kick_cmd(std::vector<std::string> buf, Client client);
@@ -66,6 +67,7 @@ class Parse
 		static  void                        RemoveClient(int id);
 		static 	std::string					SendCommandIRC(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static  void						CreateNumerics(void);
+		static  std::string					PrefixString(Client client, Channel channel);
 
 };
 

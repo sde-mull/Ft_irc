@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
+#include "Cinclude.hpp"
 
 std::vector<Channel> Parse::_Channels;
 
@@ -169,8 +169,7 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		Channel channel = _Channels.back();
     Parse::sendIrcNumeric(3, "", "", client, &channel);
 		Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &channel);
-		Parse::sendIrcNumeric(1, "353", " " + channel.getSymbol() + " " + \
-		channel.getName() + " :" + channel.getPrefix(client.Getters(GETNICK)) + client.Getters(GETNICK), client, &channel);
+		Parse::sendIrcNumeric(1, "353", PrefixString(client, channel), client, &channel);
 		Parse::sendIrcNumeric(2, "366", " :End of NAMES list", client, &channel);
 		Parse::sendIrcNumeric(2, "324", channel.getModeString(), client, &channel);
 		Parse::sendIrcNumeric(2, "315", " :End of WHO list", client, &channel);
@@ -181,48 +180,30 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	else
 		return (try_joining(ch_it, buf, client));
 	return 0;
-  
-// =======
-// 	bool							exist = false;
-// 	while (ch_it != _Channels.end())
-// 	{
-// 		if (ChannelName == ch_it->getName())
-// 		{
-// 			exist = true;
-// 			if (Parse::try_joining(ch_it, buf, client) == 1)
-// 			{
-// 				if (ch_it->getTopic() != "\0")
-// 					Parse::sendIrcMessage(":localhost 332 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :" + ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
-// 				else
-// 					Parse::sendIrcMessage(":localhost 331 " + client.Getters(GETNICK) + " " + ch_it->getName() + " :No topic is set", client.GettersInt(GETCLIENTFD));
-// 				exist = false;
-// 				return 1;
-// 			}
-// 			else
-// 			{
-// 				std::cout << "This channel is invite only and you are not invited!" << std::endl;
-// 				return 1;
-// 			}
-// 		}
-// 		ch_it++;
-// 	}
-// 	if (!exist) //":" + client.Getters(GETNICK) + "!" + client.Getters(GETNICK) + "@localhost JOIN " + channel.getName()
-// 	{
-// 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK)));
-// 		Channel channel = _Channels.back();
-// 		Parse::sendIrcMessage(Parse::SendCommandIRC("", client, channel, "", 3), client.GettersInt(GETCLIENTFD));
-// 		Parse::sendIrcMessage(Parse::SendCommandIRC("331", client, channel, " :No topic is set", 1), client.GettersInt(GETCLIENTFD));
-// 		Parse::sendIrcMessage(Parse::SendCommandIRC("353", client, channel, " :" + channel.getPrefix(client.Getters(GETNICK)) + client.Getters(GETNICK), 2), client.GettersInt(GETCLIENTFD));
-// 		Parse::sendIrcMessage(Parse::SendCommandIRC("366", client, channel, " :End of NAMES list", 1), client.GettersInt(GETCLIENTFD));
-// 		Parse::sendIrcMessage(Parse::SendCommandIRC("324", client, channel, channel.getModeString(), 1), client.GettersInt(GETCLIENTFD));
-// 		Parse::sendIrcMessage(Parse::SendCommandIRC("315", client, channel, " :End of WHO list", 1), client.GettersInt(GETCLIENTFD));
-// >>>>>>> main
+}
+
+int	Parse::Nick_cmd(std::vector<std::string> buf, Client client)
+{
+	std::string str = buf[1];
+	if (!Parse::CheckNickRules(str))
+	{
+		Parse::sendIrcNumeric(1, "432", ":Erroneus nickname", client);
+		return 0;
+	}
+	if (!Parse::CheckClientByNick(str))
+	{
+		Parse::sendIrcNumeric(1, "433", " :Nickname is already in use", client);
+		return 0;
+	}
+	client.Setters(SETNICK, str);
+	Parse::sendIrcNumeric(1, "001", "", client);
+	return 0;
 }
 
 int	Parse::Handle_commands(char *buf, Client *client)
 {
-	std::string					opts[6] = {"JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG"};
-	int 						(*function[6])(std::vector<std::string> buf, Client client)	= {&Join_cmd, &Kick_cmd, &Invite_cmd, &Topic_cmd, &Mode_cmd, &Privmsg_cmd};
+	std::string					opts[7] = {"JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "NICK"};
+	int 						(*function[7])(std::vector<std::string> buf, Client client)	= {&Join_cmd, &Kick_cmd, &Invite_cmd, &Topic_cmd, &Mode_cmd, &Privmsg_cmd, &Nick_cmd};
 	std::vector<std::string>	parsed_buffer = Parse::ft_split(buf, strlen(buf));
 	std::string	message;
 
@@ -234,8 +215,8 @@ int	Parse::Handle_commands(char *buf, Client *client)
 	{
 		std::cout << RED << "No buffer in Handle_commands" << std::endl;
 		return 0;
-	}
-	for (int i = 0; i < 5; i++)
+	} 
+	for (int i = 0; i < 7; i++)
 		if (parsed_buffer[0] == opts[i])
 			return (function[i](parsed_buffer, *client));
 
