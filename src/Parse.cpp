@@ -193,24 +193,13 @@ std::string Parse::PrefixString(Client client, Channel channel)
 	return (str);
 }
 
-int Parse::BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel, int f)
+int Parse::BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel)
 {
 	std::vector<std::string> users = (*channel).getUsers();
-	std::string flag = "";
-	std::string tmp = "";
-	std::string farto = "";
 	for(int j = 0; j < users.size(); j++)
 	{
-		if (f == 1)
-		{
-			farto = client.Getters(GETNICK);
-			flag = " H" + channel->getPrefix(users[j]) + " :1 ";
-			tmp = (Parse::ReturnClientByNick(users[j]))->Getters(GETUSER);
-		}
-		Parse::sendIrcNumeric(i, code, str + farto + flag + tmp, *(Parse::ReturnClientByNick(users[j])), channel);
-		tmp = "";
-		flag = "";
-		farto = "";
+		std::cout << "nick: " << users[j] << std::endl;
+		Parse::sendIrcNumeric(i, code, str, *(Parse::ReturnClientByNick(users[j])), channel);
 	}
 	return (0);
 }

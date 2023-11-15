@@ -43,14 +43,8 @@ class Parse
 		static	int		Invite_cmd(std::vector<std::string> buf, Client client);
 		static	int		Topic_cmd(std::vector<std::string> buf, Client client);
 		
-		//Handle_cmds_utils.cpp
 		static	int									try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
 		static	std::vector<std::string>			Split_spc(char *buf);
-		// static	std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
-		/* static	int							sendIrcMessage(std::string message, int clientId);
-		static	int							try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
-		static	std::vector<std::string>	Split_spc(char *buf); */
-		//Non-member functions
 		static  bool                        checkArgParam(std::string port, std::string passsword);
 		static  bool                        checkNumbArgs(int const argc);
 		static  int                         printErrorMessage(std::string message, int typeError);
@@ -68,7 +62,7 @@ class Parse
 		static 	std::string					SendCommandIRC(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static  void						CreateNumerics(void);
 		static  std::string					PrefixString(Client client, Channel channel);
-		static int 							BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel, int f);
+		static int 							BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel);
 		static Client* 						ReturnClientByNick(std::string nick);
 		static int 							Who_cmd(std::vector<std::string> buf, Client client);
 		static int 							BroadcastWho(Client client, Channel *channel);
