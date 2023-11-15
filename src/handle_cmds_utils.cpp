@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 16:47:21 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/14 19:04:46 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 		if (ch_it->getTopic() != "\0")
 			Parse::sendIrcNumeric(2, "332", " :" + ch_it->getTopic(), client, &(*ch_it));
 		else
-			Parse::sendIrcNumeric("331", client, (*ch_it), " :No topic is set", 2);
+			Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &(*ch_it));
 		Parse::sendIrcNumeric(1, "353", " " + ch_it->getSymbol() + " " + \
 		ch_it->getName() + " :" + ch_it->getPrefix(client.Getters(GETNICK)) + client.Getters(GETNICK), client, &(*ch_it));
 		Parse::sendIrcNumeric(2, "366", " :End of NAMES list", client, &(*ch_it));

@@ -71,7 +71,8 @@ void     Server::ft_nick(Client &client, std::string str)
 		Parse::sendIrcNumeric(1, "433", " :Nickname is already in use", client);
 		return ;
 	}
-	Parse::sendIrcNumeric(1, "001", str + "", client);
+	Parse::sendIrcMessage(":", client.GettersInt(GETCLIENTFD));
+	// Parse::sendIrcNumeric(1, "001", str + "", client);
 	client.Setters(SETNICK, str);
 }
 
