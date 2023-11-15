@@ -14,26 +14,6 @@
 
 std::vector<Client> Parse::_clients;
 
-//Non-member functions of parse
-
-// std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle)
-// {
-// 	std::vector<std::string>::iterator ite;
-
-// 	for (ite = vector.begin(); ite != vector.end(); ite++)
-// 		if (*ite == needle)
-// 			return ite;
-// 	return (vector.end());
-// }
-
-/*
-checkArgParam is a function that will check:
--> If the port is a number between 0 and 65535
--> If the port exists
--> If the port isn't different from a number
--> If the password exists 
-*/
-
 bool Parse::checkArgParam(std::string port, std::string password)
 {
 	int portNumb;
@@ -196,6 +176,19 @@ int	Parse::sendIrcNumeric(int i, std::string code, std::string str, Client clien
 	if (send(client.GettersInt(GETCLIENTFD), message.c_str(), message.length(), 0) == -1)
 		exit(1);
 	return 0;
+}
+
+std::string Parse::PrefixString(Client client, Channel channel)
+{
+	std::string str = " " + channel.getSymbol() + " " + channel.getName() + ":";
+	std::map<std::string, std::string> prefixs = channel.getPrefixs();
+	std::map<std::string, std::string>::iterator it = prefixs.begin();
+	while (it != prefixs.end())
+	{
+		str += " " + it->second + it->first;
+		it++;
+	}
+	return (str);
 }
 
 void Parse::PrintAllClients(void)
