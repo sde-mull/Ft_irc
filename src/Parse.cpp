@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Parse.hpp"
+#include "Cinclude.hpp"
 
 std::vector<Client> Parse::_clients;
 
@@ -180,15 +180,53 @@ int	Parse::sendIrcNumeric(int i, std::string code, std::string str, Client clien
 
 std::string Parse::PrefixString(Client client, Channel channel)
 {
-	std::string str = " " + channel.getSymbol() + " " + channel.getName() + ":";
+	std::string str = " " + channel.getSymbol() + " " + channel.getName() + " :";
 	std::map<std::string, std::string> prefixs = channel.getPrefixs();
 	std::map<std::string, std::string>::iterator it = prefixs.begin();
 	while (it != prefixs.end())
 	{
-		str += " " + it->second + it->first;
+		str += it->second + it->first;
 		it++;
+		if (it != prefixs.end())
+			str += " ";
 	}
 	return (str);
+}
+
+int Parse::BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel, int f)
+{
+	std::vector<std::string> users = (*channel).getUsers();
+	std::string flag = "";
+	std::string tmp = "";
+	std::string farto = "";
+	for(int j = 0; j < users.size(); j++)
+	{
+		if (f == 1)
+		{
+			farto = client.Getters(GETNICK);
+			flag = " H" + channel->getPrefix(users[j]) + " :1 ";
+			tmp = (Parse::ReturnClientByNick(users[j]))->Getters(GETUSER);
+		}
+		Parse::sendIrcNumeric(i, code, str + farto + flag + tmp, *(Parse::ReturnClientByNick(users[j])), channel);
+		tmp = "";
+		flag = "";
+		farto = "";
+	}
+	return (0);
+}
+
+int Parse::BroadcastWho(Client client, Channel *channel)
+{
+	std::vector<std::string> users = (*channel).getUsers();
+	Client *client_tmp = NULL;
+	std::string flag = "";
+	for(int j = 0; j < users.size(); j++)
+	{
+		client_tmp = (Parse::ReturnClientByNick(users[j]));
+		flag = " H" + channel->getPrefix(users[j]) + " :1 ";
+		Parse::sendIrcMessage(":localhost 352 " + client.Getters(GETNICK) + " " + channel->getName() + " localhost ft_irc " + client_tmp->Getters(GETNICK) + flag + client_tmp->Getters(GETUSER), client.GettersInt(GETCLIENTFD));
+	}
+	return (0);
 }
 
 void Parse::PrintAllClients(void)
@@ -205,6 +243,16 @@ int  Parse::ReturnClientById(int id)
 			return (i);
 	}
 	return (-1);
+}
+
+Client* Parse::ReturnClientByNick(std::string nick)
+{
+	for (int i = 0; i < _clients.size(); i++)
+	{
+		if (_clients[i].Getters(GETNICK) == nick)
+			return (&(_clients[i]));
+	}
+	return (NULL);
 }
 
 void    Parse::RemoveClient(int id)
@@ -235,7 +283,7 @@ std::string	Parse::SendCommandIRC(int i, std::string code, std::string str, Clie
 		case (3) :
 			return (":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost JOIN " + channel->getName());
 	}
-	
+	return ("");
 }
 
 

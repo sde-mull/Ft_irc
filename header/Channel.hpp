@@ -68,6 +68,8 @@ class Channel
 			std::string getPrefix(std::string nick);
 			std::string getModeString(void);
 			int			getMode(char c);
+			std::vector<std::string> getUsers();
+
 			
 };
 
