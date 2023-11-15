@@ -95,6 +95,7 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 {
 	std::string	channel_name = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
+	Client *invitedUser = Parse::ReturnClientByNick(buf[1]);
  
 	while (ch_it != _Channels.end() && ch_it->getName() != channel_name)
 		ch_it++;
@@ -164,7 +165,8 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	}
 	else if (ch_it->getMode(MODEUSERLIMIT) == 1 && ch_it->getUserAmount() >= ch_it->getUserLimit())
 		Parse::sendIrcNumeric(2, "471", " :Cannot join channel (+l)", client, &(*ch_it));
-	else
+	else if (ch_it->getMode(MODEINVITEONLY) == 1 && !ch_it->CheckInvite(client.Getters(GETNICK)))
+		Parse::sendIrcNumeric(2, "473", " :Cannot join channel (+i)", client, &(*ch_it));
 		return (try_joining(ch_it, buf, client));
 	return 0;
 }

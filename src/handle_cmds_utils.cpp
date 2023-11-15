@@ -36,7 +36,7 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 			return (1);
 		}
 		else
-			return (printErrorMessage("This channel is invite only and you haven't been invited!", 5));	
+			Parse::sendIrcNumeric(2, "473", " :Cannot join channel (+i)", client, &(*ch_it));
 	}
 	else
 	{
