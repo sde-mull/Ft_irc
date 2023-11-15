@@ -68,6 +68,10 @@ class Parse
 		static 	std::string					SendCommandIRC(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static  void						CreateNumerics(void);
 		static  std::string					PrefixString(Client client, Channel channel);
+		static int 							BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel, int f);
+		static Client* 						ReturnClientByNick(std::string nick);
+		static int 							Who_cmd(std::vector<std::string> buf, Client client);
+		static int 							BroadcastWho(Client client, Channel *channel);
 
 };
 
