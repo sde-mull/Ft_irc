@@ -194,12 +194,21 @@ int	Channel::invitedUsers(std::string user)
 {
 	std::vector<std::string>::iterator ite = std::find(_invitedUsers.begin(), _invitedUsers.end(), user);
 
-	std::cout << user << std::endl;
 	if (ite == _invitedUsers.end())
 		return (0);
 	else
 		ite = _invitedUsers.erase(ite);
 	return 1;
+}
+
+int	Channel::CheckInvite(std::string user)
+{
+	std::vector<std::string>::iterator ite = std::find(_invitedUsers.begin(), _invitedUsers.end(), user);
+
+	if (ite == _invitedUsers.end())
+		return (0);
+	else
+		return (1);
 }
 
 int	Channel::changeTopic(std::vector<std::string> buf)

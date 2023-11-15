@@ -52,6 +52,7 @@ class Channel
 			
 			int			invitedUsers(std::string user);
 			int			inviteUser(std::string user);
+			int 		CheckInvite(std::string user);
 			void		setPassword(std::string	pass);
 			int			changeTopic(std::vector<std::string> buf);
 
