@@ -81,7 +81,10 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 		if (ch_it->changeTopic(buf) == 0)
 			printErrorMessage("Error: The topic couldnt be changed.", GENERICERROR);
 		else
+		{
+			Parse::BroadcastChannel(2, "332", " " + buf[2], client, &(*ch_it), 0);
 			return 1;
+		}
 	}
 	return (0);
 }
@@ -106,14 +109,7 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 			printErrorMessage("Error: User is already invited.", GENERICERROR);
 		else
 		{
-			// :localhost 341 sde-mull god #yoyo
-			// :localhost 341 sde-mull god #oioi
-			Parse::sendIrcMessage(":localhost 341 " + client.Getters(GETNICK) + " " + buf[1] + " " + \
-			(*ch_it).getName(), client.GettersInt(GETCLIENTFD));
-			// :sde-mull!sde-mull@localhost NOTICE god you have been invited to join #yoyo
-			// :sde-mull!sde-mull@localhost NOTICE god you have been invited to join #oioi
-			Parse::sendIrcMessage(":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + \
-			"@localhost NOTICE " + buf[1] + " you have been invited to join " + (*ch_it).getName(), client.GettersInt(GETCLIENTFD));
+			Parse::sendIrcMessage(":localhost 341 " + client.Getters(GETNICK) + " " + (*ch_it).getName(), client.GettersInt(GETCLIENTFD));
 			return 1;
 		}
 	}
