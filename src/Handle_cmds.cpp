@@ -76,7 +76,7 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 		printErrorMessage("Channel not found.", NOCHANNELERR);
 	else if (ch_it->getMode(MODETOPIC) == 0 && ch_it->getIsMod(client.Getters(GETUSER)) == 0)
 		printErrorMessage("You are not a moderator of this channel and the channel is flagged to invite only.", NOTENOUGHPERMSERR);
-	else if (ch_it->getIsUser(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
 		printErrorMessage("You must be an user in this channel.", GENERICERROR);
 	else
 	{
@@ -84,7 +84,7 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 			printErrorMessage("The topic couldnt be changed.", GENERICERROR);
 		else
 		{
-			Parse::BroadcastChannel(2, "332", " " + buf[2], client, &(*ch_it), 0);
+			Parse::BroadcastChannel(2, "332", " " + buf[2], client, &(*ch_it));
 			return 1;
 		}
 	}
@@ -94,12 +94,13 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 {
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
+	Client *invitedUser = Parse::ReturnClientByNick(buf[1]);
 
 	while (ch_it != _Channels.end() && ch_it->getName() != buf[2])
 		ch_it++;
 	if (ch_it == _Channels.end())
 		printErrorMessage("Channel not found.", NOCHANNELERR);
-	else if (ch_it->getIsUser(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
 		printErrorMessage("You must be an user in this channel.", NOCHANNELERR);
 	else if (ch_it->getMode(MODEINVITEONLY) == 1 && ch_it->getIsMod(client.Getters(GETUSER)) == 0)
 		printErrorMessage("You are not a moderator of this channel and the channel is flagged to invite only.", NOTENOUGHPERMSERR);
@@ -111,7 +112,9 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 			printErrorMessage("User is already invited.", GENERICERROR);
 		else
 		{
-			Parse::sendIrcMessage(":localhost 341 " + client.Getters(GETNICK) + " " + (*ch_it).getName(), client.GettersInt(GETCLIENTFD));
+			Parse::sendIrcMessage(":localhost 341 " + client.Getters(GETNICK) + " " + buf[1] + " " + (*ch_it).getName(), client.GettersInt(GETCLIENTFD));
+			// god!sde-mull@localhost NOTICE sde-mull you have been invited to join #ovni
+			Parse::sendIrcMessage(":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost NOTICE " + buf[1] + " you have been invited to join " + (*ch_it).getName(), invitedUser->GettersInt(GETCLIENTFD));
 			return 1;
 		}
 	}
@@ -126,7 +129,7 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 		printErrorMessage("Channel not found!", NOCHANNELERR);
-	else if (ch_it->getIsMod(client.Getters(GETUSER)) == 0)
+	else if (ch_it->getIsMod(client.Getters(GETNICK)) == 0)
 		printErrorMessage("You are not a moderator of this channel!", NOTENOUGHPERMSERR);
 	else if (ch_it->getIsUser(buf[2]) == 0)
 		printErrorMessage("There is no such user.", NOUSERERR);
@@ -142,17 +145,16 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	std::string						ChannelName = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 	
-  
 	while (ch_it != _Channels.end() && ch_it->getName() != ChannelName)
 		ch_it++;
 	if (ch_it == _Channels.end())
 	{
-		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETUSER)));
+		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK)));
 		Channel channel = _Channels.back();
     	Parse::sendIrcNumeric(3, "", "", client, &channel);
 		Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &channel);
-		Parse::BroadcastChannel(1, "353", PrefixString(client, channel), client, &channel, 0);
-		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, &channel, 0);
+		Parse::BroadcastChannel(1, "353", PrefixString(client, channel), client, &channel);
+		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, &channel);
 		Parse::sendIrcMessage(":localhost 324 " + channel.getName() + channel.getModeString(), client.GettersInt(GETCLIENTFD));
 		return 1;
 	}
@@ -230,3 +232,4 @@ int	Parse::Handle_commands(char *buf, Client *client)
 	sendIrcMessage(message, client->GettersInt(GETCLIENTFD)); */
 	return (0);
 }
+

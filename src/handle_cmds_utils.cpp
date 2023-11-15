@@ -46,8 +46,8 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 			Parse::sendIrcNumeric(2, "332", " :" + ch_it->getTopic(), client, &(*ch_it));
 		else
 			Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &(*ch_it));
-		Parse::BroadcastChannel(1, "353", PrefixString(client, (*ch_it)), client, &(*ch_it), 0);
-		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, &(*ch_it), 0);
+		Parse::BroadcastChannel(1, "353", PrefixString(client, (*ch_it)), client, &(*ch_it));
+		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, &(*ch_it));
 		Parse::sendIrcNumeric(2, "324", ch_it->getModeString(), client, &(*ch_it));
 		//Parse::sendIrcNumeric(2, "315", " :End of WHO list", client, &(*ch_it));
 		return (1);
