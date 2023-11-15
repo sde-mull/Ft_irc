@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 16:04:15 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/14 18:24:57 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,41 +58,48 @@ int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<cha
 
 int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
-	if (buf[3].empty() && buf[2][0] == '+')
-		Parse::printErrorMessage("Error: in order to add a new modder you have to provide the client's user.", NOTENOUGHARGS);
+	std::cout << buf[3] << std::endl;
+ 	if (buf.size() != 4)
+		Parse::printErrorMessage("Error: arguments should be: MODE <channel> +-o <client's user>.", NOTENOUGHARGS);
+	else if (getIsUser(buf[3]) == 0)
+		Parse::printErrorMessage("Error: target not in channel.", NOUSERERR);
 	else if (buf[2][0] == '+')
 	{
+		std::cout << "ola ;)" << std::endl;
 		if (addModder(buf[3]) == 0)
-			Parse::printErrorMessage("Error: user was already a moderator.", GENERICERROR);
-		else
-			return 1;
+			Parse::printErrorMessage("Error: user was already a moderator.", NOTENOUGHPERMSERR);
+		std::cout << "mod added" << std::endl;
+		return 1;
 	}
 	else if (buf[2][0] == '-')
 	{
 		if (rmModder(buf[3]) == 0)
-			Parse::printErrorMessage("Error: user isn't a moderator.", GENERICERROR);
-		else
-			return 1;
+			Parse::printErrorMessage("Error: user isn't a moderator.", NOTENOUGHPERMSERR);
+		std::cout << "mod removed" << std::endl;
+		return 1;
 	}
 	return 0;
 }
 
 int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
-	if (buf[3].empty() && getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
-		Parse::printErrorMessage("Error: you need to specify the new limit.", NOTENOUGHARGS);
+	if (buf.size() < 3)
+		Parse::printErrorMessage("Error: arguments should be: MODE <channel> +-l <User's limit>.", NOTENOUGHARGS);
+	else if (buf.size() == 3 && buf[2][0] == '+')
+		Parse::printErrorMessage("Error: +l flag should come with user's limit specifications.", NOTENOUGHARGS);
 	else if (getMode(MODEUSERLIMIT) == 1 && buf[2][0] == '-')
 	{
 		ite->second = 0;
 		_maxusers = -1;
 		return 1;
 	}
-	else if (getMode(MODEUSERLIMIT) && buf[2][0] == '+')
+	else if (getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
 	{
+		if (buf[3].find_first_not_of("0123456789") != -1)
+			return Parse::printErrorMessage("Error: User limit must be an integer.", WRONGARGSERR);
 		int	number = std::atoi(buf[3].c_str());
-		
 		if (number <= 0)
-			Parse::printErrorMessage("Error: The user limit must be higher than 0.", GENERICERROR);
+			Parse::printErrorMessage("Error: The user limit must be higher than 0.", WRONGARGSERR);
 		else
 		{
 			_maxusers = number;
@@ -192,23 +199,25 @@ void	Channel::addUser(std::string user)
 
 int	Channel::invitedUsers(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_invitedUsers, user);
+	std::vector<std::string>::iterator ite = std::find(_invitedUsers.begin(), _invitedUsers.end(), user);
 
+	std::cout << user << std::endl;
 	if (ite == _invitedUsers.end())
 		return (0);
 	else
-	{
 		ite = _invitedUsers.erase(ite);
-		return 1;
-	}
+	return 1;
 }
 
 int	Channel::changeTopic(std::vector<std::string> buf)
 {
 	std::string	topic;
 	std::vector<std::string>::iterator ite;
-	
-	for (ite = buf.begin(); ite != buf.end(); ite++)
+
+	ite = buf.begin();
+	topic = buf[2];
+	std::advance(ite, 3);
+	for (ite; ite != buf.end(); ite++)
 		topic = topic + " " + *ite;
 	_topic = topic;
 	return 1;
@@ -216,28 +225,28 @@ int	Channel::changeTopic(std::vector<std::string> buf)
 
 int	Channel::inviteUser(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_invitedUsers, user);
+	std::vector<std::string>::iterator ite = std::find(_invitedUsers.begin(), _invitedUsers.end(), user);
 	
 	if (ite == _invitedUsers.end())
 		_invitedUsers.push_back(user);
 	else
 		return 0;
-	return 0;
+	return 1;
 }
 
 int	Channel::getIsUser(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_users, user);
+	std::vector<std::string>::iterator ite = std::find(_users.begin(), _users.end(), user);
 
 	if (ite == _users.end())
 		return 0;
-	else
-		return 1;
+	std::cout << "asdadas" << std::endl;
+	return 1;
 }
 
 int	Channel::getIsMod(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_mods, user);
+	std::vector<std::string>::iterator ite = std::find(_mods.begin(), _mods.end(), user);
 
 	if (ite == _mods.end())
 		return 0;
@@ -247,7 +256,7 @@ int	Channel::getIsMod(std::string user)
 
 int		Channel::rmModder(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_mods, user);
+	std::vector<std::string>::iterator ite = std::find(_mods.begin(), _mods.end(), user);
 
 	if (ite == _mods.end())
 		return 0;
@@ -258,7 +267,7 @@ int		Channel::rmModder(std::string user)
 
 int	Channel::rmUser(std::string user)
 {
-	std::vector<std::string>::iterator ite = vectorFind(_users, user);
+	std::vector<std::string>::iterator ite = std::find(_users.begin(), _users.end(), user);
 
 	rmModder(user);
 	if (ite == _users.end())
