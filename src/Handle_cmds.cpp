@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_cmds.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 18:52:38 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/14 20:04:56 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,17 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 		if (ch_it->inviteUser(buf[1]) == 0)
 			printErrorMessage("Error: User is already invited.", GENERICERROR);
 		else
+		{
+			// :localhost 341 sde-mull god #yoyo
+			// :localhost 341 sde-mull god #oioi
+			Parse::sendIrcMessage(":localhost 341 " + client.Getters(GETNICK) + " " + buf[1] + " " + \
+			(*ch_it).getName(), client.GettersInt(GETCLIENTFD));
+			// :sde-mull!sde-mull@localhost NOTICE god you have been invited to join #yoyo
+			// :sde-mull!sde-mull@localhost NOTICE god you have been invited to join #oioi
+			Parse::sendIrcMessage(":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + \
+			"@localhost NOTICE " + buf[1] + " you have been invited to join " + (*ch_it).getName(), client.GettersInt(GETCLIENTFD));
 			return 1;
+		}
 	}
 	return (0);
 }
