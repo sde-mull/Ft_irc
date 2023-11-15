@@ -35,6 +35,7 @@ class Parse
 
 
 		//Handle_cmds.cpp
+		static  int 	Nick_cmd(std::vector<std::string> buf, Client client);
 		static	int		Join_cmd(std::vector<std::string> buf, Client client);
 		static	int		Handle_commands(char *buf, Client *client);
 		static	int		Kick_cmd(std::vector<std::string> buf, Client client);
