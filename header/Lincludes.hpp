@@ -84,6 +84,7 @@
 #include <sstream>
 #include <deque>
 #include <list>
+#include <algorithm>
 
 char		                        **ft_split(char const *s, char c);
 std::vector<std::string>::iterator	vectorFind(std::vector<std::string> vector, std::string needle);
