@@ -75,7 +75,7 @@ void     Server::ft_nick(Client &client, std::string str)
 		Parse::sendIrcNumeric(1, "432", ":Erroneus nickname", client);
 		return ;
 	}
-	if (!Parse::CheckClientByNick(str))
+	if (Parse::CheckClientByNick(str))
 	{
 		Parse::sendIrcNumeric(1, "433", " :Nickname is already in use", client);
 		return ;

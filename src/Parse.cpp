@@ -113,9 +113,9 @@ bool  Parse::CheckClientByNick(std::string nick)
 	for (int i = 0; i < _clients.size(); i++)
 	{
 		if (!_clients[i].Getters(GETNICK).compare(nick))
-			return (false);
+			return (true);
 	}
-	return (true);
+	return (false);
 }
 
 /*
@@ -197,10 +197,7 @@ int Parse::BroadcastChannel(int i, std::string code, std::string str, Client cli
 {
 	std::vector<std::string> users = (*channel).getUsers();
 	for(int j = 0; j < users.size(); j++)
-	{
-		std::cout << "nick: " << users[j] << std::endl;
 		Parse::sendIrcNumeric(i, code, str, *(Parse::ReturnClientByNick(users[j])), channel);
-	}
 	return (0);
 }
 
