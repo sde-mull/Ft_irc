@@ -242,7 +242,6 @@ int	Channel::getIsUser(std::string user)
 
 	if (ite == _users.end())
 		return 0;
-	std::cout << "asdadas" << std::endl;
 	return 1;
 }
 
