@@ -122,6 +122,7 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 	{
 		Parse::sendIrcMessage(":localhost 341 " + client.Getters(GETNICK) + " " + buf[1] + " " + (*ch_it).getName(), client.GettersInt(GETCLIENTFD));
 		Parse::sendIrcMessage(":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost NOTICE " + buf[1] + " you have been invited to join " + (*ch_it).getName(), invitedUser->GettersInt(GETCLIENTFD));
+		ch_it->inviteUser(invitedUser->Getters(GETNICK));
 		return 1;
 	}
 	return (0);
