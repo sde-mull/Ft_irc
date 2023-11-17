@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerUserAuthentication.cpp                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:46:28 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/14 15:18:24 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 01:39:19 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,80 +121,3 @@ bool	Server::checkUserAuthentication(Client &client, char *buf, int received)
 		Client_Authenticate(client, buf, received);
 	return (false);
 }
-
-
-//--------------------------------------------------------------------
-/* 
-Sending message: :localhost 001 rreis-de :Welcome to the ft_irc Network 
-
-Sending message: :localhost 005 rreis-de :CHANNEL_TYPES = #,& 
-CHANNEL_MODES = i,t,k,o,l
-
-Sending message: :rreis-de!rreis-de@localhost JOIN #girafa
-
-Sending message: :localhost 331 rreis-de #girafa :No topic is set
-
-Sending message: :localhost 353 sde-mull = #girafa :+rreis-de @sde-mull
-
-Sending message: :localhost 353 rreis-de = #girafa :+rreis-de @sde-mull
-
-Sending message: :localhost 366 sde-mull #girafa :End of NAMES list
-
-Sending message: :localhost 366 rreis-de #girafa :End of NAMES list
-
-Sending message: :localhost 324 rreis-de #girafa -i -k -l -o -t
-
-Sending message: :localhost 352 sde-mull #girafa localhost ft_irc sde-mull H@ :1 sde-mull
-
-Sending message: :localhost 352 rreis-de #girafa localhost ft_irc rreis-de H+ :1 rreis-de
-
-Sending message: :localhost 315 rreis-de #girafa :End of WHO list
-
-Sending message: :localhost 352 sde-mull #girafa localhost ft_irc sde-mull H@ :1 sde-mull
-
-Sending message: :localhost 352 rreis-de #girafa localhost ft_irc rreis-de H+ :1 rreis-de
-
-Sending message: :localhost 315 sde-mull #girafa :End of WHO list
-
-
-
-
-
-//--------------------------------------------------------------------
-
-Sending message: :localhost 001 rreis-de :Welcome to the Darkest Region of the Internet
-
-Sending message: :localhost 005 rreis-de :CHANTYPES=#
-
-Sending message: :localhost 005 rreis-de :CHANMODES=i,t,k,o,l
-
-Sending message: :rreis-de!rreis-de@localhost JOIN #juba
-
-Sending message: :localhost 332 rreis-de #juba :No topic is set
-
-Sending message: :localhost 353 rreis-de = #juba :@god %rreis-de 
-
-Sending message: :localhost 353 rreis-de = #juba :@god %rreis-de 
-
-Sending message: :localhost 366 rreis-de #juba :End of NAMES list
-
-Sending message: :localhost 366 rreis-de #juba :End of NAMES list
-
-Sending message: :localhost 324 #juba #juba: -t -k +o -l -m -b -s 
-
-Sending message: :localhost 352 rreis-de #juba localhost ft_irc god H@ :1 sde-mull
-
-Sending message: :localhost 352 rreis-de #juba localhost ft_irc rreis-de H+ :1 rreis-de
-
-Sending message: :localhost 315 rreis-de #juba :End of WHO list
-
-Sending message: :localhost 352 god #juba localhost ft_irc god H@ :1 sde-mull
-
-Sending message: :localhost 352 god #juba localhost ft_irc rreis-de H+ :1 rreis-de
-
-Sending message: :localhost 315 god #juba :End of WHO list */
-
-
-
-
-

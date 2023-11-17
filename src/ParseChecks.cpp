@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:55:56 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/16 17:51:04 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 01:40:12 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ bool  Parse::CheckClientByNick(std::string nick)
 	for (int i = 0; i < _clients.size(); i++)
 	{
 		if (!_clients[i].Getters(GETNICK).compare(nick))
-			return (false);
+			return (true);
 	}
-	return (true);
+	return (false);
 }
 
 /*
