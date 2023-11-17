@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/17 01:12:59 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 01:57:56 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,8 +200,7 @@ void    Parse::RemoveClient(int id)
 	std::string nick;
 
 	nick = Parse::searchClientById(id).Getters(GETNICK);
-	for (int i = 0; i < _clients.size(); i++)
-		_clients.erase(_clients.begin() + Parse::ReturnClientById(id));
+	_clients.erase(_clients.begin() + Parse::ReturnClientById(id));
 
 	if (nick.length() == 0)
 		std::cout << CYAN "Anonymous user";
