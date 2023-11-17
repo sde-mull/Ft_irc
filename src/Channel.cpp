@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 16:15:54 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:56:59 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,19 @@ Channel::Channel(std::string name, std::string CreatingUser) : _superUser(Creati
 	_modes.insert(std::make_pair('i', 0));
 	_modes.insert(std::make_pair('t', 0));
 	_modes.insert(std::make_pair('k', 0));
+	_modes.insert(std::make_pair('o', 0));
+	_modes.insert(std::make_pair('l', 0));
+	_maxusers = -1;
+}
+
+Channel::Channel(std::string name, std::string CreatingUser, std::string pass) : _superUser(CreatingUser), _name(name), _topic("\0"), _password(pass)
+{
+	_users.push_back(CreatingUser);
+	_uprefix[CreatingUser] = "@";
+	_mods.push_back(CreatingUser);
+	_modes.insert(std::make_pair('i', 0));
+	_modes.insert(std::make_pair('t', 0));
+	_modes.insert(std::make_pair('k', 1));
 	_modes.insert(std::make_pair('o', 0));
 	_modes.insert(std::make_pair('l', 0));
 	_maxusers = -1;
@@ -231,7 +244,7 @@ int	Channel::changeTopic(std::vector<std::string> buf)
 	ite = buf.begin();
 	topic = buf[2];
 	std::advance(ite, 3);
-	for (ite; ite != buf.end(); ite++)
+	for (; ite != buf.end(); ite++)
 		topic = topic + " " + *ite;
 	_topic = topic;
 	return 1;
@@ -255,6 +268,13 @@ int	Channel::getIsUser(std::string user)
 	if (ite == _users.end())
 		return 0;
 	return 1;
+}
+
+int Channel::getIsSuperUser(std::string user)
+{
+	if (user == _superUser)
+		return 1;
+	return 0;
 }
 
 int	Channel::getIsMod(std::string user)
@@ -288,9 +308,7 @@ int	Channel::rmUser(std::string user)
 	if (ite == _users.end())
 		return 0;
 	else
-	{
 		ite = _users.erase(ite);
-	}
 	return 1;
 }
 
@@ -354,6 +372,7 @@ std::string Channel::getModeString(void)
 	std::string str;
 
 	std::map<char, int>::iterator it = _modes.begin();
+	
 	while (it != _modes.end())
 	{
 		str.push_back(' ');
