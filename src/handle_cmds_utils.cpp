@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cmds_utils.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:21:53 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 16:01:32 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:40:33 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	Parse::try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::st
 {
 	if (ch_it->getMode('i') == 1)
 	{
-		if (ch_it->invitedUsers(buffer[1]) == 1)
+		if (ch_it->invitedUsers(client.Getters(GETNICK)) == 1)
 		{
-			ch_it->addUser(buffer[1]);
+			ch_it->addUser(client.Getters(GETNICK));
 			if (ch_it->getTopic() != "\0")
 				Parse::sendIrcNumeric(2, "332", " :" + ch_it->getTopic(), client, &(*ch_it));
 			else

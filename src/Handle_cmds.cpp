@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 14:21:39 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:03:28 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,12 +144,11 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 	else if (ch_it->getIsMod(client.Getters(GETNICK)) == 0)
 		sendIrcNumeric(2, "482", " :You're not channel operator", client, &(*ch_it));
 	else if (!Parse::CheckClientByNick(buf[2]))
-	{
-		std::cout << "HELLO" << std::endl;
 		sendIrcNumeric(1, "401", " " + channel_name + " :No such nick", client);
-	}
 	else if (ch_it->getIsUser(buf[2]) == 0)
 		sendIrcNumeric(1, "441", buf[2] + " " + channel_name + " :They aren't on that channel", client);
+	else if (ch_it->getIsMod(buf[2]) == 1)
+		sendIrcNumeric(2, "482", " :You're not channel operator", client, &(*ch_it));
 	else
 	{
 		std::vector<std::string> users = ch_it->getUsers();
@@ -173,7 +172,7 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	{
 		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK)));
 		Channel channel = _Channels.back();
-    	Parse::sendIrcNumeric(3, "", "", client, &channel);
+		Parse::sendIrcNumeric(3, "", "", client, &channel);
 		Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &channel);
 		Parse::BroadcastChannel(1, "353", PrefixString(client, channel), client, &channel);
 		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, &channel);
@@ -182,9 +181,9 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	}
 	else if (ch_it->getMode(MODEUSERLIMIT) == 1 && ch_it->getUserAmount() >= ch_it->getUserLimit())
 		Parse::sendIrcNumeric(2, "471", " :Cannot join channel (+l)", client, &(*ch_it));
-	else if (ch_it->getMode(MODEINVITEONLY) == 1 && !ch_it->CheckInvite(client.Getters(GETNICK)))
+	else if (ch_it->getMode(MODEINVITEONLY) == 1 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
 		Parse::sendIrcNumeric(2, "473", " :Cannot join channel (+i)", client, &(*ch_it));
-	else if (ch_it->getMode(MODEPASSWORD) == 1 && buf.size() < 3 && ch_it->getIsInvited(client.Getters(GETNICK)) == 0)
+	else if (ch_it->getMode(MODEPASSWORD) == 1 && buf.size() < 3 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
 		Parse::sendIrcNumeric(2, "461", " :Not enough parameters (+k)", client, &(*ch_it)); // pls check
 	else if (ch_it->check_pass(buf[2]) == 0 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
 		Parse::sendIrcNumeric(2, "475", " :Cannot join channel (+k)", client, &(*ch_it)); // pls check
@@ -218,6 +217,8 @@ int Parse::Who_cmd(std::vector<std::string> buf, Client client)
 
 	while (ch_it != _Channels.end() && ch_it->getName() != ChannelName)
 		ch_it++;
+	if (ch_it->getUserAmount() == 0)
+		return -1;
 	Parse::BroadcastWho(client, &(*ch_it));
 	Parse::sendIrcNumeric(2, "315", " :End of WHO list", client, &(*ch_it));
 	return (0);
