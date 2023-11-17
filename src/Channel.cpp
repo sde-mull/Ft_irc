@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 14:21:47 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:15:54 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,7 @@ int	Channel::addModder(std::string user)
 		if (*ite == user)
 			return 0;
 	_mods.push_back(user);
+	_uprefix[user] = "@";
 	return 1;
 }
 
@@ -218,7 +219,8 @@ int	Channel::CheckInvite(std::string user)
 	if (ite == _invitedUsers.end())
 		return (0);
 	else
-		return (1);
+		return 1;
+	return 1;
 }
 
 int	Channel::changeTopic(std::vector<std::string> buf)
@@ -269,6 +271,7 @@ int		Channel::rmModder(std::string user)
 {
 	std::vector<std::string>::iterator ite = std::find(_mods.begin(), _mods.end(), user);
 
+	changePrefix(user, '+');
 	if (ite == _mods.end())
 		return 0;
 	else
@@ -281,11 +284,36 @@ int	Channel::rmUser(std::string user)
 	std::vector<std::string>::iterator ite = std::find(_users.begin(), _users.end(), user);
 
 	rmModder(user);
+	changePrefix(user, '0');
 	if (ite == _users.end())
 		return 0;
 	else
+	{
 		ite = _users.erase(ite);
+	}
 	return 1;
+}
+
+int				Channel::changePrefix(std::string user, char c)
+{
+	std::map<std::string, std::string>::iterator ite = _uprefix.find(user);
+
+	if (ite != _uprefix.end())
+	{
+		switch(c)
+		{
+			case '+':
+				_uprefix[user] = "+";
+				break;
+			case '@':
+				_uprefix[user] = "@";
+				break;
+			default:
+				_uprefix.erase(ite);
+		}
+		return 1;
+	}
+	return 0;
 }
 
 std::string	Channel::getSuperUser(void)

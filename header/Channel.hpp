@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 14:22:35 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:15:02 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@
 class Channel
 {
 	private:
-			std::vector<std::string>	_users;
-			std::map<std::string, std::string> _uprefix;
-			std::vector<std::string>	_mods;
-			std::string					_name;
-			std::string 				_topic;
-			std::string 				_password;
-			std::string					_superUser;
-			std::map<char, int>			_modes;
-			std::vector<std::string>	_invitedUsers;
-			int							_maxusers;
+			std::string							_name;
+			std::string 						_password;
+			std::map<char, int>					_modes;
+			std::string 						_topic;
+			int									_maxusers;
+			std::string							_superUser;
+			std::vector<std::string>			_users;
+			std::vector<std::string>			_mods;
+			std::vector<std::string>			_invitedUsers;
+			std::map<std::string, std::string>	_uprefix;
 		
 	public:
 	
@@ -48,6 +48,7 @@ class Channel
 			
 			void			addUser(std::string user);
 			int				addModder(std::string user);
+			int				changePrefix(std::string user, char opt);
 			int				rmUser(std::string user);
 			int				rmModder(std::string user);
 			void			displayModes(void);
