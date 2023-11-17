@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_cmds.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/16 20:07:58 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 12:13:04 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,39 +34,34 @@ int	Privmsg_cmd(std::vector<std::string> buf, Client client)
 
 int	Parse::Mode_cmd(std::vector<std::string> buf, Client client)
 {
-	std::string	channel_name = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
-	while (ch_it != _Channels.end() && ch_it->getName() != channel_name)
+
+	while (ch_it != _Channels.end() && ch_it->getName() != buf[1])
 		ch_it++;
 	if (ch_it == _Channels.end())
 	{
 		printErrorMessage("Channel not found", GENERICERROR);
 		return 0;
 	}
-	else if (channel_name.empty())
+	else if (buf.size() == 2)
 	{
-		printErrorMessage("No arg for target channel!", NOTENOUGHARGS);
-		return 0;
-	}
-	else if (buf.size() == 2 && buf[1] == channel_name)
-	{
+		if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
+			printErrorMessage("You must be an user in this channel.", GENERICERROR);
 		ch_it->displayModes();
 		return 1;
 	}
-	else if (buf[2].size() != 2 || (buf[2][0] != '-' && buf[2][0] != '+'))
+	else if (buf[2].size() > 2 || (buf[2][0] != '-' && buf[2][0] != '+'))
 	{
 		printErrorMessage("Bad args", GENERICERROR);
 		return 0;
 	}
-
-	char	mode = buf[2][1];
 	
 	if (ch_it->getIsMod(client.Getters(GETUSER)) == 0)
 		printErrorMessage("You are not a moderator of this channel!", NOTENOUGHPERMSERR);
-	else if (ch_it->getMode(mode) == -1)
+	else if (ch_it->getMode(buf[2][1]) == -1)
 		printErrorMessage("That mode does not exist!", GENERICERROR);
 	else
-		return (ch_it->changeMode(mode, buf));
+		return (ch_it->changeMode(buf[2][1], buf));
 	return (0);
 }
 
@@ -78,6 +73,13 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 		printErrorMessage("Channel not found.", NOCHANNELERR);
+	else if(buf.size() == 2)
+	{
+		if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
+			printErrorMessage("You must be an user in this channel.", GENERICERROR);
+		sendIrcMessage(ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
+		return 1;
+	}
 	else if (ch_it->getMode(MODETOPIC) == 0 && ch_it->getIsMod(client.Getters(GETUSER)) == 0)
 		printErrorMessage("You are not a moderator of this channel and the channel is flagged to invite only.", NOTENOUGHPERMSERR);
 	else if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
@@ -163,6 +165,8 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	std::string						ChannelName = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 	
+	if (buf[1][0] != '#' || buf[1].size() == 1)
+		return printErrorMessage("JOIN #<Channelname>.", WRONGARGSERR);
 	while (ch_it != _Channels.end() && ch_it->getName() != ChannelName)
 		ch_it++;
 	if (ch_it == _Channels.end())
@@ -180,6 +184,11 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		Parse::sendIrcNumeric(2, "471", " :Cannot join channel (+l)", client, &(*ch_it));
 	else if (ch_it->getMode(MODEINVITEONLY) == 1 && !ch_it->CheckInvite(client.Getters(GETNICK)))
 		Parse::sendIrcNumeric(2, "473", " :Cannot join channel (+i)", client, &(*ch_it));
+	else if (ch_it->getMode(MODEPASSWORD) == 1 && buf.size() < 3)
+		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, &(*ch_it)); // pls check
+	else if (ch_it->check_pass(buf[2]) == 0)
+		Parse::sendIrcNumeric(2, "475", " :Cannot join channel", client, &(*ch_it)); // pls check
+	else
 		return (try_joining(ch_it, buf, client));
 	return 0;
 }
@@ -218,7 +227,7 @@ int	Parse::Handle_commands(char *buf, Client *client)
 {
 	std::string					opts[9] = {"JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "NICK", "WHO"};
 	int 						(*function[9])(std::vector<std::string> buf, Client client)	= {&Join_cmd, &Kick_cmd, &Invite_cmd, &Topic_cmd, &Mode_cmd, &Privmsg_cmd, &Nick_cmd, &Who_cmd};
-	std::vector<std::string>	parsed_buffer = Parse::ft_split(buf, strlen(buf));
+	std::vector<std::string>	parsed_buffer = Parse::Hander_ft_split(buf, strlen(buf));
 	std::string	message;
 
 	if (!buf)

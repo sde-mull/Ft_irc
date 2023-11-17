@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 01:01:54 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 12:17:27 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ Channel::Channel(std::string name, std::string CreatingUser) : _superUser(Creati
 
 int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
+	if (buf.size() < 4)
+		Parse::printErrorMessage(" arguments should be: PASS <channel> +-k <client's user>.", NOTENOUGHARGS);
 	if (buf[3].empty() && getMode(MODEPASSWORD) == 0 && buf[2][0] == '+')
-		Parse::printErrorMessage("Error: in order to change password flag a new password is needed.", NOTENOUGHARGS);
+		Parse::printErrorMessage(" in order to change password flag a new password is needed.", NOTENOUGHARGS);
 	else if (getMode(MODEPASSWORD) == 0 && buf[2][0] == '+')
 	{
 		ite->second = 1;
@@ -58,29 +60,35 @@ int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<cha
 
 int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
+	if (buf.size() < 5)
+		Parse::printErrorMessage(" arguments should be: MODE <channel> +-o <client's user>.", NOTENOUGHARGS);
 	if (buf[3].empty() && buf[2][0] == '+')
-		Parse::printErrorMessage("Error: in order to add a new modder you have to provide the client's user.", NOTENOUGHARGS);
+		Parse::printErrorMessage(" in order to add a new modder you have to provide the client's user.", NOTENOUGHARGS);
 	else if (buf[2][0] == '+')
 	{
 		if (addModder(buf[3]) == 0)
-			Parse::printErrorMessage("Error: user was already a moderator.", GENERICERROR);
+			Parse::printErrorMessage(" user was already a moderator.", GENERICERROR);
 		else
 			return 1;
 	}
 	else if (buf[2][0] == '-')
 	{
 		if (rmModder(buf[3]) == 0)
-			Parse::printErrorMessage("Error: user isn't a moderator.", GENERICERROR);
+			Parse::printErrorMessage(" user isn't a moderator.", GENERICERROR);
 		else
 			return 1;
 	}
+	else
+		return 1;
 	return 0;
 }
 
 int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
-	if (buf[3].empty() && getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
-		Parse::printErrorMessage("Error: you need to specify the new limit.", NOTENOUGHARGS);
+	if (buf.size() < 5)
+		Parse::printErrorMessage(" arguments should be: MODE <channel> +-l <User's limit>.", NOTENOUGHARGS);
+	else if (buf[3].empty() && getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
+		Parse::printErrorMessage(" you need to specify the new limit.", NOTENOUGHARGS);
 	else if (getMode(MODEUSERLIMIT) == 1 && buf[2][0] == '-')
 	{
 		ite->second = 0;
@@ -89,10 +97,12 @@ int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<ch
 	}
 	else if (getMode(MODEUSERLIMIT) && buf[2][0] == '+')
 	{
+		if (buf[3].find_first_not_of("0123456789") != -1)
+			return Parse::printErrorMessage(" User limit must be an integer.", WRONGARGSERR);
 		int	number = std::atoi(buf[3].c_str());
 		
 		if (number <= 0)
-			Parse::printErrorMessage("Error: The user limit must be higher than 0.", GENERICERROR);
+			Parse::printErrorMessage(" The user limit must be higher than 0.", GENERICERROR);
 		else
 		{
 			_maxusers = number;
@@ -347,4 +357,11 @@ std::vector<std::string>	Channel::getUsersList(void)
 std::vector<std::string>	Channel::getMods(void)
 {
 	return (this->_mods);
+}
+
+int			Channel::check_pass(std::string pass)
+{
+	if (pass == _password)
+		return 1;
+	return 0;
 }

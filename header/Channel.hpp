@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 01:01:38 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 12:06:53 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ class Channel
 			int			mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
 			int			mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
 			int			mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
-  
+			int			check_pass(std::string pass);
+
       //idk
 			std::string getSymbol(void);
 			std::map<std::string, std::string> getPrefixs(void);

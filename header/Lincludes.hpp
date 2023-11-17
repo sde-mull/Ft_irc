@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:48:09 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/13 14:57:30 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 12:07:46 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@
 #define	NOUSERERR			-5
 #define NOTENOUGHPERMSERR	-6
 #define	NOTENOUGHARGS		-7
+#define	WRONGARGSERR		-8
 
 //Channel modes flags
 
