@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/14 15:36:31 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 01:12:59 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cinclude.hpp"
 
-std::vector<Client> Parse::_clients;
+std::vector<Client> Parse::	_clients;
+std::vector<Channel>		_Channels;
 
 bool Parse::checkArgParam(std::string port, std::string password)
 {
@@ -28,22 +29,6 @@ bool Parse::checkArgParam(std::string port, std::string password)
 	if (password.length() == 0)
 	{
 		std::cerr << B_RED "Error:\n" B_YELLOW "Server password doesn't exist" RESET << std::endl;
-		return (false);
-	}
-	return (true);
-}
-/*
-checkNumbArgs have only one job. This function will check if the number of arguments passed is not different from 2.
-./ircserv <port> <password> 
-executable  arg1  arg2   ----> 3 args that's why if (argc != 3)
-*/
-bool Parse::checkNumbArgs(int const argc)
-{
-	if (argc != 3)
-	{
-		std::cerr << B_RED "Error:\n" B_YELLOW "Usage: ./ircserv <port> <password>\n" \
-				"<port>:" B_WHITE " The port number that the server will be listening to for incoming IRC connections\n" \
-				B_YELLOW "<password>:" B_WHITE " The connection password" RESET << std::endl;
 		return (false);
 	}
 	return (true);
@@ -104,37 +89,6 @@ Client&  Parse::searchClientById(int id)
 }
 
 /*
-checkClientByNick wll search inside the vector of clients by nick.
-Returns false in case it finds an equal nick
-Returns true in case it doesn't find an equal nick
-*/
-bool  Parse::CheckClientByNick(std::string nick)
-{
-	for (int i = 0; i < _clients.size(); i++)
-	{
-		if (!_clients[i].Getters(GETNICK).compare(nick))
-			return (false);
-	}
-	return (true);
-}
-
-/*
-CheckNickRules will check if the nickname chosen is respecting the nickname rules.
-*/
-bool Parse::CheckNickRules(std::string str)
-{
-	if (str[0] == '#' || str[0] == '&' || str[0] == '$' || str[0] == ':')
-		return (false);
-	for (int i = 0; i < str.size(); i++)
-	{
-		if (str[i] == ' ' || str[i] == ',' || str[i] == '*' || str[i] == '?'\
-		|| str[i] == '!' || str[i] == '@' || str[i] == '.')
-			return (false);
-	}
-	return (true);
-}
-
-/*
 quem fez que explique aqui
 */
 
@@ -163,7 +117,7 @@ sendIRCMessage is a function that will send a message back to the client using t
 int	Parse::sendIrcMessage(std::string message, int clientId)
 {
 	message = message + "\r\n";
-	std::cout << "Sending message: " << message << std::endl;
+	// std::cout << "Sending message: " << message << std::endl;
 	if (send(clientId, message.c_str(), message.length(), 0) == -1)
 		exit(1);
 	return 0;
@@ -172,7 +126,7 @@ int	Parse::sendIrcMessage(std::string message, int clientId)
 int	Parse::sendIrcNumeric(int i, std::string code, std::string str, Client client, Channel *channel)
 {
 	std::string message = Parse::SendCommandIRC(i, code, str, client, channel) + "\r\n";
-	std::cout << "Sending message: " << message << std::endl;
+	// std::cout << "Sending message: " << message << std::endl;
 	if (send(client.GettersInt(GETCLIENTFD), message.c_str(), message.length(), 0) == -1)
 		exit(1);
 	return 0;
@@ -197,10 +151,7 @@ int Parse::BroadcastChannel(int i, std::string code, std::string str, Client cli
 {
 	std::vector<std::string> users = (*channel).getUsers();
 	for(int j = 0; j < users.size(); j++)
-	{
-		std::cout << "nick: " << users[j] << std::endl;
 		Parse::sendIrcNumeric(i, code, str, *(Parse::ReturnClientByNick(users[j])), channel);
-	}
 	return (0);
 }
 
@@ -275,4 +226,94 @@ std::string	Parse::SendCommandIRC(int i, std::string code, std::string str, Clie
 	return ("");
 }
 
+std::vector<int>				Parse::ReturnMessageTargets(std::string &target, Client client)
+{
+	std::vector<int> returnTargets;
 
+	if (target[0] == '@' || target[0] == '+')
+	{
+		if (target[1])
+			Parse::GetOpsAndMembersTarget(target, client, returnTargets);
+	}
+	else if (target[0] == '#')
+		Parse::GetAllIdInChannel(target, client, returnTargets);
+	else
+	{
+		int id = Parse::SearchTargetMessageId(target, client);
+		if (id > 0)
+			returnTargets.push_back(id);
+	}
+	return (returnTargets);
+}
+
+int Parse::SearchTargetMessageId(std::string target, Client client)
+{
+	int id = Parse::SearchClientByNick(target);
+	if (id == -1)
+		sendIrcMessage(":localhost 401 " + client.Getters(GETNICK) + " " + target + " :no such nick", client.GettersInt(GETCLIENTFD));
+	return (id);
+	
+}
+
+int		Parse::SearchClientByNick(std::string target)
+{
+	for (int i = 0; i < _clients.size(); i++)
+	{
+		if (!_clients[i].Getters(GETNICK).compare(target))
+			return (_clients[i].GettersInt(GETCLIENTFD));
+	}
+	return (-1);
+}
+
+void		Parse::GetAllIdInChannel(std::string target, Client client, std::vector<int> &returnTargets, int flag)
+{
+	Channel *targetChannel = Parse::ReturnChannelByName(target);
+	std::vector<std::string> ChannelUsers;
+
+	if (targetChannel == NULL)
+	{
+		Parse::sendIrcMessage(":localhost 403 " + client.Getters(GETNICK) + " " + target + " :No such channel", client.GettersInt(GETCLIENTFD));
+		return ;
+	}
+	if (flag)
+		ChannelUsers = targetChannel->getMods();
+	else
+		ChannelUsers = targetChannel->getUsersList();
+	std::vector<std::string>::iterator it;
+	
+	it = std::find(ChannelUsers.begin(), ChannelUsers.end(), client.Getters(GETNICK));
+	if (it == ChannelUsers.end())
+	{
+		Parse::sendIrcMessage(":localhost 404 " + client.Getters(GETNICK) + " " + target + " :You are not in the channel to send the message", client.GettersInt(GETCLIENTFD));
+		return ;
+	}
+	for (int i = 0; i < ChannelUsers.size(); i++)
+	{
+		if (client.Getters(GETNICK).compare(ChannelUsers[i]))
+			returnTargets.push_back(Parse::SearchClientByNick(ChannelUsers[i]));
+	}
+}
+
+Channel*		Parse::ReturnChannelByName(std::string name)
+{
+	for (int i = 0; i < _Channels.size(); i++)
+	{
+		if (!_Channels[i].getName().compare(name))
+			return (&(_Channels[i]));
+	}
+	return (NULL);
+}
+
+void		Parse::GetOpsAndMembersTarget(std::string &target, Client client, std::vector<int> &returnTargets)
+{
+	int flag = (target[0] == '@' && target[1] != '+');
+	target.erase(target.begin() + target.find_first_of("@+"));
+	if (target[0] == '@' || target[0] == '+')
+		target.erase(0, 1);
+	if (target.size() == 0)
+		return ;
+	if (flag)
+		Parse::GetAllIdInChannel(target, client, returnTargets);
+	else
+		Parse::GetAllIdInChannel(target, client, returnTargets);
+}

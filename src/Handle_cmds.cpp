@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_cmds.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 15:38:11 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/16 20:07:58 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,18 @@ std::vector<Channel> Parse::_Channels;
 int	Privmsg_cmd(std::vector<std::string> buf, Client client)
 {
 	std::string	message;
-	std::vector<std::string>::iterator Ite = buf.begin();
+	std::string target = buf[1];
 
-	std::advance(Ite, 2);
-	for (Ite; Ite != buf.end(); Ite++)
-		message = message + ' ' + *Ite;
+	if (!Parse::CheckPrivMessageArguments(client, buf.size(), "\"" + buf[0] + " " + buf[1] + "\""))
+		return (1);
 
-	Parse::sendIrcMessage(message, client.GettersInt(GETCLIENTFD));
+	std::vector<int> allTargetsID = Parse::ReturnMessageTargets(target, client);
+	for (int i = 2; i < buf.size(); i++)
+		message = message + buf[i] + ' ';
+	if (message[0] == ':')
+    	message.erase(0, 1);
+	for (int i = 0; i < allTargetsID.size(); i++)
+		Parse::sendIrcMessage(":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost PRIVMSG " + target + " " + message, allTargetsID[i]);
 	return(0);
 }
 
@@ -93,7 +98,7 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 
 int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 {
-	std::string	channel_name = buf[1];
+	std::string	channel_name = buf[2];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 	Client *invitedUser = Parse::ReturnClientByNick(buf[1]);
  
