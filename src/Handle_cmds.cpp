@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 18:54:17 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:58:45 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,6 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		Parse::sendIrcMessage(":localhost 324 " + channel.getName() + channel.getModeString(), client.GettersInt(GETCLIENTFD));
 		Parse::BroadcastChannel(1, "353", PrefixString(client, channel), client, &channel);
 		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, &channel);
-		std::cout << "i was here" << channel.getModeString() << std::endl;
 		if (channel.getMode(MODEPASSWORD) == 1)
 			Parse::sendIrcMessage(":localhost " + channel.getName() + "'s password is set", client.GettersInt(GETCLIENTFD));
 		else
