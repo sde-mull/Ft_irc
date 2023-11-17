@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 01:01:38 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:22:35 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,32 +44,33 @@ class Channel
 			std::string		getSuperUser(void);
 			std::string		getTopic(void);
 			std::vector<std::string>	getUsersList();
+			int 			CheckInvite(std::string user);
 			
-			void		addUser(std::string user);
-			int			addModder(std::string user);
-			int			rmUser(std::string user);
-			int			rmModder(std::string user);
-			void		displayModes(void);
-			
-			int			invitedUsers(std::string user);
-			int			inviteUser(std::string user);
-			int 		CheckInvite(std::string user);
-			void		setPassword(std::string	pass);
-			int			changeTopic(std::vector<std::string> buf);
+			void			addUser(std::string user);
+			int				addModder(std::string user);
+			int				rmUser(std::string user);
+			int				rmModder(std::string user);
+			void			displayModes(void);
+
+			int				invitedUsers(std::string user);
+			int				inviteUser(std::string user);
+			void			setPassword(std::string	pass);
+			int				changeTopic(std::vector<std::string> buf);
 
 			//parsing change modes
-			int			changeMode(char c, std::vector<std::string> buf);
-			
-			int			mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
-			int			mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
-			int			mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
-  
+			int				changeMode(char c, std::vector<std::string> buf);
+
+			int				mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
+			int				mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
+			int				mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite);
+			int				check_pass(std::string pass);
+
       //idk
-			std::string getSymbol(void);
+			std::string 	getSymbol(void);
 			std::map<std::string, std::string> getPrefixs(void);
-			std::string getPrefix(std::string nick);
-			std::string getModeString(void);
-			int			getMode(char c);
+			std::string 	getPrefix(std::string nick);
+			std::string 	getModeString(void);
+			int				getMode(char c);
 			std::vector<std::string> getUsers();
 			std::vector<std::string> getMods();
 

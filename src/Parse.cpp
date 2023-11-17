@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/17 01:57:56 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:04:21 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,3 +316,38 @@ void		Parse::GetOpsAndMembersTarget(std::string &target, Client client, std::vec
 	else
 		Parse::GetAllIdInChannel(target, client, returnTargets);
 }
+
+std::vector<std::string>    Parse::Hander_ft_split(char *buf, int received)
+{
+	std::string nova;
+	std::vector<std::string> vec;
+	std::string token;
+	
+	for (size_t j = 0; j < received; j++)
+	{
+		if (buf[j] == '\n')
+			nova += ' ';
+		if (buf[j] != '\n' && buf[j] != '\r')
+			nova += buf[j];
+	}
+
+	nova.erase(nova.begin() + nova.find_last_of(' '));
+
+	std::istringstream ss(nova);
+	while (std::getline(ss, token, ' '))
+		vec.push_back(token);
+	return (vec);
+}
+
+// std::string	Parse::trimSpc(std::string buf)
+// {
+// 	int	i = - 1;
+	
+// 	while (++i < buf.size())
+// 	{
+// 		if (i + 1 != buf.size())
+// 		{
+			
+// 		}
+// 	}
+// }
