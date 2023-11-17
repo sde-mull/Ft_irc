@@ -14,10 +14,15 @@
 
 int     Server::Handle_Message(Client &client)
 {
-	char    buf[8192];
+	char    buf[MAXBUFF];
 	size_t     received;
-	received = recv(client.GettersInt(GETCLIENTFD), buf, 1024, 0);
-	std::cout << "RESPONSE: " << buf << std::endl;
+	received = recv(client.GettersInt(GETCLIENTFD), buf, MAXBUFF, 0);
+
+	if (received < MAXBUFF)
+		buf[received + 1] = 0;
+	else
+		buf[received] = 0;
+	// std::cout << "RESPONSE: " << buf << std::endl;
 	if (received <= 0 || !strcmp(buf, "QUIT :Leaving\r\n"))
 		return (-1);
 	if (checkUserAuthentication(client, buf, received)){

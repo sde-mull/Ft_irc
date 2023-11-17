@@ -79,8 +79,18 @@ int Server::ConnectingClient(int &nbr_clients)
 
 int Server::DisconnectingClient(int id)
 {
+	std::vector<std::string> users;
+	Client &ClientDisconnecting = Parse::searchClientById(id);
+	std::string ClientName = ClientDisconnecting.Getters(GETNICK);
+
 	FD_CLR(id, &this->_currentSockets);
 	Parse::RemoveClient(id);
+
+	for (int i = 0; i < Parse::_Channels.size(); i++){
+		Parse::_Channels[i].rmUser(ClientName);
+		if (Parse::_Channels[i].getUserAmount() == 0)
+			Parse::_Channels.erase(Parse::_Channels.begin() + i);
+	}
 	close(id);
 	return (0);
 }

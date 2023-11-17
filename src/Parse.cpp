@@ -98,6 +98,8 @@ std::vector<std::string>    Parse::ft_split(char *buf, int received)
 	std::vector<std::string> vec;
 	std::string token;
 	
+	if (buf == NULL)
+		return (vec);
 	for (size_t j = 0; j < received; j++)
 	{
 		if (buf[j] == '\n')
