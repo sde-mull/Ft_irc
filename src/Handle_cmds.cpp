@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 16:03:28 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:04:31 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,11 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 	{
-		Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK)));
+		if (buf.size() > 2)
+			if (!buf[2].empty() && buf[2][1] != '#')
+				Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK), buf[2]));
+		else
+			Parse::_Channels.push_back(Channel(ChannelName, client.Getters(GETNICK)));
 		Channel channel = _Channels.back();
 		Parse::sendIrcNumeric(3, "", "", client, &channel);
 		Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &channel);

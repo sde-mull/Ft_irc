@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 16:15:02 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:02:13 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class Channel
 	
 			Channel();
 			Channel(std::string	name, std::string CreatingUser);
+			Channel(std::string name, std::string CreatingUser, std::string pass);
 			~Channel();
 
 			int				getIsMod(std::string user);
