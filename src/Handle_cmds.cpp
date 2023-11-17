@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 12:13:04 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:21:39 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	Parse::Mode_cmd(std::vector<std::string> buf, Client client)
 		return 0;
 	}
 	
-	if (ch_it->getIsMod(client.Getters(GETUSER)) == 0)
+	if (ch_it->getIsMod(client.Getters(GETNICK)) == 0)
 		printErrorMessage("You are not a moderator of this channel!", NOTENOUGHPERMSERR);
 	else if (ch_it->getMode(buf[2][1]) == -1)
 		printErrorMessage("That mode does not exist!", GENERICERROR);
@@ -80,8 +80,8 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 		sendIrcMessage(ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
 		return 1;
 	}
-	else if (ch_it->getMode(MODETOPIC) == 0 && ch_it->getIsMod(client.Getters(GETUSER)) == 0)
-		printErrorMessage("You are not a moderator of this channel and the channel is flagged to invite only.", NOTENOUGHPERMSERR);
+	else if (ch_it->getMode(MODETOPIC) == 0 && ch_it->getIsMod(client.Getters(GETNICK)) == 0)
+		printErrorMessage("You are not a moderator of this channel.", NOTENOUGHPERMSERR);
 	else if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
 		printErrorMessage("You must be an user in this channel.", GENERICERROR);
 	else
@@ -184,10 +184,10 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		Parse::sendIrcNumeric(2, "471", " :Cannot join channel (+l)", client, &(*ch_it));
 	else if (ch_it->getMode(MODEINVITEONLY) == 1 && !ch_it->CheckInvite(client.Getters(GETNICK)))
 		Parse::sendIrcNumeric(2, "473", " :Cannot join channel (+i)", client, &(*ch_it));
-	else if (ch_it->getMode(MODEPASSWORD) == 1 && buf.size() < 3)
-		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, &(*ch_it)); // pls check
-	else if (ch_it->check_pass(buf[2]) == 0)
-		Parse::sendIrcNumeric(2, "475", " :Cannot join channel", client, &(*ch_it)); // pls check
+	else if (ch_it->getMode(MODEPASSWORD) == 1 && buf.size() < 3 && ch_it->getIsInvited(client.Getters(GETNICK)) == 0)
+		Parse::sendIrcNumeric(2, "461", " :Not enough parameters (+k)", client, &(*ch_it)); // pls check
+	else if (ch_it->check_pass(buf[2]) == 0 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
+		Parse::sendIrcNumeric(2, "475", " :Cannot join channel (+k)", client, &(*ch_it)); // pls check
 	else
 		return (try_joining(ch_it, buf, client));
 	return 0;

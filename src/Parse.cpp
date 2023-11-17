@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/17 11:58:31 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:04:21 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,18 +331,23 @@ std::vector<std::string>    Parse::Hander_ft_split(char *buf, int received)
 			nova += buf[j];
 	}
 
-	for (size_t i = received; i > 0; i++)
-	{
-		if (nova[i] == ' ')
-			nova[i] = '\0';
-		else
-			break;
-	}
-	
+	nova.erase(nova.begin() + nova.find_last_of(' '));
+
 	std::istringstream ss(nova);
 	while (std::getline(ss, token, ' '))
 		vec.push_back(token);
 	return (vec);
 }
 
-
+// std::string	Parse::trimSpc(std::string buf)
+// {
+// 	int	i = - 1;
+	
+// 	while (++i < buf.size())
+// 	{
+// 		if (i + 1 != buf.size())
+// 		{
+			
+// 		}
+// 	}
+// }

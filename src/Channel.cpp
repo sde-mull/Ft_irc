@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 12:17:27 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:21:47 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ Channel::Channel(std::string name, std::string CreatingUser) : _superUser(Creati
 
 int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
-	if (buf.size() < 4)
+	if (buf.size() < 4 && buf[2][0] == '+')
 		Parse::printErrorMessage(" arguments should be: PASS <channel> +-k <client's user>.", NOTENOUGHARGS);
 	if (buf[3].empty() && getMode(MODEPASSWORD) == 0 && buf[2][0] == '+')
 		Parse::printErrorMessage(" in order to change password flag a new password is needed.", NOTENOUGHARGS);
@@ -60,9 +60,9 @@ int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<cha
 
 int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
-	if (buf.size() < 5)
+	if (buf.size() < 4)
 		Parse::printErrorMessage(" arguments should be: MODE <channel> +-o <client's user>.", NOTENOUGHARGS);
-	if (buf[3].empty() && buf[2][0] == '+')
+	else if (buf[3].empty() && buf[2][0] == '+')
 		Parse::printErrorMessage(" in order to add a new modder you have to provide the client's user.", NOTENOUGHARGS);
 	else if (buf[2][0] == '+')
 	{
@@ -85,7 +85,7 @@ int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char,
 
 int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
 {
-	if (buf.size() < 5)
+	if (buf.size() < 4 && buf[2][0] == '+')
 		Parse::printErrorMessage(" arguments should be: MODE <channel> +-l <User's limit>.", NOTENOUGHARGS);
 	else if (buf[3].empty() && getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
 		Parse::printErrorMessage(" you need to specify the new limit.", NOTENOUGHARGS);
