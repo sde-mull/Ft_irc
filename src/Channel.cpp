@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 16:04:15 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 01:01:54 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,4 +337,14 @@ std::map<std::string, std::string> Channel::getPrefixs(void)
 std::vector<std::string> Channel::getUsers(void)
 {
 	return (_users);
+}
+
+std::vector<std::string>	Channel::getUsersList(void)
+{
+	return (this->_users);
+}
+
+std::vector<std::string>	Channel::getMods(void)
+{
+	return (this->_mods);
 }

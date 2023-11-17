@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde.mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/14 01:10:12 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/17 01:01:38 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class Channel
 			std::string		getName(void);
 			std::string		getSuperUser(void);
 			std::string		getTopic(void);
+			std::vector<std::string>	getUsersList();
 			
 			void		addUser(std::string user);
 			int			addModder(std::string user);
@@ -70,6 +71,7 @@ class Channel
 			std::string getModeString(void);
 			int			getMode(char c);
 			std::vector<std::string> getUsers();
+			std::vector<std::string> getMods();
 
 			
 };
