@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 18:03:15 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:09:20 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ Channel::Channel(std::string name, std::string CreatingUser, std::string pass) :
 	_mods.push_back(CreatingUser);
 	_modes.insert(std::make_pair('i', 0));
 	_modes.insert(std::make_pair('t', 0));
-	_modes.insert(std::make_pair('k', 0));
+	_modes.insert(std::make_pair('k', 1));
 	_modes.insert(std::make_pair('o', 0));
 	_modes.insert(std::make_pair('l', 0));
 	_maxusers = -1;
