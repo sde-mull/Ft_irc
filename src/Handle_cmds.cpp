@@ -122,6 +122,7 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 	{
 		Parse::sendIrcMessage(":localhost 341 " + client.Getters(GETNICK) + " " + buf[1] + " " + (*ch_it).getName(), client.GettersInt(GETCLIENTFD));
 		Parse::sendIrcMessage(":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost NOTICE " + buf[1] + " you have been invited to join " + (*ch_it).getName(), invitedUser->GettersInt(GETCLIENTFD));
+		ch_it->inviteUser(invitedUser->Getters(GETNICK));
 		return 1;
 	}
 	return (0);
@@ -184,7 +185,7 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		Parse::sendIrcNumeric(2, "471", " :Cannot join channel (+l)", client, &(*ch_it));
 	else if (ch_it->getMode(MODEINVITEONLY) == 1 && !ch_it->CheckInvite(client.Getters(GETNICK)))
 		Parse::sendIrcNumeric(2, "473", " :Cannot join channel (+i)", client, &(*ch_it));
-	else if (ch_it->getMode(MODEPASSWORD) == 1 && buf.size() < 3 && ch_it->getIsInvited(client.Getters(GETNICK)) == 0)
+	else if (ch_it->getMode(MODEPASSWORD) == 1 && buf.size() < 3 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
 		Parse::sendIrcNumeric(2, "461", " :Not enough parameters (+k)", client, &(*ch_it)); // pls check
 	else if (ch_it->check_pass(buf[2]) == 0 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
 		Parse::sendIrcNumeric(2, "475", " :Cannot join channel (+k)", client, &(*ch_it)); // pls check

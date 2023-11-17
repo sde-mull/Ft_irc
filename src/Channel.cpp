@@ -215,6 +215,10 @@ int	Channel::CheckInvite(std::string user)
 {
 	std::vector<std::string>::iterator ite = std::find(_invitedUsers.begin(), _invitedUsers.end(), user);
 
+	for (int i = 0; i < _invitedUsers.size(); i++)
+	{
+		std::cout << "fodass: " << _invitedUsers[i] << std::endl;
+	}
 	if (ite == _invitedUsers.end())
 		return (0);
 	else
