@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 18:02:13 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:49:53 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ class Channel
 			std::string		getTopic(void);
 			std::vector<std::string>	getUsersList();
 			int 			CheckInvite(std::string user);
+			int 			getIsSuperUser(std::string user);
+			int				getHasPass(std::string pass);
+			
 			
 			void			addUser(std::string user);
 			int				addModder(std::string user);

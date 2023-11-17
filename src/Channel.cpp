@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 18:09:20 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:56:59 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ int	Channel::changeTopic(std::vector<std::string> buf)
 	ite = buf.begin();
 	topic = buf[2];
 	std::advance(ite, 3);
-	for (ite; ite != buf.end(); ite++)
+	for (; ite != buf.end(); ite++)
 		topic = topic + " " + *ite;
 	_topic = topic;
 	return 1;
@@ -268,6 +268,13 @@ int	Channel::getIsUser(std::string user)
 	if (ite == _users.end())
 		return 0;
 	return 1;
+}
+
+int Channel::getIsSuperUser(std::string user)
+{
+	if (user == _superUser)
+		return 1;
+	return 0;
 }
 
 int	Channel::getIsMod(std::string user)
@@ -301,9 +308,7 @@ int	Channel::rmUser(std::string user)
 	if (ite == _users.end())
 		return 0;
 	else
-	{
 		ite = _users.erase(ite);
-	}
 	return 1;
 }
 
@@ -367,6 +372,7 @@ std::string Channel::getModeString(void)
 	std::string str;
 
 	std::map<char, int>::iterator it = _modes.begin();
+	
 	while (it != _modes.end())
 	{
 		str.push_back(' ');
