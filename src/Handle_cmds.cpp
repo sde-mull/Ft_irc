@@ -122,6 +122,7 @@ int	Parse::Invite_cmd(std::vector<std::string> buf, Client client)
 	{
 		Parse::sendIrcMessage(":localhost 341 " + client.Getters(GETNICK) + " " + buf[1] + " " + (*ch_it).getName(), client.GettersInt(GETCLIENTFD));
 		Parse::sendIrcMessage(":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost NOTICE " + buf[1] + " you have been invited to join " + (*ch_it).getName(), invitedUser->GettersInt(GETCLIENTFD));
+		ch_it->inviteUser(invitedUser->Getters(GETNICK));
 		return 1;
 	}
 	return (0);
@@ -228,10 +229,37 @@ int Parse::Who_cmd(std::vector<std::string> buf, Client client)
 	return (0);
 }
 
+int Parse::Part_cmd(std::vector<std::string> buf, Client client)
+{
+	std::string ClientNick 	= client.Getters(GETNICK);
+	int 		ClientId 	= client.GettersInt(GETCLIENTFD);
+	std::string ChannelName = buf[1];
+
+	if (buf.size() < 2)
+		return (Parse::printErrorMessage("Command Part: Not enough parameters\nCommand Used \"" + buf[0] + buf[1] + "\"" , 1));
+	if (!buf[3].compare(":Leaving"))
+		return (Parse::printErrorMessage("Command to leave the channel must be \" :leaving\"", 2));
+	Channel *ReturnedChannel = Parse::ReturnChannelByName(ChannelName);
+	if (ReturnedChannel == NULL){
+		Parse::sendIrcMessage(":localhost 403 " + ClientNick + " " + ChannelName + " :No such channel", ClientId);
+		return (Parse::printErrorMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
+		"\nThere is no channel with this name", 2));
+	}
+	if (!ReturnedChannel->rmUser(ClientNick));
+		return (Parse::printErrorMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
+		"\nThis user is not in the user list of this channel", 2));
+
+	Parse::printMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
+		"\nThis user left the channel successfully", GREEN);
+	Parse::sendIrcMessage(":" + ClientNick + "@localhost PART " + ChannelName, ClientId);
+	// :dan-!d@localhost PART #test
+	return (0);
+}
+
 int	Parse::Handle_commands(char *buf, Client *client)
 {
-	std::string					opts[9] = {"JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "NICK", "WHO"};
-	int 						(*function[9])(std::vector<std::string> buf, Client client)	= {&Join_cmd, &Kick_cmd, &Invite_cmd, &Topic_cmd, &Mode_cmd, &Privmsg_cmd, &Nick_cmd, &Who_cmd};
+	std::string					opts[9] = {"JOIN", "KICK", "INVITE", "TOPIC", "MODE", "PRIVMSG", "NICK", "WHO", "PART"};
+	int 						(*function[9])(std::vector<std::string> buf, Client client)	= {&Join_cmd, &Kick_cmd, &Invite_cmd, &Topic_cmd, &Mode_cmd, &Privmsg_cmd, &Nick_cmd, &Who_cmd, &Part_cmd};
 	std::vector<std::string>	parsed_buffer = Parse::Hander_ft_split(buf, strlen(buf));
 	std::string	message;
 
