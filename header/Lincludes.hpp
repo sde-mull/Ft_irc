@@ -67,6 +67,8 @@
 #define	MODECHANNELOP		'o'
 #define	MODEUSERLIMIT		'l'
 
+#define MAXBUFF             4000
+
 #include <stdio.h>  
 #include <cstring>
 #include <stdlib.h>  
