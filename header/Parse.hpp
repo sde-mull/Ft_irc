@@ -27,6 +27,7 @@ class Parse
 		static std::vector<Channel>	_Channels;
 	
 		//Handle_cmds.cpp
+		static	int 								Part_cmd(std::vector<std::string> buf, Client client);
 		static  int 								Nick_cmd(std::vector<std::string> buf, Client client);
 		static	int									Join_cmd(std::vector<std::string> buf, Client client);
 		static	int									Handle_commands(char *buf, Client *client);
