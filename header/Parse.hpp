@@ -55,18 +55,20 @@ class Parse
 		static 	std::string							SendCommandIRC(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static  void								CreateNumerics(void);
 		static  std::string							PrefixString(Client client, Channel channel);
-		static int 									BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel);
-		static Client* 								ReturnClientByNick(std::string nick);
-		static int 									Who_cmd(std::vector<std::string> buf, Client client);
-		static int 									BroadcastWho(Client client, Channel *channel);
-		static bool 								CheckPrivMessageArguments(Client client, int size, std::string str);
-		static std::vector<int>						ReturnMessageTargets(std::string &target, Client client);
-		static int									SearchTargetMessageId(std::string target, Client client);
-		static int									SearchClientByNick(std::string target);
-		static void									GetAllIdInChannel(std::string target, Client client, std::vector<int> &returnTargets, int flag = 0);
-		static Channel*								ReturnChannelByName(std::string name);
-		static void									GetOpsAndMembersTarget(std::string &target, Client client, std::vector<int> &returnTargets);
-		static std::vector<std::string>   		 	Hander_ft_split(char *buf, int received);
+		static 	int 								BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel);
+		static 	Client* 							ReturnClientByNick(std::string nick);
+		static 	int 								Who_cmd(std::vector<std::string> buf, Client client);
+		static 	int 								BroadcastWho(Client client, Channel *channel);
+		static 	bool 								CheckPrivMessageArguments(Client client, int size, std::string str);
+		static 	std::vector<int>					ReturnMessageTargets(std::string &target, Client client);
+		static 	int									SearchTargetMessageId(std::string target, Client client);
+		static 	int									SearchClientByNick(std::string target);
+		static 	void								GetAllIdInChannel(std::string target, Client client, std::vector<int> &returnTargets, int flag = 0);
+		static 	Channel*							ReturnChannelByName(std::string name);
+		static 	void								GetOpsAndMembersTarget(std::string &target, Client client, std::vector<int> &returnTargets);
+		static 	std::vector<std::string>   		 	Hander_ft_split(char *buf, int received);
+		static  void								RemoveChannel(std::string ChannelName);
+		static	int									ReturnIndexChannel(std::string ChannelName);
 };
 
 #endif
