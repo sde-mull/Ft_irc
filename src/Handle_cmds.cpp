@@ -232,23 +232,25 @@ int Parse::Part_cmd(std::vector<std::string> buf, Client client)
 	std::string ChannelName = buf[1];
 
 	if (buf.size() < 2)
-		return (Parse::printErrorMessage("Command Part: Not enough parameters\nCommand Used \"" + buf[0] + buf[1] + "\"" , 1));
+		return (Parse::printErrorMessage("Command Part: Not enough parameters\nCommand Used \"" + buf[0] + buf[1] + "\"\n" , 1));
 	if (!buf[3].compare(":Leaving"))
-		return (Parse::printErrorMessage("Command to leave the channel must be \" :leaving\"", 2));
+		return (Parse::printErrorMessage("Command to leave the channel must be \" :leaving\"\n", 2));
 	Channel *ReturnedChannel = Parse::ReturnChannelByName(ChannelName);
 	if (ReturnedChannel == NULL){
 		Parse::sendIrcMessage(":localhost 403 " + ClientNick + " " + ChannelName + " :No such channel", ClientId);
 		return (Parse::printErrorMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
-		"\nThere is no channel with this name", 2));
+		"\nThere is no channel with this name\n", 2));
 	}
-	if (!ReturnedChannel->rmUser(ClientNick));
+	if (ReturnedChannel->rmUser(ClientNick) == 0){
 		return (Parse::printErrorMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
-		"\nThis user is not in the user list of this channel", 2));
+		"\nThis user is not in the user list of this channel\n", 2));
+	}
 
 	Parse::printMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
-		"\nThis user left the channel successfully", GREEN);
-	Parse::sendIrcMessage(":" + ClientNick + "@localhost PART " + ChannelName, ClientId);
-	// :dan-!d@localhost PART #test
+		"\nThis user left the channel successfully\n", GREEN);
+	Parse::sendIrcMessage(":" + ClientNick + "!" + client.Getters(GETUSER) + "@localhost PART " + ChannelName, ClientId);
+	if (!ReturnedChannel->getUserAmount())
+		Parse::RemoveChannel(ChannelName);
 	return (0);
 }
 

@@ -339,15 +339,23 @@ std::vector<std::string>    Parse::Hander_ft_split(char *buf, int received)
 	return (vec);
 }
 
-// std::string	Parse::trimSpc(std::string buf)
-// {
-// 	int	i = - 1;
-	
-// 	while (++i < buf.size())
-// 	{
-// 		if (i + 1 != buf.size())
-// 		{
-			
-// 		}
-// 	}
-// }
+void			Parse::RemoveChannel(std::string ChannelName)
+{
+	Parse::printMessage("Channel: " + ChannelName + "\nThis channel seems to be empty, deleting channel...\n", YELLOW);
+	int index = Parse::ReturnIndexChannel(ChannelName);
+	if (index == -1){
+		Parse::printMessage("Channel: " + ChannelName + "\nThis channel is not in the channels list\n", RED);
+	}
+	_Channels.erase(_Channels.begin() + index);
+	Parse::printMessage("Channel: " + ChannelName + "\nThis channel was deleted sucessfully!\n", GREEN);
+}
+
+int			Parse::ReturnIndexChannel(std::string ChannelName)
+{
+	for (int i = 0; i < _Channels.size(); i++)
+	{
+		if (!_Channels[i].getName().compare(ChannelName))
+			return (i);
+	}
+	return (-1);
+}
