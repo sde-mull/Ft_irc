@@ -163,11 +163,11 @@ void	Channel::displayModes(void)
 {
 	std::map<char, int>::iterator ite;
 	
-	//std::cout << "ft display modes" << std::endl;
+	std::cout << "ft display modes" << std::endl;
 	for (ite = _modes.begin(); ite != _modes.end(); ite++)
 	{
-		//std::cout << "loop" << std::endl;
-		//std::cout<< ite->first << " -> " << ite->second << std::endl;
+		std::cout << "loop" << std::endl;
+		std::cout<< ite->first << " -> " << ite->second << std::endl;
 	}
 		
 }
@@ -261,7 +261,7 @@ int	Channel::inviteUser(std::string user)
 	return 1;
 }
 
-int	Channel::getIsUser(std::string user)
+int	Channel::CheckIsUser(std::string user)
 {
 	std::vector<std::string>::iterator ite = std::find(_users.begin(), _users.end(), user);
 
@@ -270,14 +270,14 @@ int	Channel::getIsUser(std::string user)
 	return 1;
 }
 
-int Channel::getIsSuperUser(std::string user)
+int Channel::CheckIsSuperUser(std::string user)
 {
 	if (user == _superUser)
 		return 1;
 	return 0;
 }
 
-int	Channel::getIsMod(std::string user)
+int	Channel::CheckIsMod(std::string user)
 {
 	std::vector<std::string>::iterator ite = std::find(_mods.begin(), _mods.end(), user);
 
