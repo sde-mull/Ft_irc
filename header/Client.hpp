@@ -26,6 +26,8 @@ class Client
 		int   		_f_auth;
 		
 	public:
+		std::string	message;
+
 		Client();
 		Client(int id);
 		~Client();

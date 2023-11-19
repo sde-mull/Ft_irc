@@ -141,7 +141,7 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 
 	else if (ch_it == _Channels.end())
 		sendIrcNumeric(1, "403", channel_name + " :No such channel", client);
-	else if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
+	else if (ch_it->CheckIsUser(client.Getters(GETNICK)) == 0)
 		sendIrcNumeric(2, "442", " :You're not on that channel", client, &(*ch_it));
 	else if (ch_it->CheckIsMod(client.Getters(GETNICK)) == 0)
 		sendIrcNumeric(2, "482", " :You're not channel operator", client, &(*ch_it));
