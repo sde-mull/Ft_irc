@@ -75,4 +75,3 @@ int    Server::startConnection(void)
 	}
 	return (ServerRunning());
 }
-

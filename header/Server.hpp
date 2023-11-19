@@ -66,6 +66,7 @@ class Server
 		void    SendMsg(Client &client, const char *data);
 		void    PrintClientArgs(Client &client);
 		bool	checkUserAuthentication(Client &client, char *buf, int received);
+		void	shut_the_duck_up();
 };
 
 #endif
