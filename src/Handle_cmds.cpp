@@ -133,12 +133,14 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 	std::string	channel_name = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 
+	//std::cout << "size: " << buf.size() << std::endl;
+	//std::cout << "buf[3]: " << buf[3] << std::endl;
 	while (ch_it != _Channels.end() && ch_it->getName() != channel_name)
 		ch_it++;
-	if (ch_it != _Channels.end())
-		sendIrcNumeric(1, "403", channel_name + " :No such channel", client);
-	else if (buf.size() < 3)
+	if (buf.size() < 3)
 		sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+	else if (ch_it == _Channels.end())
+		sendIrcNumeric(1, "403", channel_name + " :No such channel", client);
 	else if (ch_it->getIsUser(client.Getters(GETNICK)) == 0)
 		sendIrcNumeric(2, "442", " :You're not on that channel", client, &(*ch_it));
 	else if (ch_it->getIsMod(client.Getters(GETNICK)) == 0)
@@ -147,13 +149,16 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 		sendIrcNumeric(1, "401", " " + channel_name + " :No such nick", client);
 	else if (ch_it->getIsUser(buf[2]) == 0)
 		sendIrcNumeric(1, "441", buf[2] + " " + channel_name + " :They aren't on that channel", client);
-	else if (ch_it->getIsMod(buf[2]) == 1 && ch_it->getIsSuperUser(client.Getters(GETNICK)) == 0)
-		sendIrcNumeric(2, "482", " :You're not channel operator", client, &(*ch_it));
 	else
 	{
+		std::string str = " ";
+		for (int k = 3; k < buf.size(); k++)
+			str += buf[k];
+		if (buf.size() == 3)
+			str = " :No reason Given";
 		std::vector<std::string> users = ch_it->getUsers();
 		for(int j = 0; j < users.size(); j++)
-			Parse::sendIrcMessage(":" + client.Getters(GETNICK) + " KICK " + channel_name + " " + buf[2] + " :No reason Given", (Parse::ReturnClientByNick(users[j]))->GettersInt(GETCLIENTFD));
+			Parse::sendIrcMessage(":" + client.Getters(GETNICK) + " KICK " + channel_name + " " + buf[2] + str, (Parse::ReturnClientByNick(users[j]))->GettersInt(GETCLIENTFD));
 		return ch_it->rmUser(buf[2]);
 	}
 	return 0;
@@ -164,6 +169,8 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	std::string						ChannelName = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 	
+	if (buf.size() < 2)
+		return (303);
 	if (buf[1][0] != '#' || buf[1].size() == 1)
 		return printErrorMessage("JOIN #<Channelname>.", WRONGARGSERR);
 	while (ch_it != _Channels.end() && ch_it->getName() != ChannelName)
@@ -198,7 +205,7 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		Parse::sendIrcNumeric(2, "473", " :Cannot join channel (+i)", client, &(*ch_it));
 	else if (ch_it->getMode(MODEPASSWORD) == 1 && buf.size() < 3 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
 		Parse::sendIrcNumeric(2, "461", " :Not enough parameters (+k)", client, &(*ch_it)); // pls check
-	else if (ch_it->check_pass(buf[2]) == 0 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
+	else if (buf.size() > 2 && ch_it->check_pass(buf[2]) == 0 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
 		Parse::sendIrcNumeric(2, "475", " :Cannot join channel (+k)", client, &(*ch_it)); // pls check
 	else
 		return (try_joining(ch_it, buf, client));

@@ -325,6 +325,8 @@ std::vector<std::string>    Parse::Hander_ft_split(char *buf, int received)
 	std::vector<std::string> vec;
 	std::string token;
 	
+	if (!buf)
+		return (vec);
 	for (size_t j = 0; j < received; j++)
 	{
 		if (buf[j] == '\n')
