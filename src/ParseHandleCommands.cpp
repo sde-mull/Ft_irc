@@ -6,11 +6,9 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:36:29 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/19 23:41:35 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/20 02:40:17 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "Parse.hpp"
 
 #include "Cinclude.hpp"
 
@@ -151,9 +149,9 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 		sendIrcNumeric(1, "441", buf[2] + " " + channel_name + " :They aren't on that channel", client);
 	else
 	{
-		std::string str = " ";
+		std::string str = "";
 		for (int k = 3; k < buf.size(); k++)
-			str += buf[k];
+			str = str + buf[k] + " ";
 		if (buf.size() == 3)
 			str = " :No reason Given";
 		std::vector<std::string> users = ch_it->getUsers();
@@ -249,6 +247,7 @@ int Parse::Part_cmd(std::vector<std::string> buf, Client client)
 	std::string ClientNick 	= client.Getters(GETNICK);
 	int 		ClientId 	= client.GettersInt(GETCLIENTFD);
 	std::string ChannelName = buf[1];
+	
 
 	if (buf.size() < 2)
 		return (Parse::printErrorMessage("Command Part: Not enough parameters\nCommand Used \"" + buf[0] + buf[1] + "\"\n" , 1));
@@ -261,16 +260,30 @@ int Parse::Part_cmd(std::vector<std::string> buf, Client client)
 		"\nThere is no channel with this name\n", 2));
 	}
   
+	std::vector<int> allTargetsID = Parse::ReturnMessageTargets(ChannelName, client);
+	
 	if (ReturnedChannel->rmUser(ClientNick) == 0){
 		return (Parse::printErrorMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
 		"\nThis user is not in the user list of this channel\n", 2));
 	}
-
+	
+	for (int i = 0; i < allTargetsID.size(); i++)
+		Parse::sendIrcMessage(":" + ClientNick + "!" + client.Getters(GETUSER) + "@localhost PART " + ChannelName, allTargetsID[i]);
+	Parse::sendIrcMessage(":" + ClientNick + "!" + client.Getters(GETUSER) + "@localhost PART " + ChannelName, ClientId);
 	Parse::printMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
 		"\nThis user left the channel successfully\n", GREEN);
-	Parse::sendIrcMessage(":" + ClientNick + "!" + client.Getters(GETUSER) + "@localhost PART " + ChannelName, ClientId);
+	
 	if (!ReturnedChannel->getUserAmount())
 		Parse::RemoveChannel(ChannelName);
+	
+	std::vector<std::string> usersList = ReturnedChannel->getUsersList();
+	int modsLen = ReturnedChannel->getMods().size();
+	if (modsLen == 0)
+	{
+		ReturnedChannel->addModder(usersList[0]);
+		Parse::BroadcastChannel(1, "353", PrefixString(client, *ReturnedChannel), client, ReturnedChannel);
+		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, ReturnedChannel);
+	}
 	return (0);
 }
 
