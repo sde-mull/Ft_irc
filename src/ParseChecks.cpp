@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseChecks.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:55:56 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/17 01:40:12 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/20 15:49:05 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ bool Parse::CheckPrivMessageArguments(Client client, int size, std::string str)
 		client.GettersInt(GETCLIENTFD));
 		return (Parse::printErrorMessage(client.Getters(GETNICK) + " didn't send a message. Command used: " + str , false));
 	}
+
 	return (true);
 }

@@ -1,2 +1,11 @@
 -> Se ligar o server e fizer reconnect enquanto está ligado ao server dá segfault. Recebe uma mensagem do tipo "QUIT :leaving".
 Temos de desconnectar o client quando aparece esta mensagem mesmo que não seja authenticado, tem de se verificar este tipo de resposta antes.
+
+
+
+
+BUGS / Improvements:
+- NICK change is not properly implemented => After authentication is set you should alter the NICK outside of the authentication parsing.
+this is causing the server to have two users with different nicknames.
+
+- You should change the channel operator to the oldest available user in channel 

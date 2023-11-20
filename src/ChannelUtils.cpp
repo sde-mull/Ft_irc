@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:25:58 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 12:33:36 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:19:49 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
 {
 	if (buf.size() < 4 && buf[2][0] == '+')
-		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, this);
 	if (buf[3].empty() && getMode(MODEPASSWORD) == 0 && buf[2][0] == '+')
-		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+		Parse::sendIrcNumeric(2, "461", buf[0] + " :Not enough parameters", client, this);
 	else if (getMode(MODEPASSWORD) == 0 && buf[2][0] == '+')
 	{
 		ite->second = 1;
@@ -38,22 +38,32 @@ int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<cha
 int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
 {
 	if (buf.size() < 4)
-		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, this);
 	else if (buf[3].empty() && buf[2][0] == '+')
-		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, this);
+	else if (this->CheckIsUser(buf[3]) == 0)
+		Parse::sendIrcNumeric(2, "401", " " + buf[3] + " :No such nick", client, this);
 	else if (buf[2][0] == '+')
 	{
 		if (addModder(buf[3]) == 0)
-			Parse::printErrorMessage(" user was already a moderator.", GENERICERROR);
+			Parse::sendIrcNumeric(2, "482", " :User is already an operator", client, this);
 		else
+		{
+			Parse::BroadcastChannel(1, "353", Parse::PrefixString(client, *this), client, this);
+			Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, this);
 			return 1;
+		}
 	}
 	else if (buf[2][0] == '-')
 	{
 		if (rmModder(buf[3]) == 0)
-			Parse::printErrorMessage(" user isn't a moderator.", GENERICERROR);
+			Parse::sendIrcNumeric(2, "482", " :User is not an operator", client, this);
 		else
+		{
+			Parse::BroadcastChannel(1, "353", Parse::PrefixString(client, *this), client, this);
+			Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, this);
 			return 1;
+		}
 	}
 	else
 		return 1;
@@ -63,9 +73,9 @@ int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char,
 int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
 {
 	if (buf.size() < 4 && buf[2][0] == '+')
-		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, this);
 	else if (buf[3].empty() && getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
-		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, this);
 	else if (getMode(MODEUSERLIMIT) == 1 && buf[2][0] == '-')
 	{
 		ite->second = 0;
@@ -75,11 +85,11 @@ int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<ch
 	else if (buf[2][0] == '+')
 	{
 		if (buf[3].find_first_not_of("0123456789") != -1)
-			Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+			Parse::sendIrcNumeric(2, "461", buf[0] + " :Bad parameters!", client, this);
 		int	number = std::atoi(buf[3].c_str());
 		
 		if (number <= 0)
-			Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
+			Parse::sendIrcNumeric(2, "461", buf[0] + " :Not enough parameters", client, this);
 		else
 		{
 			_maxusers = number;
