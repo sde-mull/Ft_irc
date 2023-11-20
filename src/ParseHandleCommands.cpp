@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:36:29 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 12:28:19 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:29:25 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	Parse::Privmsg_cmd(std::vector<std::string> buf, Client client)
 
 	if (!Parse::CheckPrivMessageArguments(client, buf.size(), "\"" + buf[0] + " " + buf[1] + "\""))
 		return (1);
-
+		
 	std::vector<int> allTargetsID = Parse::ReturnMessageTargets(target, client);
 	for (int i = 2; i < buf.size(); i++)
 		message = message + buf[i] + ' ';
@@ -53,13 +53,13 @@ int	Parse::Mode_cmd(std::vector<std::string> buf, Client client)
 	}
 	else if (buf[2].size() > 2 || (buf[2][0] != '-' && buf[2][0] != '+'))
 	{
-		sendIrcNumeric(1, "501", buf[0] + " :Unknown MODE flag", client);
+		sendIrcNumeric(2, "501", " :Unknown MODE flag", client, &(*ch_it));
 		return 0;
 	}
 	
 	if (ch_it->CheckIsMod(client.Getters(GETNICK)) == 0)
 		sendIrcNumeric(2, "482", " :You're not channel operator", client, &(*ch_it));
-	else if (ch_it->getMode(buf[2][1]) == -1)
+	else if (ch_it->getMode(buf[2][1]) == -1 || buf[2].size() > 2)
 		sendIrcNumeric(1, "501", buf[0] + " :Unknown MODE flag", client);
 	else
 	{
@@ -143,7 +143,6 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (buf.size() < 3)
 		sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
-
 	else if (ch_it == _Channels.end())
 		sendIrcNumeric(1, "403", channel_name + " :No such channel", client);
 	else if (ch_it->CheckIsUser(client.Getters(GETNICK)) == 0)
@@ -181,7 +180,7 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	if (buf.size() < 2)
 		return (303);
 	if (buf[1][0] != '#' || buf[1].size() == 1)
-		return printErrorMessage("JOIN #<Channelname>.", WRONGARGSERR);
+		return Parse::sendIrcNumeric(1, "476", " : Try /JOIN #<channelname>", client);
 	while (ch_it != _Channels.end() && ch_it->getName() != ChannelName)
 		ch_it++;
 	if (ch_it == _Channels.end())
