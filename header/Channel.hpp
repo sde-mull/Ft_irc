@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/20 12:06:36 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:33:35 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,10 @@ class Channel
 			int									changeTopic(std::vector<std::string> buf);
 			int									changePrefix(std::string user, char opt);
 			int									invitedUsers(std::string user);
+			void								ChangeNickUserList(std::string newNick, Client client);
+			void								ChangeNickModsList(std::string newNick, Client client);
+			void								ChangeNickInvitedList(std::string newNick, Client client);
+			void								ChangeNickPrefixList(std::string newNick, Client client);
 
 			// Remove functions
 			int									rmUser(std::string user);

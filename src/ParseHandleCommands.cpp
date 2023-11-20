@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseHandleCommands.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:36:29 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 16:29:25 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/20 19:00:04 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,9 +220,21 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	return 0;
 }
 
+void	Parse::ChangeNickAllPlaces(std::string newNick, Client client)
+{
+	for (int i = 0; i < Parse::_Channels.size(); i++)
+	{
+		Parse::_Channels[i].ChangeNickUserList(newNick, client);
+		Parse::_Channels[i].ChangeNickModsList(newNick, client);
+		Parse::_Channels[i].ChangeNickInvitedList(newNick, client);
+		Parse::_Channels[i].ChangeNickPrefixList(newNick, client);
+	}
+}
+
 int	Parse::Nick_cmd(std::vector<std::string> buf, Client client)
 {
 	std::string str = buf[1];
+	Client	&UpdateClient =  Parse::searchClientById(client.GettersInt(GETCLIENTFD));
 	if (!Parse::CheckNickRules(str))
 	{
 		Parse::sendIrcNumeric(1, "432", ":Erroneus nickname", client);
@@ -234,7 +246,9 @@ int	Parse::Nick_cmd(std::vector<std::string> buf, Client client)
 		return 0;
 	}
 	Parse::sendIrcMessage(":" + client.Getters(GETNICK) + " NICK :" + str, client.GettersInt(GETCLIENTFD));
-	client.Setters(SETNICK, str);
+	
+	Parse::ChangeNickAllPlaces(str, UpdateClient);
+	UpdateClient.Setters(SETNICK, str);
 	return 0;
 }
 

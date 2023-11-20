@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelChange.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:21:07 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 16:09:52 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:43:43 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	Channel::changePrefix(std::string user, char c)
 	return 0;
 }
 
-int	Channel::invitedUsers(std::string user)
+int		Channel::invitedUsers(std::string user)
 {
 	std::vector<std::string>::iterator ite = std::find(_invitedUsers.begin(), _invitedUsers.end(), user);
 
@@ -95,3 +95,48 @@ int	Channel::invitedUsers(std::string user)
 		ite = _invitedUsers.erase(ite);
 	return 1;
 }
+
+void	Channel::ChangeNickUserList(std::string newNick, Client client)
+{
+	for (int i = 0; i < this->_users.size(); i++)
+	{
+		if (this->_users[i].compare(client.Getters(GETNICK)))
+			this->_users[i] = newNick;
+	}
+}
+
+void	Channel::ChangeNickModsList(std::string newNick, Client client)
+{
+	for (int i = 0; i < this->_mods.size(); i++)
+	{
+		if (this->_mods[i].compare(client.Getters(GETNICK)))
+			this->_mods[i] = newNick;
+	}
+}
+
+void								Channel::ChangeNickInvitedList(std::string newNick, Client client)
+{
+	for (int i = 0; i < this->_invitedUsers.size(); i++)
+	{
+		if (this->_invitedUsers[i].compare(client.Getters(GETNICK)))
+			this->_invitedUsers[i] = newNick;
+	}
+}
+
+void Channel::ChangeNickPrefixList(std::string newNick, Client client)
+{
+    std::string oldNick = client.Getters(GETNICK);
+
+    for (std::map<std::string, std::string>::iterator it = this->_uprefix.begin(); it != this->_uprefix.end(); ++it)
+    {
+        if (it->second == oldNick)
+        {
+            std::string oldValue = it->second;
+
+            this->_uprefix.erase(it);
+
+            this->_uprefix[newNick] = oldValue;
+        }
+    }
+}
+

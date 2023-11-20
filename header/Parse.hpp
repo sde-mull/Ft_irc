@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 15:49:02 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:25:56 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ class Parse
 		static 	void								GetAllIdInChannel(std::string target, Client client, std::vector<int> &returnTargets, int flag = 0);
 		static 	void								GetOpsAndMembersTarget(std::string &target, Client client, std::vector<int> &returnTargets);
 		static 	std::vector<std::string>   		 	Hander_ft_split(char *buf, int received);
+		static	void								ChangeNickAllPlaces(std::string str, Client client);
 };
 
 #endif
