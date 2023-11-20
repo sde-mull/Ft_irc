@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelChange.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:21:07 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/19 23:23:41 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/20 12:07:13 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	Channel::setPassword(std::string pass)
 	_password = pass;
 }
 
-int	Channel::changeMode(char mode, std::vector<std::string> buf)
+int	Channel::changeMode(std::vector<std::string> buf, std::vector<Channel>::iterator ch_it, Client client)
 {
 	std::map<char, int>::iterator	ite;
-	
+	char							mode = buf[2][1];
 
 	for (ite = _modes.begin(); ite != _modes.end(); ite++)
 	{
@@ -41,11 +41,11 @@ int	Channel::changeMode(char mode, std::vector<std::string> buf)
 		}
 	}
 	if	(mode == MODEPASSWORD)
-		return mode_password(buf, mode, ite);
+		return mode_password(buf, mode, ite, client);
 	else if (mode == MODECHANNELOP)
-		return mode_addmod(buf, mode, ite);
+		return mode_addmod(buf, mode, ite, client);
 	else if (mode == MODEUSERLIMIT)
-		return mode_userlimit(buf, mode, ite);
+		return mode_userlimit(buf, mode, ite, client);
 	return 0;
 }
 
@@ -63,7 +63,7 @@ int	Channel::changeTopic(std::vector<std::string> buf)
 	return 1;
 }
 
-int				Channel::changePrefix(std::string user, char c)
+int	Channel::changePrefix(std::string user, char c)
 {
 	std::map<std::string, std::string>::iterator ite = _uprefix.find(user);
 

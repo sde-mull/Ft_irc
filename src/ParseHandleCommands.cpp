@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseHandleCommands.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:36:29 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 02:40:17 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/20 12:28:19 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,33 @@ int	Parse::Mode_cmd(std::vector<std::string> buf, Client client)
 		ch_it++;
 	if (ch_it == _Channels.end())
 	{
-		printErrorMessage("Channel not found", GENERICERROR);
+		sendIrcNumeric(1, "403", buf[1] + " :No such channel", client);
 		return 0;
 	}
 	else if (buf.size() == 2)
 	{
 		if (ch_it->CheckIsUser(client.Getters(GETNICK)) == 0)
-			printErrorMessage("You must be an user in this channel.", GENERICERROR);
+			sendIrcNumeric(2, "442", " :You're not on that channel", client, &(*ch_it));
+		else
+			ch_it->displayModes(client, ch_it);
 		return 1;
 	}
 	else if (buf[2].size() > 2 || (buf[2][0] != '-' && buf[2][0] != '+'))
 	{
-		printErrorMessage("Bad args", GENERICERROR);
+		sendIrcNumeric(1, "501", buf[0] + " :Unknown MODE flag", client);
 		return 0;
 	}
 	
 	if (ch_it->CheckIsMod(client.Getters(GETNICK)) == 0)
-		printErrorMessage("You are not a moderator of this channel!", NOTENOUGHPERMSERR);
+		sendIrcNumeric(2, "482", " :You're not channel operator", client, &(*ch_it));
 	else if (ch_it->getMode(buf[2][1]) == -1)
-		printErrorMessage("That mode does not exist!", GENERICERROR);
+		sendIrcNumeric(1, "501", buf[0] + " :Unknown MODE flag", client);
 	else
-		return (ch_it->changeMode(buf[2][1], buf));
+	{
+		ch_it->changeMode(buf, ch_it, client);
+		ch_it->displayModes(client, ch_it);
+		return (1);
+	}
 	return (0);
 }
 
@@ -71,25 +77,26 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 	while (ch_it != _Channels.end() && ch_it->getName() != buf[1])
 		ch_it++;
 	if (ch_it == _Channels.end())
-		printErrorMessage("Channel not found.", NOCHANNELERR);
+		sendIrcNumeric(1, "403", buf[1] + " :No such channel", client);
 	else if(buf.size() == 2)
 	{
 		if (ch_it->CheckIsUser(client.Getters(GETNICK)) == 0)
-			printErrorMessage("You must be an user in this channel.", GENERICERROR);
-		sendIrcMessage(ch_it->getTopic(), client.GettersInt(GETCLIENTFD));
+			sendIrcNumeric(2, "442", " :You're not on that channel", client, &(*ch_it));
+		else
+			ch_it->displayTopic(client, ch_it);
 		return 1;
 	}
-	else if (ch_it->getMode(MODETOPIC) == 0 && ch_it->CheckIsMod(client.Getters(GETNICK)) == 0)
-		printErrorMessage("You are not a moderator of this channel.", NOTENOUGHPERMSERR);
 	else if (ch_it->CheckIsUser(client.Getters(GETNICK)) == 0)
-		printErrorMessage("You must be an user in this channel.", GENERICERROR);
+		sendIrcNumeric(2, "442", " :You're not on that channel", client, &(*ch_it));
+	else if (ch_it->getMode(MODETOPIC) == 0 && ch_it->CheckIsMod(client.Getters(GETNICK)) == 0)
+		sendIrcNumeric(2, "482", " :You're not channel operator", client, &(*ch_it));
 	else
 	{
 		if (ch_it->changeTopic(buf) == 0)
 			printErrorMessage("The topic couldnt be changed.", GENERICERROR);
 		else
 		{
-			Parse::BroadcastChannel(2, "332", " " + buf[2], client, &(*ch_it));
+			Parse::BroadcastChannel(2, "332", " " + ch_it->getTopic(), client, &(*ch_it));
 			return 1;
 		}
 	}
@@ -145,6 +152,10 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 		sendIrcNumeric(2, "482", " :You're not channel operator", client, &(*ch_it));
 	else if (!Parse::CheckClientByNick(buf[2]))
 		sendIrcNumeric(1, "401", " " + channel_name + " :No such nick", client);
+	else if (ch_it->CheckIsMod(buf[2]) == 1)
+		sendIrcNumeric(2, "482", " :User is also an operator", client, &(*ch_it));
+	else if (client.Getters(GETNICK) == buf[2])
+		sendIrcNumeric(2, "482", " :Can not kick yourself", client, &(*ch_it));
 	else if (ch_it->CheckIsUser(buf[2]) == 0)
 		sendIrcNumeric(1, "441", buf[2] + " " + channel_name + " :They aren't on that channel", client);
 	else

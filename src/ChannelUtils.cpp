@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelUtils.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:25:58 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/19 23:27:16 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/20 12:33:36 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
+int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
 {
 	if (buf.size() < 4 && buf[2][0] == '+')
-		Parse::printErrorMessage(" arguments should be: PASS <channel> +-k <client's user>.", NOTENOUGHARGS);
+		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
 	if (buf[3].empty() && getMode(MODEPASSWORD) == 0 && buf[2][0] == '+')
-		Parse::printErrorMessage(" in order to change password flag a new password is needed.", NOTENOUGHARGS);
+		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
 	else if (getMode(MODEPASSWORD) == 0 && buf[2][0] == '+')
 	{
 		ite->second = 1;
@@ -35,12 +35,12 @@ int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<cha
 	return 0;
 }
 
-int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
+int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
 {
 	if (buf.size() < 4)
-		Parse::printErrorMessage(" arguments should be: MODE <channel> +-o <client's user>.", NOTENOUGHARGS);
+		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
 	else if (buf[3].empty() && buf[2][0] == '+')
-		Parse::printErrorMessage(" in order to add a new modder you have to provide the client's user.", NOTENOUGHARGS);
+		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
 	else if (buf[2][0] == '+')
 	{
 		if (addModder(buf[3]) == 0)
@@ -60,26 +60,26 @@ int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char,
 	return 0;
 }
 
-int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite)
+int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
 {
 	if (buf.size() < 4 && buf[2][0] == '+')
-		Parse::printErrorMessage(" arguments should be: MODE <channel> +-l <User's limit>.", NOTENOUGHARGS);
+		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
 	else if (buf[3].empty() && getMode(MODEUSERLIMIT) == 0 && buf[2][0] == '+')
-		Parse::printErrorMessage(" you need to specify the new limit.", NOTENOUGHARGS);
+		Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
 	else if (getMode(MODEUSERLIMIT) == 1 && buf[2][0] == '-')
 	{
 		ite->second = 0;
 		_maxusers = -1;
 		return 1;
 	}
-	else if (getMode(MODEUSERLIMIT) && buf[2][0] == '+')
+	else if (buf[2][0] == '+')
 	{
 		if (buf[3].find_first_not_of("0123456789") != -1)
-			return Parse::printErrorMessage(" User limit must be an integer.", WRONGARGSERR);
+			Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
 		int	number = std::atoi(buf[3].c_str());
 		
 		if (number <= 0)
-			Parse::printErrorMessage(" The user limit must be higher than 0.", GENERICERROR);
+			Parse::sendIrcNumeric(1, "461", buf[0] + " :Not enough parameters", client);
 		else
 		{
 			_maxusers = number;
@@ -93,14 +93,17 @@ int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<ch
 	return 0;
 }
 
-void	Channel::displayModes(void)
+void	Channel::displayModes(Client client, std::vector<Channel>::iterator ch_it)
 {
-	std::map<char, int>::iterator ite;
-	
-	std::cout << "ft display modes" << std::endl;
-	for (ite = _modes.begin(); ite != _modes.end(); ite++)
-	{
-		std::cout << "loop" << std::endl;
-		std::cout<< ite->first << " -> " << ite->second << std::endl;
-	}
+	std::string						printModes = ch_it->getModeString();
+
+	Parse::sendIrcNumeric(2, "324", printModes, client, &(*ch_it));
+}
+
+void	Channel::displayTopic(Client client, std::vector<Channel>::iterator ch_it)
+{
+	if (_topic.empty() == false)
+		Parse::sendIrcNumeric(2, "332", " " + ch_it->getTopic(), client, &(*ch_it));
+	else
+		Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &(*ch_it));
 }
