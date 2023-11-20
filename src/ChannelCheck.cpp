@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ChannelCheckFunctions.cpp                          :+:      :+:    :+:   */
+/*   ChannelCheck.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:11:59 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/19 23:14:39 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/20 11:17:21 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	Channel::CheckInvite(std::string user)
 	return 1;
 }
 
-int			Channel::check_pass(std::string pass)
+int	Channel::check_pass(std::string pass)
 {
 	if (pass == _password)
 		return 1;
