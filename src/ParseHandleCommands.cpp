@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Handle_cmds.cpp                                    :+:      :+:    :+:   */
+/*   ParseHandleCommands.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/30 10:53:31 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/17 18:58:45 by pcoimbra         ###   ########.fr       */
+/*   Created: 2023/11/19 23:36:29 by sde-mull          #+#    #+#             */
+/*   Updated: 2023/11/19 23:41:35 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "Parse.hpp"
 
 #include "Cinclude.hpp"
 
 std::vector<Channel> Parse::_Channels;
 
-int	Privmsg_cmd(std::vector<std::string> buf, Client client)
+int	Parse::Privmsg_cmd(std::vector<std::string> buf, Client client)
 {
 	std::string	message;
 	std::string target = buf[1];
@@ -132,8 +134,6 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 	std::string	channel_name = buf[1];
 	std::vector<Channel>::iterator	ch_it = _Channels.begin();
 
-	//std::cout << "size: " << buf.size() << std::endl;
-	//std::cout << "buf[3]: " << buf[3] << std::endl;
 	while (ch_it != _Channels.end() && ch_it->getName() != channel_name)
 		ch_it++;
 	if (buf.size() < 3)
