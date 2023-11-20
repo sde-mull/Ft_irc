@@ -65,9 +65,9 @@ class Channel
 			int									inviteUser(std::string user);
 
 			// Change values functions
+			void								setPassword(std::string	pass);
 			int									changeMode(char c, std::vector<std::string> buf);
 			int									changeTopic(std::vector<std::string> buf);
-			void								setPassword(std::string	pass);
 			int									changePrefix(std::string user, char opt);
 			int									invitedUsers(std::string user);
 

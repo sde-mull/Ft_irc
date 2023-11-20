@@ -3,9 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
+/*   Updated: 2023/11/19 23:28:43 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +65,6 @@ int Client::GettersInt(int opt) const
 	}
 	return 0;
 }
-
 //Setters
 
 void Client::Setters(int opt, std::string str)

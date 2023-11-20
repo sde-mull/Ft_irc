@@ -6,7 +6,7 @@
 /*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 12:46:50 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/11 15:22:00 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/19 23:35:03 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include "Client.hpp"
 #include "Exceptions.hpp"
 
-
 class Server;
 
 typedef void (Server::*function) (Client &client, std::string str);
@@ -26,13 +25,13 @@ typedef void (Server::*function) (Client &client, std::string str);
 class Server
 {
 	private:
+		int                             _serverSocketFd;
+		int                             _acceptFd;
+		fd_set                          _currentSockets;
 		uint16_t                        _port;
 		std::string                     _password;
-		int                             _serverSocketFd;
 		struct sockaddr_in              *_address;
-		int                             _acceptFd;
 		std::map<std::string, function> m;
-		fd_set                          _currentSockets;
 		
 	public:
 	//Server Constructors and destructors
@@ -56,18 +55,18 @@ class Server
 		int             DisconnectingClient(int id);
 	
 	//Handling messages
-		int      Handle_Message(Client &client);
-		void    ft_pass(Client &client, std::string str);
-		void    ft_nick(Client &client, std::string str);
-		void    ft_user(Client &client, std::string str);
-		void    Client_Authenticate(Client &client, char *buf, int received);
-		int     Call_Functions(Client &client, char *buf, int received);
-
-		void    SendMsg(Client &client, const char *data);
-		void    PrintClientArgs(Client &client);
-		bool	checkUserAuthentication(Client &client, char *buf, int received);
-		void	shut_the_duck_up();
-		bool	ConstructMessage(char *buf, int received, Client &client);
+		int     		Handle_Message(Client &client);
+		void    		ft_pass(Client &client, std::string str);
+		void    		ft_nick(Client &client, std::string str);
+		void    		ft_user(Client &client, std::string str);
+		void    		Client_Authenticate(Client &client, char *buf, int received);
+		int     		Call_Functions(Client &client, char *buf, int received);
+		
+		void    		SendMsg(Client &client, const char *data);
+		void    		PrintClientArgs(Client &client);
+		bool			checkUserAuthentication(Client &client, char *buf, int received);
+		bool			ConstructMessage(char *buf, int received, Client &client);
+		void			shut_the_duck_up();
 };
 
 #endif

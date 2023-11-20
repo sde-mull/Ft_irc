@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/17 14:04:21 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/20 00:05:25 by sde-mull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Cinclude.hpp"
 
-std::vector<Client> Parse::	_clients;
-std::vector<Channel>		_Channels;
+std::vector<Client> 	Parse::	_clients;
 
 bool Parse::checkArgParam(std::string port, std::string password)
 {
