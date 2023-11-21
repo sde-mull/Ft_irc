@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:31:10 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 00:05:25 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:21:18 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ once found it will return the reference of the client inside the vector
 
 Client&  Parse::searchClientById(int id)
 {
-	int index;
+	unsigned long index = 0;
 
-	for (int i = 0; i < _clients.size(); i++)
+	for (unsigned long i = 0; i < _clients.size(); i++)
 	{
 		if (_clients[i].GettersInt(GETCLIENTFD) == id){
 			index = i;
@@ -99,7 +99,7 @@ std::vector<std::string>    Parse::ft_split(char *buf, int received)
 	
 	if (buf == NULL)
 		return (vec);
-	for (size_t j = 0; j < received; j++)
+	for (int j = 0; j < received; j++)
 	{
 		if (buf[j] == '\n')
 			nova += ' ';
@@ -133,7 +133,7 @@ int	Parse::sendIrcNumeric(int i, std::string code, std::string str, Client clien
 	return 0;
 }
 
-std::string Parse::PrefixString(Client client, Channel channel)
+std::string Parse::PrefixString(Channel channel)
 {
 	std::string str = " " + channel.getSymbol() + " " + channel.getName() + " :";
 	std::map<std::string, std::string> prefixs = channel.getPrefixs();
@@ -148,10 +148,10 @@ std::string Parse::PrefixString(Client client, Channel channel)
 	return (str);
 }
 
-int Parse::BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel)
+int Parse::BroadcastChannel(int i, std::string code, std::string str, Channel *channel)
 {
 	std::vector<std::string> users = (*channel).getUsers();
-	for(int j = 0; j < users.size(); j++)
+	for(unsigned long j = 0; j < users.size(); j++)
 		Parse::sendIrcNumeric(i, code, str, *(Parse::ReturnClientByNick(users[j])), channel);
 	return (0);
 }
@@ -161,7 +161,7 @@ int Parse::BroadcastWho(Client client, Channel *channel)
 	std::vector<std::string> users = (*channel).getUsers();
 	Client *client_tmp = NULL;
 	std::string flag = "";
-	for(int j = 0; j < users.size(); j++)
+	for(unsigned long j = 0; j < users.size(); j++)
 	{
 		client_tmp = (Parse::ReturnClientByNick(users[j]));
 		flag = " H" + channel->getPrefix(users[j]) + " :1 ";
@@ -172,13 +172,13 @@ int Parse::BroadcastWho(Client client, Channel *channel)
 
 void Parse::PrintAllClients(void)
 {
-	for (int i = 0; i < _clients.size(); i++)
+	for (unsigned long i = 0; i < _clients.size(); i++)
 		std::cout << "Client with the id " << _clients[i].GettersInt(GETCLIENTFD) << " is online!" << std::endl;
 }
 
 int  Parse::ReturnClientById(int id)
 {
-	for (int i = 0; i < _clients.size(); i++)
+	for (unsigned long i = 0; i < _clients.size(); i++)
 	{
 		if (_clients[i].GettersInt(GETCLIENTFD) == id)
 			return (i);
@@ -188,7 +188,7 @@ int  Parse::ReturnClientById(int id)
 
 Client* Parse::ReturnClientByNick(std::string nick)
 {
-	for (int i = 0; i < _clients.size(); i++)
+	for (unsigned long i = 0; i < _clients.size(); i++)
 	{
 		if (_clients[i].Getters(GETNICK) == nick)
 			return (&(_clients[i]));
@@ -257,7 +257,7 @@ int Parse::SearchTargetMessageId(std::string target, Client client)
 
 int		Parse::SearchClientByNick(std::string target)
 {
-	for (int i = 0; i < _clients.size(); i++)
+	for (unsigned long i = 0; i < _clients.size(); i++)
 	{
 		if (!_clients[i].Getters(GETNICK).compare(target))
 			return (_clients[i].GettersInt(GETCLIENTFD));
@@ -287,7 +287,7 @@ void		Parse::GetAllIdInChannel(std::string target, Client client, std::vector<in
 		Parse::sendIrcMessage(":localhost 404 " + client.Getters(GETNICK) + " " + target + " :You are not in the channel to send the message", client.GettersInt(GETCLIENTFD));
 		return ;
 	}
-	for (int i = 0; i < ChannelUsers.size(); i++)
+	for (unsigned long i = 0; i < ChannelUsers.size(); i++)
 	{
 		if (client.Getters(GETNICK).compare(ChannelUsers[i]))
 			returnTargets.push_back(Parse::SearchClientByNick(ChannelUsers[i]));
@@ -296,7 +296,7 @@ void		Parse::GetAllIdInChannel(std::string target, Client client, std::vector<in
 
 Channel*		Parse::ReturnChannelByName(std::string name)
 {
-	for (int i = 0; i < _Channels.size(); i++)
+	for (unsigned long i = 0; i < _Channels.size(); i++)
 	{
 		if (!_Channels[i].getName().compare(name))
 			return (&(_Channels[i]));
@@ -326,7 +326,7 @@ std::vector<std::string>    Parse::Hander_ft_split(char *buf, int received)
 	
 	if (!buf)
 		return (vec);
-	for (size_t j = 0; j < received; j++)
+	for (int j = 0; j < received; j++)
 	{
 		if (buf[j] == '\n')
 			nova += ' ';
@@ -355,7 +355,7 @@ void			Parse::RemoveChannel(std::string ChannelName)
 
 int			Parse::ReturnIndexChannel(std::string ChannelName)
 {
-	for (int i = 0; i < _Channels.size(); i++)
+	for (unsigned long i = 0; i < _Channels.size(); i++)
 	{
 		if (!_Channels[i].getName().compare(ChannelName))
 			return (i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConnection.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:43:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/19 23:34:44 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:13:43 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int Server::DisconnectingClient(int id)
 	FD_CLR(id, &this->_currentSockets);
 	Parse::RemoveClient(id);
 
-	for (int i = 0; i < Parse::_Channels.size(); i++){
+	for (unsigned long i = 0; i < Parse::_Channels.size(); i++){
 		Parse::_Channels[i].rmUser(ClientName);
 		if (Parse::_Channels[i].getUserAmount() == 0)
 			Parse::_Channels.erase(Parse::_Channels.begin() + i);

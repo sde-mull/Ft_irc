@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/20 12:06:36 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:23:39 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,14 @@ class Channel
 
 			// Change values functions
 			void								setPassword(std::string	pass);
-			int									changeMode(std::vector<std::string> buf, std::vector<Channel>::iterator ch_it, Client client);
+			int									changeMode(std::vector<std::string> buf, Client client);
 			int									changeTopic(std::vector<std::string> buf);
 			int									changePrefix(std::string user, char opt);
 			int									invitedUsers(std::string user);
+			int									ChangeNickUserList(std::string newNick, Client client);
+			void								ChangeNickModsList(std::string newNick, Client client);
+			void								ChangeNickInvitedList(std::string newNick, Client client);
+			void								ChangeNickPrefixList(std::string newNick, Client client);
 
 			// Remove functions
 			int									rmUser(std::string user);
@@ -81,9 +85,9 @@ class Channel
 
 
 			//modes functions
-			int									mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client);
-			int									mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client);
-			int									mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client);
+			int									mode_password(std::vector<std::string> buf, std::map<char, int>::iterator ite, Client client);
+			int									mode_addmod(std::vector<std::string> buf, Client client);
+			int									mode_userlimit(std::vector<std::string> buf, std::map<char, int>::iterator ite, Client client);
 };
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:49:22 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/11 17:40:57 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:21:59 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ Server::Server(Server const &src)
 
 Server & Server::operator=(Server const &rhs)
 {
-	this->_port = getPort();
-	this->_password = getPassword();
+	this->_port = rhs.getPort();
+	this->_password = rhs.getPassword();
 	return (*this);
 }
 

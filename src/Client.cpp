@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 13:57:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/19 23:28:43 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:13:23 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Client::Client(void){}
 
-Client::Client(int id) : _socketFd(id), _nick("\0"), _user("\0"), _f_pass(0), _f_auth(0){}
+Client::Client(int id) : _socketFd(id),  _user("\0"), _nick("\0"), _f_pass(0), _f_auth(0){}
 
 Client::~Client(void){}
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:42:24 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/19 23:26:23 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:12:16 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Channel::Channel(void){
 Channel::~Channel(void){
 }
 
-Channel::Channel(std::string name, std::string CreatingUser) : _superUser(CreatingUser), _name(name), _topic("\0")
+Channel::Channel(std::string name, std::string CreatingUser) : _name(name),  _topic("\0"), _superUser(CreatingUser)
 {
 	_users.push_back(CreatingUser);
 	_uprefix[CreatingUser] = "@";
@@ -31,7 +31,7 @@ Channel::Channel(std::string name, std::string CreatingUser) : _superUser(Creati
 	_maxusers = -1;
 }
 
-Channel::Channel(std::string name, std::string CreatingUser, std::string pass) : _superUser(CreatingUser), _name(name), _topic("\0"), _password(pass)
+Channel::Channel(std::string name, std::string CreatingUser, std::string pass) :  _name(name), _topic("\0"), _password(pass), _superUser(CreatingUser)
 {
 	_users.push_back(CreatingUser);
 	_uprefix[CreatingUser] = "@";
