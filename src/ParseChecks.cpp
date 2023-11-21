@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:55:56 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 15:49:05 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:09:28 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ Returns true in case it doesn't find an equal nick
 */
 bool  Parse::CheckClientByNick(std::string nick)
 {
-	for (int i = 0; i < _clients.size(); i++)
+	for (unsigned long i = 0; i < _clients.size(); i++)
 	{
 		if (!_clients[i].Getters(GETNICK).compare(nick))
 			return (true);
@@ -51,7 +51,7 @@ bool Parse::CheckNickRules(std::string str)
 {
 	if (str[0] == '#' || str[0] == '&' || str[0] == '$' || str[0] == ':')
 		return (false);
-	for (int i = 0; i < str.size(); i++)
+	for (unsigned long i = 0; i < str.size(); i++)
 	{
 		if (str[i] == ' ' || str[i] == ',' || str[i] == '*' || str[i] == '?'\
 		|| str[i] == '!' || str[i] == '@' || str[i] == '.')

@@ -6,13 +6,13 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:25:58 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 16:19:49 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:18:59 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
+int	Channel::mode_password(std::vector<std::string> buf, std::map<char, int>::iterator ite, Client client)
 {
 	if (buf.size() < 4 && buf[2][0] == '+')
 		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, this);
@@ -35,7 +35,7 @@ int	Channel::mode_password(std::vector<std::string> buf, char mode, std::map<cha
 	return 0;
 }
 
-int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
+int	Channel::mode_addmod(std::vector<std::string> buf, Client client)
 {
 	if (buf.size() < 4)
 		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, this);
@@ -49,8 +49,8 @@ int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char,
 			Parse::sendIrcNumeric(2, "482", " :User is already an operator", client, this);
 		else
 		{
-			Parse::BroadcastChannel(1, "353", Parse::PrefixString(client, *this), client, this);
-			Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, this);
+			Parse::BroadcastChannel(1, "353", Parse::PrefixString(*this), this);
+			Parse::BroadcastChannel(2, "366", " :End of NAMES list", this);
 			return 1;
 		}
 	}
@@ -60,8 +60,8 @@ int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char,
 			Parse::sendIrcNumeric(2, "482", " :User is not an operator", client, this);
 		else
 		{
-			Parse::BroadcastChannel(1, "353", Parse::PrefixString(client, *this), client, this);
-			Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, this);
+			Parse::BroadcastChannel(1, "353", Parse::PrefixString(*this), this);
+			Parse::BroadcastChannel(2, "366", " :End of NAMES list", this);
 			return 1;
 		}
 	}
@@ -70,7 +70,7 @@ int	Channel::mode_addmod(std::vector<std::string> buf, char mode, std::map<char,
 	return 0;
 }
 
-int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<char, int>::iterator ite, Client client)
+int	Channel::mode_userlimit(std::vector<std::string> buf, std::map<char, int>::iterator ite, Client client)
 {
 	if (buf.size() < 4 && buf[2][0] == '+')
 		Parse::sendIrcNumeric(2, "461", " :Not enough parameters", client, this);
@@ -84,7 +84,7 @@ int	Channel::mode_userlimit(std::vector<std::string> buf, char mode, std::map<ch
 	}
 	else if (buf[2][0] == '+')
 	{
-		if (buf[3].find_first_not_of("0123456789") != -1)
+		if (buf[3].find_first_not_of("0123456789") != std::string::npos)
 			Parse::sendIrcNumeric(2, "461", buf[0] + " :Bad parameters!", client, this);
 		int	number = std::atoi(buf[3].c_str());
 		

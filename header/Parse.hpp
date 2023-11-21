@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parse.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:19:54 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 18:25:56 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:18:33 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ class Parse
 		static	int									sendIrcNumeric(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static 	std::string							SendCommandIRC(int i, std::string code, std::string str, Client client, Channel *channel = NULL);
 		static 	int 								BroadcastWho(Client client, Channel *channel);
-		static 	int 								BroadcastChannel(int i, std::string code, std::string str, Client client, Channel *channel);
+		static 	int 								BroadcastChannel(int i, std::string code, std::string str, Channel *channel);
 		
 		//Search and Return
 		static  Client&                     		searchClientById(int id);
@@ -67,13 +67,13 @@ class Parse
 		static	int									ReturnIndexChannel(std::string ChannelName);
 		
 				
-		static	int									try_joining(std::vector<Channel>::iterator ch_it, std::vector<std::string> buffer, Client client);
+		static	int									try_joining(std::vector<Channel>::iterator ch_it, Client client);
 		static	std::vector<std::string>			Split_spc(char *buf);
 		static  void                        		addClient(int id);
 		static  std::vector<std::string>    		ft_split(char *buf, int received);
 		static  void                        		RemoveClient(int id);
 		static  void								CreateNumerics(void);
-		static  std::string							PrefixString(Client client, Channel channel);
+		static  std::string							PrefixString(Channel channel);
 		static 	void								GetAllIdInChannel(std::string target, Client client, std::vector<int> &returnTargets, int flag = 0);
 		static 	void								GetOpsAndMembersTarget(std::string &target, Client client, std::vector<int> &returnTargets);
 		static 	std::vector<std::string>   		 	Hander_ft_split(char *buf, int received);

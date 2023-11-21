@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerUserAuthentication.cpp                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:46:28 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/17 01:39:19 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:14:04 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int Server::Call_Functions(Client &client, char *buf, int received)
 {
 	std::vector<std::string> vec = Parse::ft_split(buf, received);
 	int f = 0;
-	for (int k = 0; k < vec.size(); k++)
+	for (unsigned long k = 0; k < vec.size(); k++)
 	{
 		std::map<std::string, function>::iterator it = m.find(std::string(vec[k]));
 		if (it != m.end()/*  && k < vec.size() - 1 */)

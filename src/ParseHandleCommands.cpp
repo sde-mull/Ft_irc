@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseHandleCommands.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sde-mull <sde-mull@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:36:29 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/20 19:00:04 by sde-mull         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:33:30 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int	Parse::Privmsg_cmd(std::vector<std::string> buf, Client client)
 		return (1);
 		
 	std::vector<int> allTargetsID = Parse::ReturnMessageTargets(target, client);
-	for (int i = 2; i < buf.size(); i++)
+	for (unsigned long i = 2; i < buf.size(); i++)
 		message = message + buf[i] + ' ';
 	if (message[0] == ':')
     	message.erase(0, 1);
-	for (int i = 0; i < allTargetsID.size(); i++)
+	for (unsigned long i = 0; i < allTargetsID.size(); i++)
 		Parse::sendIrcMessage(":" + client.Getters(GETNICK) + "!" + client.Getters(GETUSER) + "@localhost PRIVMSG " + target + " " + message, allTargetsID[i]);
 	return(0);
 }
@@ -63,7 +63,7 @@ int	Parse::Mode_cmd(std::vector<std::string> buf, Client client)
 		sendIrcNumeric(1, "501", buf[0] + " :Unknown MODE flag", client);
 	else
 	{
-		ch_it->changeMode(buf, ch_it, client);
+		ch_it->changeMode(buf, client);
 		ch_it->displayModes(client, ch_it);
 		return (1);
 	}
@@ -96,7 +96,7 @@ int	Parse::Topic_cmd(std::vector<std::string> buf, Client client)
 			printErrorMessage("The topic couldnt be changed.", GENERICERROR);
 		else
 		{
-			Parse::BroadcastChannel(2, "332", " " + ch_it->getTopic(), client, &(*ch_it));
+			Parse::BroadcastChannel(2, "332", " " + ch_it->getTopic(), &(*ch_it));
 			return 1;
 		}
 	}
@@ -160,13 +160,13 @@ int	Parse::Kick_cmd(std::vector<std::string> buf, Client client)
 	else
 	{
 		std::string str = "";
-		for (int k = 3; k < buf.size(); k++)
+		for (unsigned long k = 3; k < buf.size(); k++)
 			str = str + buf[k] + " ";
 		if (buf.size() == 3)
 			str = " :No reason Given";
 		std::vector<std::string> users = ch_it->getUsers();
-		for(int j = 0; j < users.size(); j++)
-			Parse::sendIrcMessage(":" + client.Getters(GETNICK) + " KICK " + channel_name + " " + buf[2] + str, (Parse::ReturnClientByNick(users[j]))->GettersInt(GETCLIENTFD));
+		for(unsigned long j = 0; j < users.size(); j++)
+			Parse::sendIrcMessage(":" + client.Getters(GETNICK) + " KICK " + channel_name + " " + buf[2] + " " + str, (Parse::ReturnClientByNick(users[j]))->GettersInt(GETCLIENTFD));
 		return ch_it->rmUser(buf[2]);
 	}
 	return 0;
@@ -199,8 +199,8 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		Parse::sendIrcNumeric(3, "", "", client, &channel);
 		Parse::sendIrcNumeric(2, "331", " :No topic is set", client, &channel);
 		Parse::sendIrcMessage(":localhost 324 " + channel.getName() + channel.getModeString(), client.GettersInt(GETCLIENTFD));
-		Parse::BroadcastChannel(1, "353", PrefixString(client, channel), client, &channel);
-		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, &channel);
+		Parse::BroadcastChannel(1, "353", PrefixString(channel), &channel);
+		Parse::BroadcastChannel(2, "366", " :End of NAMES list", &channel);
 		if (channel.getMode(MODEPASSWORD) == 1)
 			Parse::sendIrcMessage(":localhost " + channel.getName() + "'s password is set", client.GettersInt(GETCLIENTFD));
 		else
@@ -216,17 +216,25 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 	else if (buf.size() > 2 && ch_it->check_pass(buf[2]) == 0 && ch_it->CheckInvite(client.Getters(GETNICK)) == 0)
 		Parse::sendIrcNumeric(2, "475", " :Cannot join channel (+k)", client, &(*ch_it)); // pls check
 	else
-		return (try_joining(ch_it, buf, client));
+		return (try_joining(ch_it, client));
 	return 0;
 }
 
 void	Parse::ChangeNickAllPlaces(std::string newNick, Client client)
 {
-	for (int i = 0; i < Parse::_Channels.size(); i++)
+	for (unsigned long i = 0; i < Parse::_Channels.size(); i++)
 	{
-		Parse::_Channels[i].ChangeNickUserList(newNick, client);
+		std::string channel_name = _Channels[i].getName();
+		std::vector<int> allTargetsID = Parse::ReturnMessageTargets(channel_name, client);
+		for (unsigned long i = 0; i < allTargetsID.size(); i++)
+			Parse::sendIrcMessage(":" + client.Getters(GETNICK) + " NICK :" + newNick, allTargetsID[i]);
+		
+		if (Parse::_Channels[i].ChangeNickUserList(newNick, client) == 0)
+		{
+			Parse::_Channels[i].ChangeNickInvitedList(newNick, client);
+			continue ;
+		}
 		Parse::_Channels[i].ChangeNickModsList(newNick, client);
-		Parse::_Channels[i].ChangeNickInvitedList(newNick, client);
 		Parse::_Channels[i].ChangeNickPrefixList(newNick, client);
 	}
 }
@@ -291,7 +299,7 @@ int Parse::Part_cmd(std::vector<std::string> buf, Client client)
 		"\nThis user is not in the user list of this channel\n", 2));
 	}
 	
-	for (int i = 0; i < allTargetsID.size(); i++)
+	for (unsigned long i = 0; i < allTargetsID.size(); i++)
 		Parse::sendIrcMessage(":" + ClientNick + "!" + client.Getters(GETUSER) + "@localhost PART " + ChannelName, allTargetsID[i]);
 	Parse::sendIrcMessage(":" + ClientNick + "!" + client.Getters(GETUSER) + "@localhost PART " + ChannelName, ClientId);
 	Parse::printMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
@@ -305,8 +313,8 @@ int Parse::Part_cmd(std::vector<std::string> buf, Client client)
 	if (modsLen == 0)
 	{
 		ReturnedChannel->addModder(usersList[0]);
-		Parse::BroadcastChannel(1, "353", PrefixString(client, *ReturnedChannel), client, ReturnedChannel);
-		Parse::BroadcastChannel(2, "366", " :End of NAMES list", client, ReturnedChannel);
+		Parse::BroadcastChannel(1, "353", PrefixString(*ReturnedChannel), ReturnedChannel);
+		Parse::BroadcastChannel(2, "366", " :End of NAMES list", ReturnedChannel);
 	}
 	return (0);
 }
