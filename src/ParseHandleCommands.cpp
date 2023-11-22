@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:36:29 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/21 16:33:30 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/22 10:39:33 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,7 +306,10 @@ int Parse::Part_cmd(std::vector<std::string> buf, Client client)
 		"\nThis user left the channel successfully\n", GREEN);
 	
 	if (!ReturnedChannel->getUserAmount())
+	{
 		Parse::RemoveChannel(ChannelName);
+		return 1;
+	}
 	
 	std::vector<std::string> usersList = ReturnedChannel->getUsersList();
 	int modsLen = ReturnedChannel->getMods().size();
