@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:36:29 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/22 10:39:33 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/22 13:10:42 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,10 +201,10 @@ int	Parse::Join_cmd(std::vector<std::string> buf, Client client)
 		Parse::sendIrcMessage(":localhost 324 " + channel.getName() + channel.getModeString(), client.GettersInt(GETCLIENTFD));
 		Parse::BroadcastChannel(1, "353", PrefixString(channel), &channel);
 		Parse::BroadcastChannel(2, "366", " :End of NAMES list", &channel);
-		if (channel.getMode(MODEPASSWORD) == 1)
-			Parse::sendIrcMessage(":localhost " + channel.getName() + "'s password is set", client.GettersInt(GETCLIENTFD));
-		else
-			Parse::sendIrcMessage(":localhost " + channel.getName() + "'s password isn't set", client.GettersInt(GETCLIENTFD));
+		// if (channel.getMode(MODEPASSWORD) == 1)
+		// 	Parse::sendIrcMessage(":localhost " + channel.getName() + "'s password is set", client.GettersInt(GETCLIENTFD));
+		// else
+		// 	Parse::sendIrcMessage(":localhost " + channel.getName() + "'s password isn't set", client.GettersInt(GETCLIENTFD));
 		return 1;
 	}
 	else if (ch_it->getMode(MODEUSERLIMIT) == 1 && ch_it->getUserAmount() >= ch_it->getUserLimit())
@@ -283,8 +283,9 @@ int Parse::Part_cmd(std::vector<std::string> buf, Client client)
 
 	if (buf.size() < 2)
 		return (Parse::printErrorMessage("Command Part: Not enough parameters\nCommand Used \"" + buf[0] + buf[1] + "\"\n" , 1));
-	if (!buf[3].compare(":Leaving"))
-		return (Parse::printErrorMessage("Command to leave the channel must be \" :leaving\"\n", 2));
+	if (buf.size() >= 4)
+		if (!buf[3].compare(":Leaving"))
+			return (Parse::printErrorMessage("Command to leave the channel must be \" :leaving\"\n", 2));
 	Channel *ReturnedChannel = Parse::ReturnChannelByName(ChannelName);
 	if (ReturnedChannel == NULL){
 		Parse::sendIrcMessage(":localhost 403 " + ClientNick + " " + ChannelName + " :No such channel", ClientId);
@@ -298,6 +299,9 @@ int Parse::Part_cmd(std::vector<std::string> buf, Client client)
 		return (Parse::printErrorMessage("\nClient Request From: " + ClientNick + "\nPART Command\nChannel: " + ChannelName +\
 		"\nThis user is not in the user list of this channel\n", 2));
 	}
+	ReturnedChannel->rmModder(ClientNick);
+	ReturnedChannel->rmInvitedUsers(ClientNick);
+	ReturnedChannel->rmPrefixes(ClientNick);
 	
 	for (unsigned long i = 0; i < allTargetsID.size(); i++)
 		Parse::sendIrcMessage(":" + ClientNick + "!" + client.Getters(GETUSER) + "@localhost PART " + ChannelName, allTargetsID[i]);
