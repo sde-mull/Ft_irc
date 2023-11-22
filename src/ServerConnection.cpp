@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:43:01 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/21 16:13:43 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/22 13:22:41 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,35 @@ int Server::DisconnectingClient(int id)
 	std::string ClientName = ClientDisconnecting.Getters(GETNICK);
 
 	FD_CLR(id, &this->_currentSockets);
-	Parse::RemoveClient(id);
 
 	for (unsigned long i = 0; i < Parse::_Channels.size(); i++){
-		Parse::_Channels[i].rmUser(ClientName);
+		std::string Channel_name = Parse::_Channels[i].getName();
+		std::vector<int> allTargetsID = Parse::ReturnMessageTargets(Channel_name, ClientDisconnecting);
+		if (Parse::_Channels[i].rmUser(ClientName) == 1)
+		{
+			for (unsigned long i = 0; i < allTargetsID.size(); i++)
+				Parse::sendIrcMessage(":" + ClientDisconnecting.Getters(GETNICK) + "!" + ClientDisconnecting.Getters(GETUSER) + "@localhost PART " + Channel_name, allTargetsID[i]);
+		}
+		Parse::_Channels[i].rmModder(ClientName);
+		Parse::_Channels[i].rmInvitedUsers(ClientName);
+		Parse::_Channels[i].rmPrefixes(ClientName);
+		
 		if (Parse::_Channels[i].getUserAmount() == 0)
-			Parse::_Channels.erase(Parse::_Channels.begin() + i);
+			Parse::RemoveChannel(Channel_name);
+		else
+		{
+			std::vector<std::string> usersList = Parse::_Channels[i].getUsersList();
+			int modsLen = Parse::_Channels[i].getMods().size();
+			if (modsLen == 0)
+			{
+				Parse::_Channels[i].addModder(usersList[0]);
+				Parse::BroadcastChannel(1, "353", Parse::PrefixString(Parse::_Channels[i]), &Parse::_Channels[i]);
+				Parse::BroadcastChannel(2, "366", " :End of NAMES list", &Parse::_Channels[i]);
+			}
+		}
 	}
+	Parse::RemoveClient(id);
+	
 	close(id);
 	return (0);
 }

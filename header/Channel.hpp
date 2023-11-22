@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 15:06:55 by pcoimbra          #+#    #+#             */
-/*   Updated: 2023/11/21 16:23:39 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/22 12:39:35 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ class Channel
 			// Remove functions
 			int									rmUser(std::string user);
 			int									rmModder(std::string user);
+			int									rmInvitedUsers(std::string user);
+			int									rmPrefixes(std::string user);
 		
 			//Display information
 			void								displayModes(Client client, std::vector<Channel>::iterator ch_it);

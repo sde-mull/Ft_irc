@@ -6,7 +6,7 @@
 /*   By: pcoimbra <pcoimbra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 23:25:58 by sde-mull          #+#    #+#             */
-/*   Updated: 2023/11/21 16:18:59 by pcoimbra         ###   ########.fr       */
+/*   Updated: 2023/11/22 10:49:57 by pcoimbra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,14 @@ int	Channel::mode_userlimit(std::vector<std::string> buf, std::map<char, int>::i
 	else if (buf[2][0] == '+')
 	{
 		if (buf[3].find_first_not_of("0123456789") != std::string::npos)
-			Parse::sendIrcNumeric(2, "461", buf[0] + " :Bad parameters!", client, this);
+		{
+			Parse::sendIrcNumeric(2, "461", " " + buf[0] + " :Bad parameters!", client, this);
+			return 0;
+		}
 		int	number = std::atoi(buf[3].c_str());
 		
 		if (number <= 0)
-			Parse::sendIrcNumeric(2, "461", buf[0] + " :Not enough parameters", client, this);
+			Parse::sendIrcNumeric(2, "461", " " + buf[0] + " :Not enough parameters", client, this);
 		else
 		{
 			_maxusers = number;
